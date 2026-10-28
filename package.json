@@ -1,0 +1,30 @@
+{
+  "name": "spendfloor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "SpendFloor: one agent spend policy, enforced on-chain on Base Sepolia and Solana devnet.",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "sdk",
+    "agent",
+    "rebalance-bot",
+    "policy"
+  ],
+  "scripts": {
+    "check-toolchain": "bash scripts/check-toolchain.sh"
+  },
+  "dependencies": {
+    "@anchor-lang/core": "1.2.0",
+    "@solana/web3.js": "1.99.0",
+    "@solana/spl-token": "0.4.15",
+    "viem": "2.57.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "litesvm": "1.6.1",
+    "typescript": "5.9.3",
+    "tsx": "4.23.15"
+  }
+}

@@ -1,0 +1,14 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.37"
+# Pinned explicitly (T01). Do NOT use the Foundry Osaka default:
+# T06 confirms what Base Sepolia accepts before the vault build.
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+
+# Fuzz minimum for money paths (MUSE.md proof rules). T10 may raise, never lower.
+[fuzz]
+runs = 10000
