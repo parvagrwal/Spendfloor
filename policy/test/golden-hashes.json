@@ -1,0 +1,121 @@
+[
+  {
+    "name": "G1-p0-conformance",
+    "note": "Policy P0 from the plan: per-tx 2, window 5 per 86400 s, expiry +24 h, one merchant per chain.",
+    "policy": {
+      "version": 1,
+      "decimals": 6,
+      "perTxMax": "2000000",
+      "windowMax": "5000000",
+      "windowSeconds": "86400",
+      "windowAnchor": "1760000000",
+      "expiresAt": "1760086400",
+      "evmRecipients": [
+        "0x00000000000000000000000000000000000A11CE"
+      ],
+      "solRecipients": [
+        "43vyqgsiRgahQt4RcDAzCbnncHkwHLy9fhZz8nMDHfv6"
+      ]
+    },
+    "canonicalBytesHex": "5350454e44464c4f4f522f7631000000010600000000001e848000000000004c4b4000000000000151800000000068e778000000000068e8c9801cc952a3c98a04b13efa328e9b0541472dda8a86cc311620203f3c250de071855bcd0ce1532604f98c543350c23a78e32babd79b839e565ebfdede3be3fdcbe2",
+    "evmSetHash": "1cc952a3c98a04b13efa328e9b0541472dda8a86cc311620203f3c250de07185",
+    "solSetHash": "5bcd0ce1532604f98c543350c23a78e32babd79b839e565ebfdede3be3fdcbe2",
+    "policyHash": "83a5665cf4043632bb2804323fe11659ede2b59bfb6e4bb5014885f3254b1003"
+  },
+  {
+    "name": "G2-p1-short-window-two-recipients",
+    "note": "P1-style short window (300 s) with two recipients per chain; exercises multi-recipient set hashing.",
+    "policy": {
+      "version": 1,
+      "decimals": 6,
+      "perTxMax": "1000000",
+      "windowMax": "3000000",
+      "windowSeconds": "300",
+      "windowAnchor": "1760000000",
+      "expiresAt": "1760086400",
+      "evmRecipients": [
+        "0x00000000000000000000000000000000000A11CE",
+        "0x0000000000000000000000000000000000000B0B"
+      ],
+      "solRecipients": [
+        "43vyqgsiRgahQt4RcDAzCbnncHkwHLy9fhZz8nMDHfv6",
+        "8ogq7P8jYVUorg5DJwYBGZqjz3WoL8DG9Bwgya3B2MHH"
+      ]
+    },
+    "canonicalBytesHex": "5350454e44464c4f4f522f7631000000010600000000000f424000000000002dc6c0000000000000012c0000000068e778000000000068e8c98083a1ec2e75ef1ef460a4f05e5455f5e221776606851c6f229e4fe977ca32aa86e2538abfab314136d5f3a337383cb353f8d59065062064ffc8244de64a9729cf",
+    "evmSetHash": "83a1ec2e75ef1ef460a4f05e5455f5e221776606851c6f229e4fe977ca32aa86",
+    "solSetHash": "e2538abfab314136d5f3a337383cb353f8d59065062064ffc8244de64a9729cf",
+    "policyHash": "7017b1560851daf96bb76a4ae39110b6b6c70d99903b400142b9d67a466f47d8"
+  },
+  {
+    "name": "G3-p2-short-expiry-min-amounts",
+    "note": "P2-style expiry (+180 s), minimum amounts (1 micro-unit) and minimum window (60 s).",
+    "policy": {
+      "version": 1,
+      "decimals": 6,
+      "perTxMax": "1",
+      "windowMax": "1",
+      "windowSeconds": "60",
+      "windowAnchor": "1760000000",
+      "expiresAt": "1760000180",
+      "evmRecipients": [
+        "0x0000000000000000000000000000000000000B0B"
+      ],
+      "solRecipients": [
+        "8ogq7P8jYVUorg5DJwYBGZqjz3WoL8DG9Bwgya3B2MHH"
+      ]
+    },
+    "canonicalBytesHex": "5350454e44464c4f4f522f7631000000010600000000000000010000000000000001000000000000003c0000000068e778000000000068e778b4e1ab8e2a690a1f722f2e2ed183a719e9b855bf26b57e5f079dad59080a6d1db9d33c50959a25c19da210c768af233947b676e8a2f1cd15b905c6b7176c82cdba",
+    "evmSetHash": "e1ab8e2a690a1f722f2e2ed183a719e9b855bf26b57e5f079dad59080a6d1db9",
+    "solSetHash": "d33c50959a25c19da210c768af233947b676e8a2f1cd15b905c6b7176c82cdba",
+    "policyHash": "fc105fd9615d88e17549f5a433c0ddee4b6d2fff233bd0988a15ffbeb1655a0e"
+  },
+  {
+    "name": "G4-large-values",
+    "note": "u64-max window and a >2^53 per-tx value; i64 times past the u32 range (2030 / 2100). Catches width and precision bugs.",
+    "policy": {
+      "version": 1,
+      "decimals": 6,
+      "perTxMax": "12345678901234567890",
+      "windowMax": "18446744073709551615",
+      "windowSeconds": "31536000",
+      "windowAnchor": "1893456000",
+      "expiresAt": "4102444800",
+      "evmRecipients": [
+        "0x00000000000000000000000000000000000A11CE"
+      ],
+      "solRecipients": [
+        "43vyqgsiRgahQt4RcDAzCbnncHkwHLy9fhZz8nMDHfv6"
+      ]
+    },
+    "canonicalBytesHex": "5350454e44464c4f4f522f76310000000106ab54a98ceb1f0ad2ffffffffffffffff0000000001e133800000000070dbd88000000000f48657001cc952a3c98a04b13efa328e9b0541472dda8a86cc311620203f3c250de071855bcd0ce1532604f98c543350c23a78e32babd79b839e565ebfdede3be3fdcbe2",
+    "evmSetHash": "1cc952a3c98a04b13efa328e9b0541472dda8a86cc311620203f3c250de07185",
+    "solSetHash": "5bcd0ce1532604f98c543350c23a78e32babd79b839e565ebfdede3be3fdcbe2",
+    "policyHash": "037f68a2b85b10e20a29e2350de7731a591cb534e1e0fee4880dddec90917f98"
+  },
+  {
+    "name": "G5-order-invariance",
+    "note": "Same policy as G2 with recipient lists reversed. MUST produce the identical policyHash as G2 (sets are sorted before hashing; labels are not hashed).",
+    "policy": {
+      "version": 1,
+      "decimals": 6,
+      "perTxMax": "1000000",
+      "windowMax": "3000000",
+      "windowSeconds": "300",
+      "windowAnchor": "1760000000",
+      "expiresAt": "1760086400",
+      "evmRecipients": [
+        "0x0000000000000000000000000000000000000B0B",
+        "0x00000000000000000000000000000000000A11CE"
+      ],
+      "solRecipients": [
+        "8ogq7P8jYVUorg5DJwYBGZqjz3WoL8DG9Bwgya3B2MHH",
+        "43vyqgsiRgahQt4RcDAzCbnncHkwHLy9fhZz8nMDHfv6"
+      ]
+    },
+    "canonicalBytesHex": "5350454e44464c4f4f522f7631000000010600000000000f424000000000002dc6c0000000000000012c0000000068e778000000000068e8c98083a1ec2e75ef1ef460a4f05e5455f5e221776606851c6f229e4fe977ca32aa86e2538abfab314136d5f3a337383cb353f8d59065062064ffc8244de64a9729cf",
+    "evmSetHash": "83a1ec2e75ef1ef460a4f05e5455f5e221776606851c6f229e4fe977ca32aa86",
+    "solSetHash": "e2538abfab314136d5f3a337383cb353f8d59065062064ffc8244de64a9729cf",
+    "policyHash": "7017b1560851daf96bb76a4ae39110b6b6c70d99903b400142b9d67a466f47d8"
+  }
+]
