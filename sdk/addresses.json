@@ -1,0 +1,12 @@
+{
+  "evm": {
+    "owner": "0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0",
+    "agent": "0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772",
+    "submitter": "0x292e031155c7301eA14dd1a04b653B1c23855196"
+  },
+  "sol": {
+    "owner": "HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v",
+    "agent": "5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3",
+    "submitter": "8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb"
+  }
+}
