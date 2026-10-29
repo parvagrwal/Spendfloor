@@ -1,0 +1,19 @@
+rpc-probe: 4 endpoints, read-only, mode=pace-only, 2026-10-29T08:03:38.168Z
+
+=== SOL RPC1 official :: https://api.devnet.solana.com (getBlockHeight) ===
+pace-only mode: burst skipped (quiet-window retest)
+pace x25 @5/s: ok=25 429=0 httpErr=0 rpcErr=0 netErr=0 median=70ms  -> PACE PASS (zero 429)
+
+=== SOL official alias :: https://devnet.solana.com (getBlockHeight) ===
+pace-only mode: burst skipped (quiet-window retest)
+pace x25 @5/s: ok=0 429=0 httpErr=0 rpcErr=0 netErr=25  -> PACE FAIL
+
+=== SOL dRPC :: https://solana-devnet.drpc.org (getBlockHeight) ===
+pace-only mode: burst skipped (quiet-window retest)
+pace x25 @5/s: ok=0 429=0 httpErr=25 rpcErr=0 netErr=0  -> PACE FAIL
+
+=== SOL BlockPI :: https://solana-devnet.blockpi.network/v1/rpc/public (getBlockHeight) ===
+pace-only mode: burst skipped (quiet-window retest)
+pace x25 @5/s: ok=0 429=0 httpErr=25 rpcErr=0 netErr=0  -> PACE FAIL
+
+rpc-probe done. No transactions were submitted.

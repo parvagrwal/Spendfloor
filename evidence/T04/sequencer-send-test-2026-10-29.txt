@@ -1,0 +1,19 @@
+machine: agent
+submitter: 0x292e031155c7301eA14dd1a04b653B1c23855196
+read rpc: https://sepolia.base.org (alternate: https://base-sepolia-rpc.publicnode.com)
+sequencer rpc: https://sepolia-sequencer.base.org
+self-send value: 0.0001 ETH
+
+read rpc OK: https://sepolia.base.org (block 0x314d091)
+submitter balance before: 0.03 ETH
+nonce: 0
+estimated gas: 21000
+maxFeePerGas: 7000000 maxPriorityFeePerGas: 1000000
+signed tx (234 hex chars); broadcasting
+broadcast OK via sequencer endpoint: 0x350455a9033cc0f9d3c6b261368fe4f447f76dddb853d4e3349b03649b12e731
+waiting for receipt: 0x350455a9033cc0f9d3c6b261368fe4f447f76dddb853d4e3349b03649b12e731 (via sequencer endpoint)
+receipt: status=success block=51695770 gasUsed=21000
+read-back via https://base-sepolia-rpc.publicnode.com: status=success block=51695770
+submitter balance after: 0.029999873999999908 ETH (delta should be gas only)
+
+sequencer-send-test: PASS via sequencer endpoint :: hash=0x350455a9033cc0f9d3c6b261368fe4f447f76dddb853d4e3349b03649b12e731 block=51695770 gasUsed=21000

@@ -1,0 +1,27 @@
+machine: agent
+rpc:     evm=https://sepolia.base.org sol=https://api.devnet.solana.com
+
+EVM owner     0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0
+EVM agent     0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772
+EVM submitter 0x292e031155c7301eA14dd1a04b653B1c23855196
+SOL owner     HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v
+SOL agent     5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3
+SOL submitter 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+
+OK    evm owner private key absent on this agent machine
+OK    evm agent local key matches registry address
+OK    evm submitter local key matches registry address
+OK    sol owner private key absent on this agent machine
+OK    sol agent local key matches registry address
+OK    sol submitter local key matches registry address
+
+EVM owner     balance: 0.026 ETH
+EVM agent     balance: 0 ETH
+OK    evm AGENT balance is exactly 0
+EVM submitter balance: 0.03 ETH
+SOL owner     balance: 6 SOL
+SOL agent     balance: 0 SOL
+OK    sol AGENT balance is exactly 0
+SOL submitter balance: 1 SOL
+
+fund-check: all asserts passed
