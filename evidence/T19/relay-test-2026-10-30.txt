@@ -1,0 +1,14 @@
+✔ relay on: V1 lands through the relay (2654.564456ms)
+✔ relay off: agent cannot spend (fails closed) (32.148472ms)
+✔ relay forwards over-cap spend; vault rejects it (no policy in relay) (1026.165451ms)
+✔ rate limit: third submit in a minute is rejected (2037.54357ms)
+✔ rate limiter unit test (no chain) (0.565147ms)
+✔ relay off unit test (no chain, never started) (1.375563ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7234.06354
