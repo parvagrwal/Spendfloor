@@ -128,5 +128,42 @@ X1 one chain updated, other not (T18 verify DRIFT) · X2 freeze skew
   32/32, T11 34/34, T12b, T13 10,000 cases, T14, T17 conformance).
 - The vaults are unaudited custom code (not a formal audit). This
   document is a review, not an audit report.
-- Socket dependency scanning (T23a) is a separate task and is NOT
-  covered here; it runs in CI over npm + Cargo manifests.
+- Socket dependency scanning (T23a) is covered in section 5 below.
+
+## 5. Socket dependency scanning (T23a)
+
+Socket here is Socket.dev (supply-chain security), NOT the Socket
+bridge protocol that appears in the old multichain research file.
+
+What it scans: the npm manifests (root package.json: viem 2.57.7,
+@solana/web3.js 1.99.0, @solana/spl-token 0.4.15,
+@anchor-lang/core 1.2.0, tsx, typescript, @types/node, litesvm; plus
+the sub-package manifests, which carry no dependencies) and the Cargo
+manifests (solana/Cargo.toml workspace, programs/spendfloor
+anchor-lang/anchor-spl 1.2.0, litesvm-tests litesvm 0.10 + proptest 1
++ solana 3.x + sha2). Foundry libraries are vendored as plain files
+in evm/lib/ (not manifest dependencies), so Socket does not scan
+them; they are covered by Slither (section 1) instead.
+
+How CI runs it: `.github/workflows/ci.yml` has two jobs. `forge-tests`
+runs the EVM vault suite. `socket-scan` runs `socket ci` (Node CLI,
+alias for `socket scan create --report`), which exits non-zero when
+the scan does not pass the security policy, so unhealthy dependencies
+fail CI. The job runs only when a Socket API key is configured (see
+below); otherwise it is skipped, not failed.
+
+Setup (either path, Parv's choice):
+1. (Recommended) Install the Socket GitHub App (free) on this repo.
+   It scans on every push and posts a check. No secret needed.
+2. Create a free Socket API key (socket.dev dashboard) and add it as
+   a repo secret named SOCKET_SECURITY_API_KEY. The socket-scan job
+   then runs on every push and pull request.
+
+Scan report: pending the first CI run with Socket enabled. The link
+goes here once the first scan is green.
+
+Pre-check (not a substitute for the Socket scan): the manifests were
+reviewed by hand — all direct dependencies are mainstream, pinned
+packages (viem, @solana/web3.js, Anchor, LiteSVM, proptest); no
+typosquats or obviously malicious packages were found. The Socket
+scan is still required for the T23a acceptance.

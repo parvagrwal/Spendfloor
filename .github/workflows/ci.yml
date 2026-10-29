@@ -1,0 +1,51 @@
+# SpendFloor CI (T23a): Foundry tests + Socket dependency scan.
+#
+# Socket here is Socket.dev (supply-chain security), NOT the Socket
+# bridge protocol. Two ways to enable the Socket scan (either one):
+#   1. (Recommended) Install the Socket GitHub App (free) on this repo:
+#      it scans on every push and posts a check. No secret needed.
+#   2. Create a free Socket API key (socket.dev dashboard) and add it
+#      as a repo secret named SOCKET_SECURITY_API_KEY. The socket-scan
+#      job below then runs `socket ci` (exits non-zero on an unhealthy
+#      scan, so unhealthy dependencies fail CI).
+# If neither is set up, the socket-scan job is skipped (not failed) so
+# CI stays green on the Foundry tests alone. The scan report link goes
+# in docs/THREAT_MODEL.md once the first scan runs.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  forge-tests:
+    name: Foundry tests (EVM vault)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Run forge tests
+        working-directory: evm
+        run: forge test
+
+  socket-scan:
+    name: Socket dependency scan
+    runs-on: ubuntu-latest
+    # Only run when a Socket API key is configured. If Parv uses the
+    # Socket GitHub App instead, the App provides the scan separately
+    # and this job is skipped (not failed).
+    if: secrets.SOCKET_SECURITY_API_KEY != ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Socket CLI
+        run: npm install -g @socketsecurity/cli
+      - name: Run Socket scan (fails CI on unhealthy deps)
+        env:
+          SOCKET_SECURITY_API_KEY: ${{ secrets.SOCKET_SECURITY_API_KEY }}
+        run: socket ci
