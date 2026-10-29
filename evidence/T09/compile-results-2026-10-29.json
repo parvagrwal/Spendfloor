@@ -1,0 +1,370 @@
+{
+  "model": "qwen2.5:7b",
+  "validCount": 10,
+  "looserCount": 1,
+  "cleanCount": 10,
+  "pass": false,
+  "results": [
+    {
+      "name": "C1 daily merchant",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"50000000\",\n  \"windowMax\": \"200000000\",\n  \"windowSeconds\": \"86400\",\n  \"windowAnchor\": \"1689129600\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000001\"],\n  \"solRecipients\": [\"4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "50000000",
+        "windowMax": "200000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1689129600",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001"
+        ],
+        "solRecipients": [
+          "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C2 weekly team",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"500000000\",\n  \"windowMax\": \"5000000000\",\n  \"windowSeconds\": \"604800\",\n  \"windowAnchor\": \"1689187200\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000001\", \"0x0000000000000000000000000000000000000002\"],\n  \"solRecipients\": [\"4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN\", \"8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "500000000",
+        "windowMax": "5000000000",
+        "windowSeconds": "604800",
+        "windowAnchor": "1689187200",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001",
+          "0x0000000000000000000000000000000000000002"
+        ],
+        "solRecipients": [
+          "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN",
+          "8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C3 tight daily",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"1000000\",\n  \"windowMax\": \"10000000\",\n  \"windowSeconds\": \"86400\",\n  \"windowAnchor\": \"1625318400\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000003\"],\n  \"solRecipients\": [\"CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "1000000",
+        "windowMax": "10000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1625318400",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000003"
+        ],
+        "solRecipients": [
+          "CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C4 max recipients",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"100000000\",\n  \"windowMax\": \"1000000000\",\n  \"windowSeconds\": \"86400\",\n  \"windowAnchor\": \"1793232000\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\n    \"0x0000000000000000000000000000000000000001\",\n    \"0x0000000000000000000000000000000000000002\",\n    \"0x0000000000000000000000000000000000000003\",\n    \"0x0000000000000000000000000000000000000004\",\n    \"0x0000000000000000000000000000000000000005\",\n    \"0x0000000000000000000000000000000000000006\",\n    \"0x0000000000000000000000000000000000000007\",\n    \"0x0000000000000000000000000000000000000008\"\n  ],\n  \"solRecipients\": [\n    \"4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN\",\n    \"8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj\",\n    \"CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6\",\n    \"GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT\",\n    \"LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp\",\n    \"QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB\",\n    \"UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY\",\n    \"YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu\"\n  ]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "100000000",
+        "windowMax": "1000000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1793232000",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001",
+          "0x0000000000000000000000000000000000000002",
+          "0x0000000000000000000000000000000000000003",
+          "0x0000000000000000000000000000000000000004",
+          "0x0000000000000000000000000000000000000005",
+          "0x0000000000000000000000000000000000000006",
+          "0x0000000000000000000000000000000000000007",
+          "0x0000000000000000000000000000000000000008"
+        ],
+        "solRecipients": [
+          "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN",
+          "8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj",
+          "CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6",
+          "GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT",
+          "LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp",
+          "QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB",
+          "UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY",
+          "YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "equal"
+        },
+        "overall": "EQUAL"
+      }
+    },
+    {
+      "name": "C5 minute window",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"10000000\",\n  \"windowMax\": \"100000000\",\n  \"windowSeconds\": \"60\",\n  \"windowAnchor\": \"0\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000004\"],\n  \"solRecipients\": [\"GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "10000000",
+        "windowMax": "100000000",
+        "windowSeconds": "60",
+        "windowAnchor": "0",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000004"
+        ],
+        "solRecipients": [
+          "GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C6 year window",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"100000000000\",\n  \"windowMax\": \"500000000000\",\n  \"windowSeconds\": \"31536000\",\n  \"windowAnchor\": \"1681305600\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000005\"],\n  \"solRecipients\": [\"LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "100000000000",
+        "windowMax": "500000000000",
+        "windowSeconds": "31536000",
+        "windowAnchor": "1681305600",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000005"
+        ],
+        "solRecipients": [
+          "LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "looser",
+          "windowMax": "looser",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "LOOSER"
+      }
+    },
+    {
+      "name": "C7 cents",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"500000\",\n  \"windowMax\": \"2500000\",\n  \"windowSeconds\": \"86400\",\n  \"windowAnchor\": \"1689260800\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000006\"],\n  \"solRecipients\": [\"QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "500000",
+        "windowMax": "2500000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1689260800",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000006"
+        ],
+        "solRecipients": [
+          "QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C8 large amounts",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"100000000000\",\n  \"windowMax\": \"1000000000000\",\n  \"windowSeconds\": \"2592000\",\n  \"windowAnchor\": \"1689216000\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000001\", \"0x0000000000000000000000000000000000000002\", \"0x0000000000000000000000000000000000000003\"],\n  \"solRecipients\": [\"UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "100000000000",
+        "windowMax": "1000000000000",
+        "windowSeconds": "2592000",
+        "windowAnchor": "1689216000",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001",
+          "0x0000000000000000000000000000000000000002",
+          "0x0000000000000000000000000000000000000003"
+        ],
+        "solRecipients": [
+          "UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    },
+    {
+      "name": "C9 expiry date",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"25000000\",\n  \"windowMax\": \"100000000\",\n  \"windowSeconds\": \"86400\",\n  \"windowAnchor\": \"1793232000\",\n  \"expiresAt\": \"1716931200\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000007\"],\n  \"solRecipients\": [\"YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "25000000",
+        "windowMax": "100000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1793232000",
+        "expiresAt": "1716931200",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000007"
+        ],
+        "solRecipients": [
+          "YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "tighter",
+          "windowAnchor": "equal"
+        },
+        "overall": "TIGHTER"
+      }
+    },
+    {
+      "name": "C10 anchored window",
+      "raw": "{\n  \"version\": 1,\n  \"decimals\": 6,\n  \"perTxMax\": \"75000000\",\n  \"windowMax\": \"300000000\",\n  \"windowSeconds\": \"259200\",\n  \"windowAnchor\": \"1635494400\",\n  \"expiresAt\": \"0\",\n  \"evmRecipients\": [\"0x0000000000000000000000000000000000000001\", \"0x0000000000000000000000000000000000000002\"],\n  \"solRecipients\": [\"4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN\", \"8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj\", \"CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6\"]\n}",
+      "extracted": false,
+      "valid": true,
+      "errors": [],
+      "drafted": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "75000000",
+        "windowMax": "300000000",
+        "windowSeconds": "259200",
+        "windowAnchor": "1635494400",
+        "expiresAt": "0",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001",
+          "0x0000000000000000000000000000000000000002"
+        ],
+        "solRecipients": [
+          "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN",
+          "8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj",
+          "CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6"
+        ]
+      },
+      "diff": {
+        "fields": {
+          "perTxMax": "equal",
+          "windowMax": "equal",
+          "windowSeconds": "equal",
+          "evmRecipients": "equal",
+          "solRecipients": "equal",
+          "expiresAt": "equal",
+          "windowAnchor": "different"
+        },
+        "overall": "DIFFERENT"
+      }
+    }
+  ]
+}

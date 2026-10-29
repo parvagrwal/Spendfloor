@@ -1,0 +1,128 @@
+
+=== C1 daily merchant ===
+English: Allow up to $50 per transaction and up to $200 per day. The window is one day. EVM recipients: 0x0000000000000000000000000000000000000001. Solana recipients: 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: EQUAL
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: equal
+
+=== C2 weekly team ===
+English: Allow up to $500 per transaction and up to $5000 per week. The window is one week. EVM recipients: 0x0000000000000000000000000000000000000001, 0x0000000000000000000000000000000000000002. Solana recipients: 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN, 8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: TIGHTER
+  perTxMax: tighter
+  windowMax: tighter
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: equal
+
+=== C3 tight daily ===
+English: Allow up to $1 per transaction and up to $10 per day. The window is one day. EVM recipients: 0x0000000000000000000000000000000000000003. Solana recipients: CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: DIFFERENT
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== C4 max recipients ===
+English: Allow up to $100 per transaction and up to $1000 per day. The window is one day. EVM recipients: 0x0000000000000000000000000000000000000001, 0x0000000000000000000000000000000000000002, 0x0000000000000000000000000000000000000003, 0x0000000000000000000000000000000000000004, 0x0000000000000000000000000000000000000005, 0x0000000000000000000000000000000000000006, 0x0000000000000000000000000000000000000007, 0x0000000000000000000000000000000000000008. Solana recipients: 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN, 8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj, CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6, GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT, LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp, QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB, UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY, YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: EQUAL
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: equal
+
+=== C5 minute window ===
+English: Allow up to $10 per transaction and up to $100 per minute. The window is one minute. EVM recipients: 0x0000000000000000000000000000000000000004. Solana recipients: GcdayuLaLyrdmUu324nahyv33G5poQdLUEZ1nEytDeT. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: TIGHTER
+  perTxMax: equal
+  windowMax: tighter
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== C6 year window ===
+English: Allow up to $1000 per transaction and up to $50000 per year. The window is one year. EVM recipients: 0x0000000000000000000000000000000000000005. Solana recipients: LX3EUdRUBUa3TbsYXLEUdj9J3prXkWXvLYSWyYyc2Jp. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: LOOSER
+  perTxMax: looser
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== C7 cents ===
+English: Allow up to $0.50 per transaction and up to $2.50 per day. The window is one day. EVM recipients: 0x0000000000000000000000000000000000000006. Solana recipients: QRSsyMWN1yHT9ir42bgNZUNZ4PdEhcSWCrL2AryKpyB. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: DIFFERENT
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== C8 large amounts ===
+English: Allow up to $100000 per transaction and up to $1000000 per 30 days. The window is 30 days. EVM recipients: 0x0000000000000000000000000000000000000001, 0x0000000000000000000000000000000000000002, 0x0000000000000000000000000000000000000003. Solana recipients: UKrXU5bFrTzrqqpZXs8GVDbp4xPweiM65ADXNAy3ddY. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: DIFFERENT
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== C9 expiry date ===
+English: Allow up to $25 per transaction and up to $100 per day. The window is one day. EVM recipients: 0x0000000000000000000000000000000000000007. Solana recipients: YEGAxog9gxiGXxo538aAQxq55XAebpFfwU72ZUxmSHu. This policy expires on 2027-06-01.
+schema-valid: YES (extracted JSON: no)
+diff overall: TIGHTER
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: tighter
+  windowAnchor: equal
+
+=== C10 anchored window ===
+English: Allow up to $75 per transaction and up to $300 per 3 days. The window is 3 days and starts on 2026-10-29 00:00 UTC. EVM recipients: 0x0000000000000000000000000000000000000001, 0x0000000000000000000000000000000000000002. Solana recipients: 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN, 8opHzTAnfzRpPEx21XtnrVTX28YQuCpAjcn1PczScKj, CiDwVBFgWV9E5MvXWoLgnEgn2hK7rJikbvfWavzAQz6. No expiry.
+schema-valid: YES (extracted JSON: no)
+diff overall: DIFFERENT
+  perTxMax: equal
+  windowMax: equal
+  windowSeconds: equal
+  evmRecipients: equal
+  solRecipients: equal
+  expiresAt: equal
+  windowAnchor: different
+
+=== H14 gate ===
+model: qwen2.5:7b
+schema-valid: 10/10 (need >= 8)
+clean JSON (no extraction): 10/10
+looser diffs: 1 (need 0)
+run-compile: FAIL
+results written to evidence/T09/compile-results-2026-10-29.json
