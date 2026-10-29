@@ -1,0 +1,45 @@
+Compiling 1 files with Solc 0.8.37
+Solc 0.8.37 finished in 401.65ms
+Compiler run successful!
+
+Ran 32 tests for test/Vault.t.sol:SpendFloorVaultTest
+[PASS] testFuzz_SpendOutcomes(uint256,uint256,uint256) (runs: 10000, μ: 131564, ~: 98080)
+[PASS] test_AgentAsRecipient() (gas: 38431)
+[PASS] test_BadNonce() (gas: 93286)
+[PASS] test_DeadlineBoundaries() (gas: 252008)
+[PASS] test_DeadlineTooFar() (gas: 93273)
+[PASS] test_ExactBoundaries() (gas: 457051)
+[PASS] test_Frozen() (gas: 318598)
+[PASS] test_IntentExpired() (gas: 93106)
+[PASS] test_MalleableSignature() (gas: 78103)
+[PASS] test_NoReceive() (gas: 32815)
+[PASS] test_NonAllowlisted() (gas: 99883)
+[PASS] test_OverDailyCap() (gas: 449665)
+[PASS] test_OverPerTxCap() (gas: 107361)
+[PASS] test_OwnerOnly() (gas: 109169)
+[PASS] test_PolicyHashStable() (gas: 15023)
+[PASS] test_Precedence() (gas: 1265715)
+[PASS] test_Replay() (gas: 210343)
+[PASS] test_SessionExpired() (gas: 162650)
+[PASS] test_SessionExpiredAtBoundary() (gas: 162628)
+[PASS] test_SetAgent() (gas: 305914)
+[PASS] test_SetPolicy() (gas: 517711)
+[PASS] test_TamperedAmount() (gas: 90936)
+[PASS] test_TamperedDeadline() (gas: 91003)
+[PASS] test_TamperedNonce() (gas: 91024)
+[PASS] test_TamperedTo() (gas: 90959)
+[PASS] test_U64MaxAmount() (gas: 107261)
+[PASS] test_ValidSpend() (gas: 200745)
+[PASS] test_VaultAsRecipient() (gas: 125392)
+[PASS] test_WindowRollover() (gas: 477227)
+[PASS] test_Withdraw() (gas: 184709)
+[PASS] test_WrongSigner() (gas: 83489)
+[PASS] test_ZeroAmount() (gas: 97521)
+Suite result: ok. 32 passed; 0 failed; 0 skipped; finished in 3.29s (3.26s CPU time)
+
+Ran 2 tests for test/Invariants.t.sol:InvariantsTest
+[PASS] testFuzz_Invariants(uint256) (runs: 10000, μ: 4368947, ~: 4352283)
+[PASS] test_LoweredCapNoPanic() (gas: 690716)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 25.85s (25.82s CPU time)
+
+Ran 2 test suites in 25.87s (29.13s CPU time): 34 tests passed, 0 failed, 0 skipped (34 total tests)

@@ -8,6 +8,13 @@ solc = "0.8.37"
 evm_version = "cancun"
 optimizer = true
 optimizer_runs = 200
+# T11: the stateful fuzz test's derivation function exceeds the 16-slot
+# stack limit under the legacy codegen; via_ir is the standard fix and
+# does not change semantics (tests prove it). DISABLED 2026-10-29: with
+# via_ir, test_Precedence reads a stale block.timestamp after vm.warp
+# (deadline 101 at timestamp 102), so the test is reverted to legacy
+# codegen and the fuzz test is refactored instead.
+# via_ir = true
 
 # Fuzz minimum for money paths (MUSE.md proof rules). T10 may raise, never lower.
 [fuzz]

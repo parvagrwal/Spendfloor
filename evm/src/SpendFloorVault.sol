@@ -343,19 +343,26 @@ contract SpendFloorVault {
             revert SessionExpired();
         }
         if (amount == 0) revert ZeroAmount();
-        if (!isRecipient[to]) revert RecipientNotAllowed();
+        // The agent is never a recipient, even if a rotation made it one:
+        // setPolicy rejects the agent at set time, but setAgent can rotate
+        // onto an address the policy already lists. The spend check closes
+        // that gap (T11 finding).
+        if (to == agent || !isRecipient[to]) revert RecipientNotAllowed();
 
         uint256 windowIndex = windowIndexAt(block.timestamp);
         if (windowIndex != currentWindow) {
             currentWindow = windowIndex;
             spentInWindow = 0;
         }
-        // Overflow-safe: spentInWindow <= windowMax is an invariant (every
-        // successful spend enforces it), so windowMax - spentInWindow never
-        // underflows, and amount > remaining is exactly spent + amount >
-        // windowMax without ever adding (V8: a u64-max amount reports
-        // DailyCapExceeded, never a panic).
-        if (amount > policy.windowMax - spentInWindow) revert DailyCapExceeded();
+        // Saturating cap check (T11): if spent already meets the window
+        // cap, for example after setPolicy lowered it below spent, every
+        // further amount exceeds the remaining allowance. Written this
+        // way the check never underflows: the old form
+        // (amount > windowMax - spentInWindow) panicked when spent
+        // exceeded windowMax instead of reporting DailyCapExceeded.
+        if (spentInWindow >= policy.windowMax || amount > policy.windowMax - spentInWindow) {
+            revert DailyCapExceeded();
+        }
         if (amount > policy.perTxMax) revert PerTxCapExceeded();
 
         nonce++;
