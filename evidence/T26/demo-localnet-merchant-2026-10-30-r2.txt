@@ -1,0 +1,12 @@
+=== DEMO NETWORK: localnet (Anvil + Surfpool) ===
+local vault: 0x610178da211fef7d417bc0e6fed39f05609ad788 (merchant 0x90F79bf6EB2c4f870365E785982E1f101E93b906)
+attacker ATA exists: 37H9XXqz5FZfLeqt4CEBBwi2vBwDRsvj1kUowWh8WibY
+local SOL: program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE policy 5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE vault 8whF22ZfqHVp44YNkXLvQMmj3eLgpFADWcifdhLynAUr mint E8YMPDYvuAKDTV2e4V8tDPB2PaUSaeK56wo1NqRQvvDq
+message: Pay 1 SFUSD to the merchant
+llm raw: {"action": "pay", "to": "merchant_address", "amount": 1}
+llm pay action: to=merchant_address toEvm= toSol= amount=1 SFUSD
+amount fidelity: message=1 SFUSD, llm=1 SFUSD, match=true
+evm recipient: 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+sol dest token: HRFDHanKn3C1TAStDsY5A8eyEW73HV3nqS3EDFuVUpBC
+EVM pay: ok=true label= hash=0x0f3818452006dcefe640e1303e01ce29355fca59091e695d6d60c3b5b740ef0d digest=0x0cb04544b87e3a022a17e57e9f5f8b230807694db9a63b426617d96f97b1fcc5 signed=1000000 micro-units
+SOL pay: ok=true label= sig=2JbfwiAQ4wTn2GNqA37Nrvo61zMtuE22D5F4tWxMbtGHC2tTqzQ16u1JMBweYNo76mLeNcm83TH67G5H5wcUcwyr digest=2JbfwiAQ4wTn2GNqA37Nrvo61zMtuE22D5F4tWxMbtGHC2tTqzQ16u1JMBweYNo76mLeNcm83TH67G5H5wcUcwyr signed=1000000 micro-units

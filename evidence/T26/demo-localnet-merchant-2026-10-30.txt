@@ -1,0 +1,9 @@
+=== DEMO NETWORK: localnet (Anvil + Surfpool) ===
+local vault: 0xdc64a140aa3e981100a9beca4e685f962f0cf6c9 (merchant 0x90F79bf6EB2c4f870365E785982E1f101E93b906)
+attacker ATA exists: 37H9XXqz5FZfLeqt4CEBBwi2vBwDRsvj1kUowWh8WibY
+local SOL: program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE policy 5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE vault 8whF22ZfqHVp44YNkXLvQMmj3eLgpFADWcifdhLynAUr mint E8YMPDYvuAKDTV2e4V8tDPB2PaUSaeK56wo1NqRQvvDq
+message: Pay 1 SFUSD to the merchant
+llm raw: {"action": "pay", "to": "merchant_address", "amount": 1}
+llm pay action: to=merchant_address toEvm= toSol= amount=1 SFUSD
+amount fidelity: message=1 SFUSD, llm=1 SFUSD, match=true
+FAIL  Non-base58 character

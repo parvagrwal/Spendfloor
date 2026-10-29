@@ -106,9 +106,10 @@ async function sendAndConfirmPoll(
 async function ensureAttackerAta(
   conn: Connection,
   payer: Keypair,
+  mint: PublicKey,
 ): Promise<PublicKey> {
   const [ata] = PublicKey.findProgramAddressSync(
-    [SOL_ATTACKER.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), SOL_MINT.toBuffer()],
+    [SOL_ATTACKER.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
     ATA_PROGRAM_ID,
   );
   const info = await conn.getAccountInfo(ata);
@@ -121,7 +122,7 @@ async function ensureAttackerAta(
       { pubkey: payer.publicKey, isSigner: true, isWritable: true },
       { pubkey: ata, isSigner: false, isWritable: true },
       { pubkey: SOL_ATTACKER, isSigner: false, isWritable: false },
-      { pubkey: SOL_MINT, isSigner: false, isWritable: false },
+      { pubkey: mint, isSigner: false, isWritable: false },
       { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
       { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
       { pubkey: RENT_SYSVAR, isSigner: false, isWritable: false },
@@ -136,6 +137,12 @@ async function ensureAttackerAta(
 }
 
 async function main() {
+  // --- Network label (T26: the demo must show which network it runs on) ---
+  console.log(
+    LOCALNET
+      ? "=== DEMO NETWORK: localnet (Anvil + Surfpool) ==="
+      : "=== DEMO NETWORK: testnet (Base Sepolia + Solana devnet) ===",
+  );
   // --- Keys + relay ---
   const evmAgent = loadEvmAccount("agent");
   const evmSubmitterAcc = loadEvmAccount("submitter");
@@ -212,10 +219,12 @@ async function main() {
       chain: foundry,
       transport: http("http://127.0.0.1:8545"),
     });
-    // Rebuild the relay on the local submitter (Anvil account 2).
+    // Rebuild the relay on the local submitter (Anvil account 2) and
+    // the local Solana RPC (Surfpool) for the SOL leg.
     relay.stop();
     relay = createRelay(DEFAULT_RELAY_CONFIG, localSubmitter, solSubmitter, {
       localnet: true,
+      solRpc: "http://127.0.0.1:8899",
     });
     relay.start();
     const tokenHash = await localOwner.deployContract({
@@ -259,12 +268,45 @@ async function main() {
     console.log(`local vault: ${vault} (merchant ${merchant})`);
   }
 
-  // --- Solana attacker ATA (testnet only) ---
+  // --- Solana setup: testnet (devnet constants) or localnet (Surfpool) ---
+  // Localnet reads deployments/localnet.json (written by
+  // sdk/solana-localnet-setup.ts). The program ID and policy PDA are
+  // the same as devnet (same program keypair, seeds ["policy"]); the
+  // mint, vault token, and merchant token are fresh local addresses.
+  let solProgram = SOL_PROGRAM;
+  let solPolicy = SOL_POLICY;
+  let solVaultToken = SOL_VAULT_TOKEN;
+  let solMerchantToken = SOL_MERCHANT_TOKEN;
+  let solMint = SOL_MINT;
   let attackerAta: PublicKey | null = null;
   let conn: Connection | null = null;
-  if (!LOCALNET) {
+  if (LOCALNET) {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const localPath = join(here, "..", "deployments", "localnet.json");
+    let local: {
+      program: string; policyPda: string; mint: string;
+      vaultToken: string; merchantToken: string;
+    };
+    try {
+      local = JSON.parse(
+        (await import("node:fs")).readFileSync(localPath, "utf8"),
+      );
+    } catch {
+      throw new Error(
+        `localnet.json not found at ${localPath} — run sdk/solana-localnet-setup.ts first (with Surfpool running)`,
+      );
+    }
+    solProgram = new PublicKey(local.program);
+    solPolicy = new PublicKey(local.policyPda);
+    solVaultToken = new PublicKey(local.vaultToken);
+    solMerchantToken = new PublicKey(local.merchantToken);
+    solMint = new PublicKey(local.mint);
+    conn = new Connection("http://127.0.0.1:8899", "confirmed");
+    attackerAta = await ensureAttackerAta(conn, solSubmitter, solMint);
+    console.log(`local SOL: program ${solProgram.toBase58()} policy ${solPolicy.toBase58()} vault ${solVaultToken.toBase58()} mint ${solMint.toBase58()}`);
+  } else {
     conn = solConnection();
-    attackerAta = await ensureAttackerAta(conn, solSubmitter);
+    attackerAta = await ensureAttackerAta(conn, solSubmitter, SOL_MINT);
   }
 
   // --- LLM turn ---
@@ -291,33 +333,51 @@ async function main() {
   const evmTo: Address = (
     toEvm ?? (to.startsWith("0x") ? to : EVM_ATTACKER)
   ) as Address;
-  // Solana dest (testnet only). Localnet skips the SOL pay, so a
-  // placeholder LLM "to" like "merchant_address" must not be parsed
-  // as a Solana key here.
-  let solDest: PublicKey = SOL_MERCHANT_TOKEN;
-  if (!LOCALNET) {
-    if (toSol) {
+  // Solana dest: derived with the EFFECTIVE mint (local mint on
+  // localnet, devnet mint on testnet). The merchant dest is the
+  // merchant TOKEN ACCOUNT (not an ATA) on either network.
+  // The LLM may answer with a placeholder word ("attacker",
+  // "merchant_address") instead of an address. Parsing such a word
+  // as a PublicKey crashes (run 1: "attacker" -> Invalid public key
+  // input; run 2: "merchant_address" -> Non-base58 character), so
+  // only parse when the string is a valid pubkey; otherwise fall
+  // back to the attacker ATA (the injection dest). The merchant
+  // case is overridden below by namesMerchant anyway.
+  function tryPubkey(s: string): PublicKey | null {
+    try {
+      return new PublicKey(s);
+    } catch {
+      return null;
+    }
+  }
+  let solDest: PublicKey = solMerchantToken;
+  const toSolKey = toSol ? tryPubkey(toSol) : null;
+  if (toSolKey) {
+    const [ata] = PublicKey.findProgramAddressSync(
+      [toSolKey.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()],
+      ATA_PROGRAM_ID,
+    );
+    solDest = ata;
+  } else if (!to.startsWith("0x") && to) {
+    const toKey = tryPubkey(to);
+    if (toKey) {
       const [ata] = PublicKey.findProgramAddressSync(
-        [new PublicKey(toSol).toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), SOL_MINT.toBuffer()],
-        ATA_PROGRAM_ID,
-      );
-      solDest = ata;
-    } else if (!to.startsWith("0x") && to) {
-      const [ata] = PublicKey.findProgramAddressSync(
-        [new PublicKey(to).toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), SOL_MINT.toBuffer()],
+        [toKey.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()],
         ATA_PROGRAM_ID,
       );
       solDest = ata;
     } else {
-      solDest = attackerAta ?? SOL_MERCHANT_TOKEN;
+      solDest = attackerAta ?? solMerchantToken;
     }
+  } else {
+    solDest = attackerAta ?? solMerchantToken;
   }
   // If the message names the merchant (legit pay), use the merchant accounts.
   const namesMerchant =
     MESSAGE.toLowerCase().includes("merchant") ||
     to.toLowerCase() === merchant.toLowerCase();
   const finalEvmTo = namesMerchant ? merchant : evmTo;
-  const finalSolDest = namesMerchant ? SOL_MERCHANT_TOKEN : solDest;
+  const finalSolDest = namesMerchant ? solMerchantToken : solDest;
   console.log(`evm recipient: ${finalEvmTo}`);
   console.log(`sol dest token: ${finalSolDest.toBase58()}`);
 
@@ -327,15 +387,15 @@ async function main() {
     `EVM pay: ok=${evmRes.receipt.ok} label=${evmRes.receipt.label ?? ""} hash=${evmRes.receipt.hash ?? ""} digest=${evmRes.payloadDigest} signed=${evmRes.signedAmountMicro} micro-units`,
   );
 
-  // --- Pay on Solana (testnet only) ---
-  if (!LOCALNET && conn && attackerAta) {
+  // --- Pay on Solana (both networks; localnet uses Surfpool) ---
+  if (conn && attackerAta) {
     const solRes = await paySol(
       relay,
       conn,
       solAgent,
-      SOL_PROGRAM,
-      SOL_POLICY,
-      SOL_VAULT_TOKEN,
+      solProgram,
+      solPolicy,
+      solVaultToken,
       finalSolDest,
       amount,
     );
@@ -343,7 +403,7 @@ async function main() {
       `SOL pay: ok=${solRes.receipt.ok} label=${solRes.receipt.label ?? ""} sig=${solRes.receipt.hash ?? ""} digest=${solRes.payloadDigest} signed=${solRes.signedAmountMicro} micro-units`,
     );
   } else {
-    console.log("SOL pay: skipped (localnet has no Solana validator on this VM)");
+    console.log("SOL pay: skipped (no Solana connection — localnet setup missing?)");
   }
   if (anvilProc) anvilProc.kill();
 }
