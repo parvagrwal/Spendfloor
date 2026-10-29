@@ -1,0 +1,31 @@
+{
+  "network": "Solana devnet",
+  "deployed": "2026-10-30 (event window)",
+  "program": "CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE",
+  "programDeployTx": "54r7q3BbxLmG8Eor3iGjZW8STYdzXk9rd7PeipXgkjiqx1wtRqdLAeaMhbzoE5aywgAx8X1ZdUwD8puhW9VEEfXH",
+  "note": "New program ID. The T07 program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC cannot be upgraded (its program keypair is lost); it is superseded. The token program deploys fresh here; declare_id in solana/programs/spendfloor/src/lib.rs matches.",
+  "policyPda": "5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE",
+  "policyInitTx": "FsiBmCFrEt3n4erUtnFgpQPmytX7d64TeWuvw6hLo4TmtmmbMrhHuT2pJ5Hm1ehp4EMuAN2qNWHJGqfGPm84XQk",
+  "mint": "ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U",
+  "mintTx": "31PtZ9P4GtEEpmaBMFv6ehyxNrAa1jHZCdSouErVw1wwRguBjWDZqZn9UitttRzzuKgSBxGBtQno84k8cANNUgK9",
+  "vaultTokenAccount": "GhanJGGQhwhSL9q1Uvsy7MopiA2aDH7QERmrvqz1xn6N",
+  "vaultTokenAccountTx": "2JxriSZfz9jvtkcQ7W7HJzHrfgcPDaFAaWYZTpLe4hJFnJS11y8vjHiT57tbmJbRJVrJoyDfbtXHR8Rqk3SDMdBw",
+  "merchantTokenAccount": "GiKhKyYKuMQjJZrMLmRxhggrzRPkDrwLEAbr7SuUcnMV",
+  "merchantTokenAccountTx": "5Uv2Vpwdr9vP6sPLw9JuSDNgNz7bVigVGKo9vvY6VMuwU8twhcTD9XUV92s3hSmet5zcmkDVMZHfPCsNGmvvtG5Q",
+  "mintToVaultTx": "5rF5fExNMtF7AjYmBYqkWbs6Cb94o1VsS6R8jksKi54iz7wEvpKwiqRQh8ci1Gi9ACE71RSXKuwUu59V6fnAcARh",
+  "owner": "HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v",
+  "agent": "5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3",
+  "merchant": "8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS",
+  "evmMerchant": "0x61f1c99d674bcd333578AC4f538F46AbC7bB4106",
+  "evmSetHash": "0xcefa82f0f269c54debfdedde4ced94e7026b2ccfd4ab681ded6e0a037c727656",
+  "policy": {
+    "perTx": 2000000,
+    "window": 5000000,
+    "windowSeconds": 86400,
+    "windowAnchor": 1793300140,
+    "expiresAt": 1793386540,
+    "funded": 100000000
+  },
+  "p1p2Note": "P1/P2 are set_policy configurations for T17, not separate Solana vaults (one program has one policy PDA). On EVM they are separate contracts.",
+  "verified": "evidence/T16/testnet-verify-2026-10-30.txt (all on-chain checks pass)"
+}

@@ -1,0 +1,39 @@
+PASS  EVM demo owner: 0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0
+PASS  EVM demo agent: 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772
+PASS  EVM demo token: 0xb86eFe265BE37a521ddb271d750e6a41CB2471e2
+PASS  EVM demo frozen: false
+PASS  EVM demo merchant recipient: true
+PASS  EVM demo perTx: perTxMax=2000000
+PASS  EVM demo window: 
+PASS  EVM demo windowSeconds: 
+PASS  EVM demo balance: 100000000 micro-units
+PASS  EVM P1 owner: 0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0
+PASS  EVM P1 agent: 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772
+PASS  EVM P1 token: 0xb86eFe265BE37a521ddb271d750e6a41CB2471e2
+PASS  EVM P1 frozen: false
+PASS  EVM P1 merchant recipient: true
+PASS  EVM P1 perTx: perTxMax=2000000
+PASS  EVM P1 window: 
+PASS  EVM P1 windowSeconds: 
+PASS  EVM P1 balance: 100000000 micro-units
+PASS  EVM P2 owner: 0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0
+PASS  EVM P2 agent: 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772
+PASS  EVM P2 token: 0xb86eFe265BE37a521ddb271d750e6a41CB2471e2
+PASS  EVM P2 frozen: false
+PASS  EVM P2 merchant recipient: true
+PASS  EVM P2 perTx: perTxMax=2000000
+PASS  EVM P2 window: 
+PASS  EVM P2 windowSeconds: 
+PASS  EVM P2 balance: 100000000 micro-units
+PASS  SOL policy owner: HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v
+PASS  SOL policy agent: 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3
+PASS  SOL policy mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U
+PASS  SOL policy perTx: 2000000
+PASS  SOL policy window: 5000000
+PASS  SOL policy windowSeconds: 86400
+PASS  SOL policy frozen: false
+PASS  SOL policy recipients: ["8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS"]
+PASS  SOL policy evmSetHash: 0xcefa82f0f269c54debfdedde4ced94e7026b2ccfd4ab681ded6e0a037c727656
+SOL policy anchor: 1793300140, expiry: 1793386540, spent: 0
+PASS  SOL vault token balance: 100000000 micro-units
+ALL CHECKS PASS

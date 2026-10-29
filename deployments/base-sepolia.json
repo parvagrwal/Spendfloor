@@ -1,0 +1,51 @@
+{
+  "network": "Base Sepolia",
+  "deployed": "2026-10-30 (event window)",
+  "token": {
+    "address": "0xb86efe265be37a521ddb271d750e6a41cb2471e2",
+    "name": "SpendFloor USD (SFUSD, 6 decimals)",
+    "deployTx": "0xd0df5cec737d5f493fa9cc35e58560e28e0383901c7288827222b55da0e51cb7"
+  },
+  "owner": "0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0",
+  "agent": "0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772",
+  "merchant": "0x61f1c99d674bcd333578AC4f538F46AbC7bB4106",
+  "solMerchant": "8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS",
+  "solSetHash": "0x8124c2952fc59c7c2df2f5966449254374797964d83d460f5f66c8f225f7584f",
+  "vaults": {
+    "demo": {
+      "address": "0x8d13a6a31518b357a480659073b9db78ab861809",
+      "deployTx": "0x1d076760f7776456b3da94f33555918c13b72818bc078193817d99cc100304af",
+      "mintTx": "0xa0350a977806b417542158243b875d5c19df033751dee8a5dc99735df1e0c554",
+      "perTx": 2000000,
+      "window": 5000000,
+      "windowSeconds": 86400,
+      "windowAnchor": 1793300029,
+      "expiresAt": 1793386429,
+      "funded": 100000000
+    },
+    "P1": {
+      "address": "0x13d9a2306c094e8693ad443985708211effd5964",
+      "deployTx": "0x9b4e27322df42578f6053448ec6b9b1060fdd2b7032d10933e8115da59b5a796",
+      "mintTx": "0x92c1466fe844d5d7da2e27f31710cbb93963fae6bd80640b0d1637afe1a08812",
+      "perTx": 2000000,
+      "window": 5000000,
+      "windowSeconds": 300,
+      "windowAnchor": 1793300029,
+      "expiresAt": 1793386429,
+      "funded": 100000000
+    },
+    "P2": {
+      "address": "0xeec2e45af98e10b64bf596f65403f6dac0e28c7b",
+      "deployTx": "0x27589732767758973e9b9db222f54d312e19052e3653b055b02338733ec43f80",
+      "mintTx": "0x6d49671fd32acda77f53041f365c64dea6bc32f523db94c09bd5dc522e730433",
+      "perTx": 2000000,
+      "window": 5000000,
+      "windowSeconds": 86400,
+      "windowAnchor": 1793300029,
+      "expiresAt": 1793300209,
+      "note": "P2 expired 180 s after anchor (by design, for the V16 expiry vector in T17).",
+      "funded": 100000000
+    }
+  },
+  "verified": "evidence/T16/testnet-verify-2026-10-30.txt (all on-chain checks pass)"
+}

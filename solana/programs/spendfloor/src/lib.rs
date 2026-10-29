@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount};
 use sha2::{Digest, Sha256};
 
-declare_id!("BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC");
+declare_id!("CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE");
 
 /// T12a (reworked to plan D4) + T12b complete Solana program: the mirror
 /// of the T10 EVM vault, holding SPL SFUSD, not native SOL.
