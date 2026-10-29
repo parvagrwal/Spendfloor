@@ -14,6 +14,8 @@
 //   npx tsx conformance/owner.ts sol-set-window
 //   npx tsx conformance/owner.ts sol-set-expiry
 //   npx tsx conformance/owner.ts sol-reset
+//   npx tsx conformance/owner.ts sol-mutate-recipient
+//   npx tsx conformance/owner.ts sol-restore-recipient
 //
 // EVM vault (demo): 0x8d13a6a31518b357a480659073b9db78ab861809
 // SOL program: CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE
@@ -185,6 +187,25 @@ async function solSetPolicy(windowSecs: bigint, expiry: bigint) {
   console.log(`sol set_policy window=${windowSecs} expiry=${expiry} anchor=${now}: sig=${sig}`);
 }
 
+// T18 mutation test: change ONLY the recipient list, preserving every
+// other field (including anchor/expiry) from the current policy, so
+// the verify diff is precise (only recipients + hash change).
+async function solSetRecipients(recipients: PublicKey[]) {
+  const ownerKp = loadSolKeypair("owner");
+  const conn = new Connection("https://api.devnet.solana.com", "confirmed");
+  const pol = await readSolPolicy(conn, SOL_PROGRAM);
+  const evmHashBytes = Buffer.from(pol.evmSetHash);
+  let data = Buffer.concat([discriminator("set_policy")]);
+  data = Buffer.concat([data, u32le(pol.version), Buffer.from([pol.decimals]), u64le(pol.perTxMax), u64le(pol.windowMax), u64le(pol.windowSeconds), i64le(pol.windowAnchor), i64le(pol.expiresAt)]);
+  data = Buffer.concat([data, u32le(recipients.length)]);
+  for (const r of recipients) {
+    data = Buffer.concat([data, r.toBuffer()]);
+  }
+  data = Buffer.concat([data, evmHashBytes]);
+  const sig = await solIx(ownerKp, data);
+  console.log(`sol set_policy recipients=[${recipients.map((r) => r.toBase58()).join(",")}]: sig=${sig}`);
+}
+
 async function main() {
   if (cmd === "evm-freeze") await evmSetFrozen(true);
   else if (cmd === "evm-unfreeze") await evmSetFrozen(false);
@@ -203,6 +224,12 @@ async function main() {
   } else if (cmd === "sol-reset") {
     const now = BigInt(Math.floor(Date.now() / 1000));
     await solSetPolicy(86400n, now + 86400n);
+  } else if (cmd === "sol-mutate-recipient") {
+    // T18 mutation: merchant -> attacker (demo attacker, non-merchant).
+    await solSetRecipients([new PublicKey("Hk851CTYdPGq8NuLGwz66kKzsu5HP66WNtie3Yhbw33F")]);
+  } else if (cmd === "sol-restore-recipient") {
+    // T18 mutation restore: back to merchant.
+    await solSetRecipients([SOL_MERCHANT]);
   } else {
     console.log(`unknown command: ${cmd}`);
     process.exit(1);
