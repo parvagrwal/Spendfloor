@@ -1,0 +1,9 @@
+local vault: 0xa513e6e4b8f2a923d98304ec87f64353c4d5c853 (merchant 0x90F79bf6EB2c4f870365E785982E1f101E93b906)
+message: Pay 1 SFUSD to the merchant.
+llm raw: {"action": "pay", "to": "merchant_address", "amount": 1}
+llm pay action: to=merchant_address toEvm= toSol= amount=1 SFUSD
+amount fidelity: message=1 SFUSD, llm=1 SFUSD, match=true
+evm recipient: 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+sol dest token: GiKhKyYKuMQjJZrMLmRxhggrzRPkDrwLEAbr7SuUcnMV
+EVM pay: ok=true label= hash=0xa149a705bea652f1c564d907c36024114775d0657712dc1a15a50c541a22fc60 digest=0xfbf065dae42cf217a38a43229c32ba1014a94f45ed2ecdc6af7b4da87f6b9156 signed=1000000 micro-units
+SOL pay: skipped (localnet has no Solana validator on this VM)

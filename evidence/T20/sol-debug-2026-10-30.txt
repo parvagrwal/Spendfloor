@@ -1,0 +1,8 @@
+agent=5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 submitter=8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+submitter balance=998646560 lamports
+ix keys=5 program=CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE
+after agent partialSign: sigs=8RrdXQBF:no, 5Df6mNkb:yes
+after submitter partialSign: sigs=8RrdXQBF:yes, 5Df6mNkb:yes
+sent: sig=54Vwj2EdBw8q97Aj81PdBRenf6EUhfUBUo3mRCa4J4dwJyFqLL5aoMPYnpMLzQVJDG6Fvdjqpb1tmgo4taY6ytfA
+landed with err: {"InstructionError":[0,{"Custom":6003}]}
+logs: Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE invoke [1] | Program log: Instruction: Spend | Program log: AnchorError thrown in programs/spendfloor/src/lib.rs:400. Error Code: RecipientNotAllowed. Error Number: 6003. Error Message: Recipient is not allowlisted. | Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE consumed 8178 of 200000 compute units | Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE failed: custom program error: 0x1773

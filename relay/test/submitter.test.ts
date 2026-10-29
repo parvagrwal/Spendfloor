@@ -27,6 +27,7 @@ import {
   type Abi,
   type Address,
   type Hash,
+  type PublicClient,
 } from "viem";
 import {
   generatePrivateKey,
@@ -77,7 +78,7 @@ async function waitForRpc(url: string, timeoutMs: number): Promise<void> {
 
 let anvilProc: ChildProcess | null = null;
 let evmOwner: ReturnType<typeof createWalletClient>;
-let evmPublic: ReturnType<typeof createPublicClient>;
+let evmPublic: PublicClient;
 let evmSubmitter: ReturnType<typeof createWalletClient>;
 let evmToken: Address;
 let vaultA: Address;
@@ -111,7 +112,7 @@ test.before(async () => {
   evmPublic = createPublicClient({
     chain: foundry,
     transport: http(EVM_RPC),
-  });
+  }) as unknown as PublicClient;
   evmOwner = createWalletClient({
     account: ownerAcc,
     chain: foundry,
@@ -315,7 +316,7 @@ test("relay off unit test (no chain, never started)", async () => {
   const relay = new Relay(
     DEFAULT_RELAY_CONFIG,
     createPublicClient({ chain: foundry, transport: http(EVM_RPC) }),
-    evmSubmitter,
+    evmSubmitter as unknown as Parameters<typeof createRelay>[1],
     // @ts-expect-error dummy connection: submit throws before any RPC use
     null,
     Keypair.generate(),

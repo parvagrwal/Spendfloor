@@ -140,6 +140,14 @@ export class Relay {
   isRunning(): boolean {
     return this.started;
   }
+  /** The submitter's EVM address (fee payer). */
+  evmSubmitterAddress(): Address | undefined {
+    return this.evmSubmitter.account?.address;
+  }
+  /** The submitter's Solana public key (fee payer). */
+  solSubmitterAddress(): PublicKey {
+    return this.solSubmitter.publicKey;
+  }
   private requireRunning(): void {
     if (!this.started) throw new Error("relay is off (fails closed)");
   }
@@ -195,7 +203,9 @@ export class Relay {
     this.limiter.check(agentId);
     await this.checkSolFloat();
     const tx = Transaction.from(partialTx);
-    tx.sign(this.solSubmitter);
+    // partialSign, NOT sign: sign() rebuilds the signature list for the
+    // given signers only and wipes the agent's partial signature.
+    tx.partialSign(this.solSubmitter);
     let signature: string;
     try {
       signature = await this.solConnection.sendRawTransaction(
