@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-30",
+  "runs": [
+    {
+      "run": 1,
+      "seconds": 63.3,
+      "under90": true,
+      "evm": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "hash": "0x21af4ff6838995b1e3039fb9bc270b1c809180680cc2a71a303e555a6b57ac1d",
+        "digest": "0xc4cf68e6e40d4ab50466303d78b38d882032323fd65cb976377e7919fa0ed86d"
+      },
+      "sol": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "sig": "2PsBE12WXVJEJViUmgQYG9QPPAXTwfrinVeQHetXpUVjDe8xSjFtEFSbioQr9gwU7aEQm7DyScYMsTxJYgZ6tSP1",
+        "digest": "2PsBE12WXVJEJViUmgQYG9QPPAXTwfrinVeQHetXpUVjDe8xSjFtEFSbioQr9gwU7aEQm7DyScYMsTxJYgZ6tSP1"
+      },
+      "fidelityMatch": true
+    },
+    {
+      "run": 2,
+      "seconds": 14.4,
+      "under90": true,
+      "evm": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "hash": "0x853c3f0948770f3aad78ad87bd9d56782ac9d30167efdbca5ac8407d24be464c",
+        "digest": "0xd24deef8d0616d979eed594b759b207337eb8727dfe03fe01f6681f313dc7c35"
+      },
+      "sol": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "sig": "67DkXeQcyrismHBJQYstYL3VU4dJkjdfYL7rH4VNGkAwaNhkn1Nw9nqMYoPDWQ13s3m6qXyADAN6H25WQHgaaHCx",
+        "digest": "67DkXeQcyrismHBJQYstYL3VU4dJkjdfYL7rH4VNGkAwaNhkn1Nw9nqMYoPDWQ13s3m6qXyADAN6H25WQHgaaHCx"
+      },
+      "fidelityMatch": true
+    },
+    {
+      "run": 3,
+      "seconds": 14.6,
+      "under90": true,
+      "evm": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "hash": "0xb8e5571f6a851500257e1b55cc0f7de06345c49f0706a309272ba2746089287d",
+        "digest": "0x20924f56c7333e5c2dcd4cc07f48b14cffc49f982805fc64dd06f1e342c0bd10"
+      },
+      "sol": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "sig": "4ssgmSF9QAtLTmte3PNBiLfP6piC8SXxnvd96VwmSsF2PLVfxhFi67e988erqAgQeNUozn8DePqVqgPufPNrMuNa",
+        "digest": "4ssgmSF9QAtLTmte3PNBiLfP6piC8SXxnvd96VwmSsF2PLVfxhFi67e988erqAgQeNUozn8DePqVqgPufPNrMuNa"
+      },
+      "fidelityMatch": true
+    },
+    {
+      "run": 4,
+      "seconds": 14,
+      "under90": true,
+      "evm": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "hash": "0xefe296345c222bec486cd58267e345bf165710db1a37ad4d2ffda80de9a5aa7c",
+        "digest": "0xab250ae47907a84a51e3d1be29940e74b8d722a5e7636f8faee3f719de37aa13"
+      },
+      "sol": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "sig": "23oezxnerUNmsP6KbWxD1WPjKWX3MQKyK4xGVN3Zr91fq2ayqC1wdaGzNmLhMFcQ1PniThE6CYEMVctSDnkGQ9Uc",
+        "digest": "23oezxnerUNmsP6KbWxD1WPjKWX3MQKyK4xGVN3Zr91fq2ayqC1wdaGzNmLhMFcQ1PniThE6CYEMVctSDnkGQ9Uc"
+      },
+      "fidelityMatch": true
+    },
+    {
+      "run": 5,
+      "seconds": 13.6,
+      "under90": true,
+      "evm": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "hash": "0xe9b8abc963b8244d4c3d77aa445672d2f37f9bb2bd7fe9a207980d3853e1d6d5",
+        "digest": "0xb2d9ee95db6f7f395075dad8058beb463916442c8deb1aa7a6c46d720ca8b387"
+      },
+      "sol": {
+        "ok": false,
+        "label": "RecipientNotAllowed",
+        "sig": "2xC3ptafaaV2WtDXNBokqZKNDqi7Q3CZGUUmYCwnHW5JoxYEftUJVi8NKcveBs7gvg9ti3qzBNNhauRgQtGJDLfw",
+        "digest": "2xC3ptafaaV2WtDXNBokqZKNDqi7Q3CZGUUmYCwnHW5JoxYEftUJVi8NKcveBs7gvg9ti3qzBNNhauRgQtGJDLfw"
+      },
+      "fidelityMatch": true
+    }
+  ],
+  "legit": {
+    "seconds": 17.4,
+    "evm": {
+      "ok": true,
+      "label": "",
+      "hash": "0x7fc426fc9b34499085478a0e2cfcfc68c93a46b9b12da08a3757fe5ae961019d",
+      "digest": "0x04a6904f7e56e8eef2400267815cae440b61e0919e76fa0a44ff7163ae359708"
+    },
+    "sol": null,
+    "fidelityMatch": true,
+    "note": "First attempt got IntentExpired (pay.ts used wall-clock deadline; Anvil clock ahead). Fixed pay.ts to use block timestamp. Second attempt used testnet merchant on Anvil (not a recipient) -> RecipientNotAllowed (correct). Third attempt with Anvil merchant (acct 3) landed."
+  },
+  "allUnder90": true,
+  "allRejected": true
+}

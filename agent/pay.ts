@@ -68,7 +68,14 @@ export async function payEvm(
     abi: VAULT_ABI,
     functionName: "nonce",
   })) as bigint;
-  const deadline = BigInt(Math.floor(Date.now() / 1000) + 300);
+  // Deadline from the chain's block timestamp, not wall clock (T17
+  // lesson: Anvil warps run its clock ahead of real time, so a wall-
+  // clock deadline can already be past -> IntentExpired, which is
+  // what killed T27's first legit control). The vault checks the
+  // deadline against block.timestamp, so block time is the correct
+  // source on both Anvil and testnet.
+  const block = await evmPublic.getBlock({ blockTag: "latest" });
+  const deadline = block.timestamp + 300n;
   const signed = await signEvmIntent(agent, chainId, vault, {
     to,
     amount: amountMicro,
