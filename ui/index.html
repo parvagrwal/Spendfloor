@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SpendFloor — Demo Dashboard</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 900px; padding: 0 1rem; color: #111; }
+  h1 { font-size: 1.6rem; }
+  .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  .green { color: #0a7a2f; font-weight: 700; }
+  .mono { font-family: ui-monospace, monospace; font-size: 0.85rem; word-break: break-all; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #eee; padding: 0.4rem; text-align: left; font-size: 0.9rem; }
+  button { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; }
+  .note { color: #555; font-size: 0.85rem; }
+  .tag { display: inline-block; background: #eef; border-radius: 6px; padding: 0.1rem 0.5rem; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+<h1>SpendFloor — Demo Dashboard</h1>
+<p class="note">One spend policy for AI agents, enforced on-chain on Base Sepolia + Solana devnet. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.</p>
+
+<div class="card">
+<h2>Policy (same on both chains)</h2>
+<p>Per-transaction cap: <b>2 SFUSD</b> &nbsp;|&nbsp; Window cap: <b>5 SFUSD</b> &nbsp;|&nbsp; Window: <b>86,400 s (24 h)</b></p>
+<p>Recipients: merchant only</p>
+<p class="mono">EVM merchant: 0x61f1c99d674bcd333578AC4f538F46AbC7bB4106<br>
+SOL merchant: 8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS</p>
+<p>Policy hash (identical both chains, set by T21):</p>
+<p class="mono">0xe078f647281bcd096ab2e81ddfb4e98bcd2ac0bdf46a2bfd94bb770233dea43f</p>
+<p class="mono">EVM demo vault: 0x8d13a6a31518b357a480659073b9db78ab861809<br>
+SOL policy PDA: 5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE<br>
+EVM SFUSD: 0xb86efe265be37a521ddb271d750e6a41cb2471e2<br>
+SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
+</div>
+
+<div class="card">
+<h2>Verify status</h2>
+<p><span class="green">GREEN 15/15</span> <span class="tag">T18, 2026-10-30</span></p>
+<p class="note">The verify CLI recomputes the policy hash from live chain reads on both chains, checks the EVM runtime code, the Solana upgrade authority, zero agent balances, and cross-chain caps + recipients. Last full run: green on all 15 checks.</p>
+</div>
+
+<div class="card">
+<h2>Rejected injection attempts (counter)</h2>
+<p><b>10</b> on-chain-confirmed rejections: 5 rehearsal runs × 2 chains, all <b>RecipientNotAllowed</b>, amount fidelity true. Each rejection has a confirmed transaction hash/signature on-chain.</p>
+<table>
+<tr><th>Run</th><th>Chain</th><th>Label</th><th>On-chain evidence</th></tr>
+<tr><td>1</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0x21af4ff6838995b1e3039fb9bc270b1c809180680cc2a71a303e555a6b57ac1d">0x21af…ac1d</a></td></tr>
+<tr><td>1</td><td>Solana devnet</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://explorer.solana.com/tx/2PsBE12WXVJEJViUmgQYG9QPPAXTwfrinVeQHetXpUVjDe8xSjFtEFSbioQr9gwU7aEQm7DyScYMsTxJYgZ6tSP1?cluster=devnet">2PsB…SP1</a></td></tr>
+<tr><td>2</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0x853c3f0948770f3aad78ad87bd9d56782ac9d30167efdbca5ac8407d24be464c">0x853c…64c</a></td></tr>
+<tr><td>2</td><td>Solana devnet</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://explorer.solana.com/tx/67DkXeQcyrismHBJQYstYL3VU4dJkjdfYL7rH4VNGkAwaNhkn1Nw9nqMYoPDWQ13s3m6qXyADAN6H25WQHgaaHCx?cluster=devnet">67Dk…HCx</a></td></tr>
+<tr><td>3</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0xb8e5571f6a851500257e1b55cc0f7de06345c49f0706a309272ba2746089287d">0xb8e5…87d</a></td></tr>
+<tr><td>3</td><td>Solana devnet</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://explorer.solana.com/tx/4ssgmSF9QAtLTmte3PNBiLfP6piC8SXxnvd96VwmSsF2PLVfxhFi67e988erqAgQeNUozn8DePqVqgPufPNrMuNa?cluster=devnet">4ssg…MuNa</a></td></tr>
+<tr><td>4</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0xefe296345c222bec486cd58267e345bf165710db1a37ad4d2ffda80de9a5aa7c">0xefe2…a7c</a></td></tr>
+<tr><td>4</td><td>Solana devnet</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://explorer.solana.com/tx/23oezxnerUNmsP6KbWxD1WPjKWX3MQKyK4xGVN3Zr91fq2ayqC1wdaGzNmLhMFcQ1PniThE6CYEMVctSDnkGQ9Uc?cluster=devnet">23oe…GQ9Uc</a></td></tr>
+<tr><td>5</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0xe9b8abc963b8244d4c3d77aa445672d2f37f9bb2bd7fe9a207980d3853e1d6d5">0xe9b8…1d6d</a></td></tr>
+<tr><td>5</td><td>Solana devnet</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://explorer.solana.com/tx/2xC3ptafaaV2WtDXNBokqZKNDqi7Q3CZGUUmYCwnHW5JoxYEftUJVi8NKcveBs7gvg9ti3qzBNNhauRgQtGJDLfw?cluster=devnet">2xC3…DLfw</a></td></tr>
+</table>
+<p class="note">Source: evidence/T27/rehearsal-2026-10-30.json (T27, 5 runs, all under 90 s).</p>
+</div>
+
+<div class="card">
+<h2>Lost to the attacker</h2>
+<p>Attacker balances read from both chains (what the attacker actually got):</p>
+<p>EVM attacker (0x960b6582945D1447b55B032C9630a3Bc8E82C6D0): <b id="evm-lost">0 SFUSD</b> <span class="tag" id="evm-tag">cached</span></p>
+<p>SOL attacker ATA (94o4pwuHjHWu6GjFuxit9yNYFGg8V5Rgw8uPh6LzSNrz): <b id="sol-lost">0 SFUSD</b> <span class="tag" id="sol-tag">cached</span></p>
+<button onclick="refreshLive()">Refresh live</button>
+<span class="note" id="refresh-note">Cached values are the last verified readings (T18/T27, 2026-10-30). Pressing Refresh reads both chains live; if a chain does not answer, its cached value stays.</span>
+</div>
+
+<p class="note">This page has no build step and no external libraries. Open ui/index.html directly, or serve the ui/ folder. Live reads go to the public Base Sepolia and Solana devnet RPCs; if either is unreachable, cached verified values are shown instead.</p>
+
+<script>
+const EVM_RPC = "https://sepolia.base.org";
+const SOL_RPC = "https://api.devnet.solana.com";
+const SFUSD = "0xb86efe265be37a521ddb271d750e6a41cb2471e2";
+const EVM_ATTACKER = "0x960b6582945D1447b55B032C9630a3Bc8E82C6D0";
+const SOL_ATTACKER_ATA = "94o4pwuHjHWu6GjFuxit9yNYFGg8V5Rgw8uPh6LzSNrz";
+
+async function readEvmAttacker() {
+  // balanceOf(address) = 0x70a08231 + 32-byte padded address.
+  const data = "0x70a08231" + "000000000000000000000000" + EVM_ATTACKER.slice(2).toLowerCase();
+  const res = await fetch(EVM_RPC, { method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call",
+      params: [{ to: SFUSD, data }, "latest"] }) });
+  const j = await res.json();
+  if (j.error) throw new Error(j.error.message);
+  return parseInt(j.result, 16) / 1e6;
+}
+
+async function readSolAttacker() {
+  const res = await fetch(SOL_RPC, { method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "getTokenAccountBalance",
+      params: [SOL_ATTACKER_ATA] }) });
+  const j = await res.json();
+  if (j.error) throw new Error(j.error.message);
+  return j.result.value.uiAmount;
+}
+
+async function refreshLive() {
+  document.getElementById("refresh-note").textContent = "Reading both chains…";
+  try {
+    const v = await readEvmAttacker();
+    document.getElementById("evm-lost").textContent = v + " SFUSD";
+    document.getElementById("evm-tag").textContent = "live";
+  } catch (e) { document.getElementById("evm-tag").textContent = "cached (RPC unreachable)"; }
+  try {
+    const v = await readSolAttacker();
+    document.getElementById("sol-lost").textContent = v + " SFUSD";
+    document.getElementById("sol-tag").textContent = "live";
+  } catch (e) { document.getElementById("sol-tag").textContent = "cached (RPC unreachable)"; }
+  document.getElementById("refresh-note").textContent =
+    "Last refresh: " + new Date().toLocaleString() + ". Cached values are the last verified readings (T18/T27, 2026-10-30).";
+}
+</script>
+</body>
+</html>
