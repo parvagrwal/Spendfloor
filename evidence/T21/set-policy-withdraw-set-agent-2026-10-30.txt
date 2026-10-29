@@ -1,0 +1,14 @@
+T21 set-policy + withdraw + set-agent (2026-10-30, via cli/spendfloor.ts owner, Parv owner key):
+  pre: EVM spent=1000000/5000000 (headroom 4000000), SOL spent=1000000/5000000 (headroom 4000000)
+  EVM set-policy: ok hash=0xc4fb8c2c820affc3b00bdf46d1aee190fbf27a2ef9f8281c06096c9503fa9b3c (perTx 2000000, window 5000000, windowSecs 86400, expiry now+86400)
+  SOL set-policy: ok sig=54VoyoXGJU7NRqxbJqW75tGw4a8sgDZmBNgeKDpRtoQXLPpr8JG4mzs4cmgxzStXUH5dtMUDaDbvaW1Yphkzk4Nq (same params)
+  NOTE: set-policy's auto-verify failed on Parv's machine with a dRPC free-tier rate limit
+  ("You reached Public endpoint rate limit, please upgrade to paid plan" on base-sepolia.drpc.org).
+  This is a transient RPC limit, NOT a policy failure: both set-policy txs landed (ok hashes/sigs).
+  The VM re-ran verify after all three commands: GREEN 15/15 (see verify-green-after-t21-2026-10-30.txt).
+  EVM withdraw 1000000 (1 SFUSD to owner): ok hash=0x05e8d20392b448692cd59b73cb9d95e91e4ed53caa4d1c0cd0cfc9ca3d7a2863
+  SOL withdraw 1000000 (1 SFUSD to owner): ok sig=216evchs8czgxrkkTo7bbdVA8LfjCrnWMFpZ8cLRCzcu6FN5bGBhA746jwWQM2R5gjyv51BWQZw6SW6L8mJFDKH1
+  EVM set-agent 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 (current, no-op): ok hash=0x7ae2f78deb24af8b606c641fbfadf0c5181e86d6a3d7b9da3665327931136be0
+  SOL set-agent 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 (current, no-op): ok sig=4fhYeUga5e4PMKoHsGnDFbkVSNmM83hk1q2yrsGrF38dRSG6Qc4PQztV1SZqrCLk9YmNrfVTuRSkYK8iSKkHbeag
+  Post-T21 verify (VM): GREEN 15/15; EVM policyHash == SOL policyHash == 0xe078f647281bcd096ab2e81ddfb4e98bcd2ac0bdf46a2bfd94bb770233dea43f
+  (identical across chains for the first time: set-policy set the same anchor/expiry/caps on both chains in parallel).

@@ -1,33 +1,30 @@
-// spendfloor verify (T18).
+// spendfloor verify (T18) + owner CLI (T21).
 //
-// Reads the enforced state from both chains, recomputes everything
-// from what it reads (trusting neither stored hash), and reports
-// PASS/FAIL per check with a precise diff on failure.
+// Verify: reads the enforced state from both chains, recomputes
+// everything from what it reads (trusting neither stored hash), and
+// reports PASS/FAIL per check with a precise diff on failure.
+//
+// Owner: freeze/unfreeze/set-policy/withdraw/set-agent on both
+// chains (owner keys only, on Parv's machine). Freeze/unfreeze run
+// the two chains in parallel and record the skew (NOT atomic).
 //
 // Graphify: Verifier Recomputes From Source of Truth + Mutation
-// Testing + Verifier That Has Never Failed Disguise (a verifier that
-// never fails is suspect, so the mutation test is required, not
-// optional) + One-Path Verification Disguise (two independent RPCs
-// per chain, not one path) + Stored Value Disguise (recompute, do
-// not trust a stored hash).
-//
-// Checks (each via RPC1 AND RPC2, which must agree):
-//   evm.policy    live fields -> recomputed policyHash == stored policyHash;
-//                 isRecipient(merchant) == true
-//   evm.code      on-chain runtime code hash == local build (forge artifact)
-//   evm.roles     owner == OWNER, agent == AGENT
-//   evm.agent     AGENT native == 0, AGENT SFUSD == 0 (E1)
-//   sol.policy    live fields + live recipients -> recomputed policyHash
-//                 == stored policyHash; recipients == expected [merchant]
-//   sol.upgrade   program upgrade authority == OWNER (not AGENT) (S11)
-//   sol.roles     owner == OWNER, agent == AGENT
-//   sol.agent     AGENT native == 0, AGENT SFUSD == 0 (E1)
-//   cross.policy  caps + recipients match across chains, else DRIFT (X1);
-//                 anchor/expiry/spent are session state, not drift
+// Testing + Verifier That Has Never Failed Disguise + One-Path
+// Verification Disguise + Stored Value Disguise (verify); Non-
+// Atomicity and Admitted Seams + 'One Atomic Stop' Phrasing Trap +
+// Owner Role + Worst-Case Exposure Printed Beside Limit (owner).
 //
 // Usage:
 //   npx tsx cli/spendfloor.ts verify [--net testnet]
 //   npx tsx cli/spendfloor.ts verify --net testnet --json
+//   npx tsx cli/spendfloor.ts owner freeze
+//   npx tsx cli/spendfloor.ts owner unfreeze
+//   npx tsx cli/spendfloor.ts owner set-policy --per-tx 2000000 --window 5000000 --window-secs 86400 --expiry-secs 86400
+//   npx tsx cli/spendfloor.ts owner withdraw --amount 1000000
+//   npx tsx cli/spendfloor.ts owner set-agent --agent <address-or-pubkey>
+//   (set-agent takes --evm-agent <hex> and --sol-agent <base58>; with
+//   no args it sets each chain to its current agent, a no-op proving
+//   both transactions land)
 //
 // Exit code 0 if all checks PASS, 1 otherwise. SOL RPC2 defaults to
 // SOL_RPC2 env (Helius on Parv's machine); if unset it reuses RPC1 and
@@ -40,16 +37,32 @@ import { fileURLToPath } from "node:url";
 import { PublicKey } from "@solana/web3.js";
 import {
   createPublicClient,
+  createWalletClient,
   http,
   keccak256,
+  type Abi,
   type Address,
   type Hash,
+  type PublicClient,
 } from "viem";
 import { baseSepolia } from "viem/chains";
 import { readEvmPolicy, VAULT_ABI } from "../sdk/evm.js";
-import { readSolPolicy } from "../sdk/sol.js";
+import { readSolPolicy, discriminator } from "../sdk/sol.js";
 import { solConnection } from "../agent/pay.js";
+import { loadEvmAccount, loadSolKeypair } from "../sdk/keys.js";
 import { evmSetHash, policyHash, solSetHash } from "../policy/src/canonical.js";
+import {
+  Connection,
+  Keypair,
+  Transaction,
+  TransactionInstruction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
+import {
+  TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+} from "@solana/spl-token";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..");
@@ -67,8 +80,13 @@ const toHexBytes = (b: Uint8Array) => "0x" + Buffer.from(b).toString("hex");
 async function main() {
   const args = process.argv.slice(2);
   const cmd = args[0];
+  if (cmd === "owner") {
+    await runOwner(args.slice(1));
+    return;
+  }
   if (cmd !== "verify") {
     console.log("usage: npx tsx cli/spendfloor.ts verify [--net testnet] [--json]");
+    console.log("       npx tsx cli/spendfloor.ts owner freeze|unfreeze|set-policy|withdraw|set-agent [flags]");
     process.exit(1);
   }
   const netIdx = args.indexOf("--net");
@@ -109,7 +127,6 @@ async function main() {
   }
   const evm1 = createPublicClient({ chain: baseSepolia, transport: http(EVM_RPC1) });
   const evm2 = createPublicClient({ chain: baseSepolia, transport: http(EVM_RPC2) });
-  const { Connection } = await import("@solana/web3.js");
   const sol1 = new Connection(SOL_RPC1, "confirmed");
   const sol2 = new Connection(SOL_RPC2, "confirmed");
   void solConnection;
@@ -266,6 +283,278 @@ async function main() {
     console.log(JSON.stringify({ green, checks }, null, 2));
   }
   process.exit(green ? 0 : 1);
+}
+
+// ------------------------------------------------------------------
+// Owner CLI (T21).
+//
+// Graphify: Non-Atomicity and Admitted Seams + 'One Atomic Stop'
+// Phrasing Trap (never claim the freeze is atomic across chains; it
+// is two separate transactions, so the skew is measured and shown) +
+// Owner Role (only the owner key can do these) + Worst-Case Exposure
+// Printed Beside Limit (during the skew, the unfrozen chain can still
+// spend up to its remaining window headroom, so that number is shown).
+//
+// Commands (all need the OWNER keys, which live on Parv's machine):
+//   owner freeze              freeze both chains in parallel, skew recorded
+//   owner unfreeze            unfreeze both chains in parallel, skew recorded
+//   owner set-policy --per-tx X --window Y --window-secs Z --expiry-secs W
+//                             set policy on both chains in parallel, then verify
+//   owner withdraw --amount X SFUSD to the owner, both chains
+//   owner set-agent --agent ADDR   set agent on both chains
+//
+// Freeze/unfreeze run the two chains in parallel (Promise.allSettled,
+// so one chain's failure does not hide the other's result). The skew
+// is |t_evm - t_sol| in seconds between confirmations.
+
+function loadDeployments() {
+  const evmDep = JSON.parse(readFileSync(join(repoRoot, "deployments", "base-sepolia.json"), "utf8"));
+  const solDep = JSON.parse(readFileSync(join(repoRoot, "deployments", "solana-devnet.json"), "utf8"));
+  return {
+    EVM_VAULT: evmDep.vaults.demo.address as Address,
+    EVM_TOKEN: evmDep.token.address as Address,
+    EVM_OWNER: evmDep.owner as Address,
+    EVM_AGENT: evmDep.agent as Address,
+    EVM_MERCHANT: evmDep.merchant as Address,
+    SOL_PROGRAM: new PublicKey(solDep.program as string),
+    SOL_POLICY: new PublicKey(solDep.policyPda as string),
+    SOL_MINT: new PublicKey(solDep.mint as string),
+    SOL_VAULT_TOKEN: new PublicKey(solDep.vaultTokenAccount as string),
+    SOL_OWNER: new PublicKey(solDep.owner as string),
+    SOL_AGENT: new PublicKey(solDep.agent as string),
+    SOL_MERCHANT: new PublicKey(solDep.merchant as string),
+  };
+}
+
+function u32le(v: number): Buffer {
+  const b = Buffer.alloc(4); b.writeUInt32LE(v); return b;
+}
+function u64le(v: bigint): Buffer {
+  const b = Buffer.alloc(8); b.writeBigUInt64LE(v); return b;
+}
+function i64le(v: bigint): Buffer {
+  const b = Buffer.alloc(8); b.writeBigInt64LE(v); return b;
+}
+
+async function evmArtifactAbi(): Promise<Abi> {
+  const evmDir = join(repoRoot, "evm");
+  const forgeBin = process.env.HOME && (await import("node:fs")).existsSync(`${process.env.HOME}/.foundry/bin/forge`)
+    ? `${process.env.HOME}/.foundry/bin/forge` : "forge";
+  execSync(`${forgeBin} build`, { cwd: evmDir, stdio: "ignore" });
+  const artifact = JSON.parse(readFileSync(join(evmDir, "out", "SpendFloorVault.sol", "SpendFloorVault.json"), "utf8"));
+  return artifact.abi as Abi;
+}
+
+async function solSend(ownerKp: Keypair, conn: Connection, ix: TransactionInstruction, extraIxs: TransactionInstruction[] = []): Promise<string> {
+  const tx = new Transaction({ feePayer: ownerKp.publicKey }).add(...extraIxs, ix);
+  const sig = await sendAndConfirmTransaction(conn, tx, [ownerKp], { commitment: "confirmed" });
+  return sig;
+}
+
+async function runOwner(sub: string[]) {
+  const op = sub[0];
+  if (!["freeze", "unfreeze", "set-policy", "withdraw", "set-agent"].includes(op)) {
+    console.log("usage: owner freeze|unfreeze|set-policy|withdraw|set-agent [flags]");
+    process.exit(1);
+  }
+  const dep = loadDeployments();
+  const flag = (name: string): string | undefined => {
+    const i = sub.indexOf(name);
+    return i >= 0 ? sub[i + 1] : undefined;
+  };
+
+  // Pre-read both policies (for worst-case exposure + set-policy preservation).
+  const evmPub = createPublicClient({ chain: baseSepolia, transport: http("https://sepolia.base.org") });
+  const solConn = new Connection("https://api.devnet.solana.com", "confirmed");
+  const evmPol = await readEvmPolicy(evmPub as unknown as PublicClient, dep.EVM_VAULT);
+  const solPol = await readSolPolicy(solConn, dep.SOL_PROGRAM);
+  const evmHeadroom = evmPol.windowMax - evmPol.spentInWindow;
+  const solHeadroom = solPol.windowMax - solPol.spent;
+  console.log(`pre: EVM spent=${evmPol.spentInWindow}/${evmPol.windowMax} (headroom ${evmHeadroom}), SOL spent=${solPol.spent}/${solPol.windowMax} (headroom ${solHeadroom})`);
+
+  const timed = async <T>(fn: () => Promise<T>): Promise<{ ok: boolean; value?: T; error?: string; at: number }> => {
+    try {
+      const value = await fn();
+      return { ok: true, value, at: Date.now() };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : String(e), at: Date.now() };
+    }
+  };
+
+  if (op === "freeze" || op === "unfreeze") {
+    const frozen = op === "freeze";
+    const abi = await evmArtifactAbi();
+    const ownerAcc = loadEvmAccount("owner");
+    const ownerWallet = createWalletClient({ account: ownerAcc, chain: baseSepolia, transport: http("https://sepolia.base.org") });
+    const ownerKp = loadSolKeypair("owner");
+    const evmFn = async () => {
+      const h = await ownerWallet.writeContract({ account: ownerAcc, chain: baseSepolia, address: dep.EVM_VAULT, abi, functionName: "setFrozen", args: [frozen] });
+      const r = await evmPub.waitForTransactionReceipt({ hash: h });
+      if (r.status !== "success") throw new Error(`EVM setFrozen reverted: ${h}`);
+      return h;
+    };
+    const solFn = async () => {
+      const ix = new TransactionInstruction({
+        keys: [
+          { pubkey: ownerKp.publicKey, isSigner: true, isWritable: true },
+          { pubkey: dep.SOL_POLICY, isSigner: false, isWritable: true },
+        ],
+        programId: dep.SOL_PROGRAM,
+        data: Buffer.concat([discriminator("set_frozen"), Buffer.from([frozen ? 1 : 0])]),
+      });
+      return solSend(ownerKp, solConn, ix);
+    };
+    const [evmRes, solRes] = await Promise.allSettled([timed(evmFn), timed(solFn)]);
+    const evm = evmRes.status === "fulfilled" ? evmRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    const sol = solRes.status === "fulfilled" ? solRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    console.log(`EVM ${op}: ${evm.ok ? `ok hash=${evm.value}` : `FAIL ${evm.error}`}`);
+    console.log(`SOL ${op}: ${sol.ok ? `ok sig=${sol.value}` : `FAIL ${sol.error}`}`);
+    if (evm.ok && sol.ok) {
+      const skewSec = Math.abs(evm.at - sol.at) / 1000;
+      console.log(`SKEW: ${skewSec.toFixed(1)}s between EVM and SOL ${op} confirmations (NOT atomic; two separate transactions)`);
+      if (frozen) {
+        console.log(`WORST-CASE EXPOSURE during skew: the unfrozen chain could still spend up to its headroom (EVM ${evmHeadroom}, SOL ${solHeadroom} micro-units); caps still bound spending, so exposure is capped, not unlimited (X2)`);
+      }
+    } else {
+      console.log(`SKEW: not measurable (one chain failed); ${op} is PARTIAL, re-run to complete the other chain`);
+      process.exit(1);
+    }
+    return;
+  }
+
+  if (op === "set-policy") {
+    const perTx = BigInt(flag("--per-tx") ?? evmPol.perTxMax.toString());
+    const window = BigInt(flag("--window") ?? evmPol.windowMax.toString());
+    const windowSecs = BigInt(flag("--window-secs") ?? evmPol.windowSeconds.toString());
+    const expirySecs = BigInt(flag("--expiry-secs") ?? "86400");
+    const now = BigInt(Math.floor(Date.now() / 1000));
+    const expiry = now + expirySecs;
+    const abi = await evmArtifactAbi();
+    const ownerAcc = loadEvmAccount("owner");
+    const ownerWallet = createWalletClient({ account: ownerAcc, chain: baseSepolia, transport: http("https://sepolia.base.org") });
+    const ownerKp = loadSolKeypair("owner");
+    const evmFn = async () => {
+      const h = await ownerWallet.writeContract({
+        account: ownerAcc, chain: baseSepolia, address: dep.EVM_VAULT, abi, functionName: "setPolicy",
+        args: [evmPol.version, evmPol.decimals, perTx, window, windowSecs, now, expiry, [dep.EVM_MERCHANT], evmPol.solSetHash as Hash],
+      });
+      const r = await evmPub.waitForTransactionReceipt({ hash: h });
+      if (r.status !== "success") throw new Error(`EVM setPolicy reverted: ${h}`);
+      return h;
+    };
+    const solFn = async () => {
+      const recipients = solPol.recipients.length > 0 ? solPol.recipients : [dep.SOL_MERCHANT];
+      const evmHashBytes = Buffer.from(solPol.evmSetHash);
+      let data = Buffer.concat([discriminator("set_policy")]);
+      data = Buffer.concat([data, u32le(solPol.version), Buffer.from([solPol.decimals]), u64le(perTx), u64le(window), u64le(windowSecs), i64le(now), i64le(expiry)]);
+      data = Buffer.concat([data, u32le(recipients.length)]);
+      for (const r of recipients) data = Buffer.concat([data, r.toBuffer()]);
+      data = Buffer.concat([data, evmHashBytes]);
+      const ix = new TransactionInstruction({
+        keys: [
+          { pubkey: ownerKp.publicKey, isSigner: true, isWritable: true },
+          { pubkey: dep.SOL_POLICY, isSigner: false, isWritable: true },
+        ],
+        programId: dep.SOL_PROGRAM,
+        data,
+      });
+      return solSend(ownerKp, solConn, ix);
+    };
+    const [evmRes, solRes] = await Promise.allSettled([timed(evmFn), timed(solFn)]);
+    const evm = evmRes.status === "fulfilled" ? evmRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    const sol = solRes.status === "fulfilled" ? solRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    console.log(`EVM set-policy: ${evm.ok ? `ok hash=${evm.value}` : `FAIL ${evm.error}`}`);
+    console.log(`SOL set-policy: ${sol.ok ? `ok sig=${sol.value}` : `FAIL ${sol.error}`}`);
+    if (!evm.ok || !sol.ok) { console.log("set-policy PARTIAL; re-run to complete the other chain"); process.exit(1); }
+    console.log("set-policy landed on both chains; running verify...");
+    // Re-run verify in-process by shelling out to the same CLI.
+    execSync(`npx tsx ${join(here, "spendfloor.ts")} verify`, { stdio: "inherit" });
+    return;
+  }
+
+  if (op === "withdraw") {
+    const amount = BigInt(flag("--amount") ?? "1000000"); // default 1 SFUSD
+    const abi = await evmArtifactAbi();
+    const ownerAcc = loadEvmAccount("owner");
+    const ownerWallet = createWalletClient({ account: ownerAcc, chain: baseSepolia, transport: http("https://sepolia.base.org") });
+    const ownerKp = loadSolKeypair("owner");
+    const evmFn = async () => {
+      const h = await ownerWallet.writeContract({
+        account: ownerAcc, chain: baseSepolia, address: dep.EVM_VAULT, abi, functionName: "withdraw",
+        args: [ownerAcc.address, amount],
+      });
+      const r = await evmPub.waitForTransactionReceipt({ hash: h });
+      if (r.status !== "success") throw new Error(`EVM withdraw reverted: ${h}`);
+      return h;
+    };
+    const solFn = async () => {
+      const destAta = await getAssociatedTokenAddress(dep.SOL_MINT, ownerKp.publicKey);
+      const extra: TransactionInstruction[] = [];
+      const destInfo = await solConn.getAccountInfo(destAta);
+      if (!destInfo) {
+        extra.push(createAssociatedTokenAccountInstruction(ownerKp.publicKey, destAta, ownerKp.publicKey, dep.SOL_MINT));
+      }
+      const ix = new TransactionInstruction({
+        keys: [
+          { pubkey: ownerKp.publicKey, isSigner: true, isWritable: true },
+          { pubkey: dep.SOL_POLICY, isSigner: false, isWritable: true },
+          { pubkey: dep.SOL_VAULT_TOKEN, isSigner: false, isWritable: true },
+          { pubkey: destAta, isSigner: false, isWritable: true },
+          { pubkey: TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
+        ],
+        programId: dep.SOL_PROGRAM,
+        data: Buffer.concat([discriminator("withdraw"), u64le(amount)]),
+      });
+      return solSend(ownerKp, solConn, ix, extra);
+    };
+    const [evmRes, solRes] = await Promise.allSettled([timed(evmFn), timed(solFn)]);
+    const evm = evmRes.status === "fulfilled" ? evmRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    const sol = solRes.status === "fulfilled" ? solRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    console.log(`EVM withdraw ${amount}: ${evm.ok ? `ok hash=${evm.value}` : `FAIL ${evm.error}`}`);
+    console.log(`SOL withdraw ${amount}: ${sol.ok ? `ok sig=${sol.value}` : `FAIL ${sol.error}`}`);
+    if (!evm.ok || !sol.ok) process.exit(1);
+    return;
+  }
+
+  if (op === "set-agent") {
+    // EVM agent (hex address) and SOL agent (base58 pubkey) are
+    // different keypairs, so they need separate args. With no args,
+    // set each chain's agent to its CURRENT agent (a no-op that proves
+    // both transactions land without changing demo state).
+    const evmAgent = (flag("--evm-agent") ?? evmPol.agent) as Address;
+    const solAgent = flag("--sol-agent") ?? solPol.agent.toBase58();
+    const abi = await evmArtifactAbi();
+    const ownerAcc = loadEvmAccount("owner");
+    const ownerWallet = createWalletClient({ account: ownerAcc, chain: baseSepolia, transport: http("https://sepolia.base.org") });
+    const ownerKp = loadSolKeypair("owner");
+    const evmFn = async () => {
+      const h = await ownerWallet.writeContract({
+        account: ownerAcc, chain: baseSepolia, address: dep.EVM_VAULT, abi, functionName: "setAgent",
+        args: [evmAgent],
+      });
+      const r = await evmPub.waitForTransactionReceipt({ hash: h });
+      if (r.status !== "success") throw new Error(`EVM setAgent reverted: ${h}`);
+      return h;
+    };
+    const solFn = async () => {
+      const ix = new TransactionInstruction({
+        keys: [
+          { pubkey: ownerKp.publicKey, isSigner: true, isWritable: true },
+          { pubkey: dep.SOL_POLICY, isSigner: false, isWritable: true },
+        ],
+        programId: dep.SOL_PROGRAM,
+        data: Buffer.concat([discriminator("set_agent"), new PublicKey(solAgent).toBuffer()]),
+      });
+      return solSend(ownerKp, solConn, ix);
+    };
+    const [evmRes, solRes] = await Promise.allSettled([timed(evmFn), timed(solFn)]);
+    const evm = evmRes.status === "fulfilled" ? evmRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    const sol = solRes.status === "fulfilled" ? solRes.value : { ok: false, error: "promise rejected", at: Date.now() };
+    console.log(`EVM set-agent ${evmAgent}: ${evm.ok ? `ok hash=${evm.value}` : `FAIL ${evm.error}`}`);
+    console.log(`SOL set-agent ${solAgent}: ${sol.ok ? `ok sig=${sol.value}` : `FAIL ${sol.error}`}`);
+    if (!evm.ok || !sol.ok) process.exit(1);
+    return;
+  }
 }
 
 main().catch((err) => { console.error(`VERIFY ERROR: ${err instanceof Error ? err.message : String(err)}`); process.exit(1); });

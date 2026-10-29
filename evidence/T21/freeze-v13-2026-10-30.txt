@@ -1,0 +1,10 @@
+T21 freeze + V13 (2026-10-30, via cli/spendfloor.ts owner freeze, Parv owner key):
+  pre: EVM spent=1000000/5000000 (headroom 4000000), SOL spent=1000000/5000000 (headroom 4000000)
+  EVM freeze: ok hash=0x6fb41da8451ec9eef4935ecda1ca9fbd842956df6020632320266f5f3f63aa6c
+  SOL freeze: ok sig=A8bVjuezWkbuF3aJ6Y3QFHQ2PXyYAVtdeCMnWexGvFUUk4x4XsvGPDu4iBVtkMfPvRfvkZgwnGZbKhgw1KsQCLw
+  SKEW: 1.6s between EVM and SOL freeze confirmations (NOT atomic; two separate transactions)
+  WORST-CASE EXPOSURE during skew: unfrozen chain could still spend up to headroom (EVM 4000000, SOL 4000000 micro-units); caps bound spending, not unlimited (X2)
+V13 while frozen (agent spend 1 SFUSD to merchant, VM agent+submitter keys):
+  EVM spend: ok=false label=Frozen hash=0x27ffae7391046535ad8c7f5dcf0c79d18341c9aac6b5761bcfbd318c4a352914
+  SOL spend: ok=false label=Frozen sig=Y8q12fz27Sxtr9gNTELX4WwRYfdiGwetrw4XncMJ8ttgEBezSJcD6rWKjU6ukqasKqxMD6b8LwFZmvzZYzgdikM
+  V13 PASS on both chains (reverts roll back; spent stays 1 each chain).
