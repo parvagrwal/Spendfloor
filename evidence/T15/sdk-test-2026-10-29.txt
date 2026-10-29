@@ -1,0 +1,20 @@
+Solana validator unavailable, Solana tests will skip: RPC did not come up: http://127.0.0.1:8899
+Solana tests skipped: local validator unavailable.
+✔ evm: valid spend lands and updates state (32847.663763ms)
+✔ evm: non-recipient spend lands as RecipientNotAllowed with a hash (1054.135535ms)
+✔ evm: read state matches the deployed policy (9.718368ms)
+﹣ sol: valid spend lands and updates state (0.432218ms) # program .so missing
+﹣ sol: non-recipient spend lands as RecipientNotAllowed with a signature (0.256484ms) # program .so missing
+﹣ sol: read state matches the initialized policy (0.165448ms) # program .so missing
+✔ sol: discriminators match the program's Anchor discriminators (2.728323ms)
+✔ sol: spend instruction has the right data and account order (60.26725ms)
+✔ sol: policy account parses from the Borsh layout (4.091037ms)
+✔ sol: program error codes map to labels (0.261052ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 3
+ℹ todo 0
+ℹ duration_ms 37491.391589
