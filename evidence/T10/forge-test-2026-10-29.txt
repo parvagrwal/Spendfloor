@@ -1,0 +1,46 @@
+Compiling 1 files with Solc 0.8.37
+Solc 0.8.37 finished in 424.93ms
+Compiler run successful with warnings:
+Warning (2018): Function state mutability can be restricted to view
+   --> test/Vault.t.sol:727:5:
+    |
+727 |     function test_PolicyHashStable() public {
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+
+Ran 32 tests for test/Vault.t.sol:SpendFloorVaultTest
+[PASS] testFuzz_SpendOutcomes(uint256,uint256,uint256) (runs: 10000, μ: 130464, ~: 97639)
+[PASS] test_AgentAsRecipient() (gas: 38431)
+[PASS] test_BadNonce() (gas: 93286)
+[PASS] test_DeadlineBoundaries() (gas: 251236)
+[PASS] test_DeadlineTooFar() (gas: 93273)
+[PASS] test_ExactBoundaries() (gas: 455830)
+[PASS] test_Frozen() (gas: 318169)
+[PASS] test_IntentExpired() (gas: 93106)
+[PASS] test_MalleableSignature() (gas: 78103)
+[PASS] test_NoReceive() (gas: 32815)
+[PASS] test_NonAllowlisted() (gas: 99722)
+[PASS] test_OverDailyCap() (gas: 448444)
+[PASS] test_OverPerTxCap() (gas: 106932)
+[PASS] test_OwnerOnly() (gas: 109169)
+[PASS] test_PolicyHashStable() (gas: 15023)
+[PASS] test_Precedence() (gas: 1264333)
+[PASS] test_Replay() (gas: 209914)
+[PASS] test_SessionExpired() (gas: 162650)
+[PASS] test_SessionExpiredAtBoundary() (gas: 162628)
+[PASS] test_SetAgent() (gas: 305485)
+[PASS] test_SetPolicy() (gas: 517121)
+[PASS] test_TamperedAmount() (gas: 90936)
+[PASS] test_TamperedDeadline() (gas: 91003)
+[PASS] test_TamperedNonce() (gas: 91024)
+[PASS] test_TamperedTo() (gas: 90959)
+[PASS] test_U64MaxAmount() (gas: 106832)
+[PASS] test_ValidSpend() (gas: 200316)
+[PASS] test_VaultAsRecipient() (gas: 125231)
+[PASS] test_WindowRollover() (gas: 475683)
+[PASS] test_Withdraw() (gas: 184709)
+[PASS] test_WrongSigner() (gas: 83489)
+[PASS] test_ZeroAmount() (gas: 97521)
+Suite result: ok. 32 passed; 0 failed; 0 skipped; finished in 1.74s (1.75s CPU time)
+
+Ran 1 test suite in 1.74s (1.74s CPU time): 32 tests passed, 0 failed, 0 skipped (32 total tests)
