@@ -1,0 +1,9 @@
+test spend_s13_duplicate_accounts_rejected ... ok
+test spend_s15_submitter_cannot_alter_payload ... ok
+test spend_s7_fake_token_program_rejected ... ok
+test spend_s6_wrong_mint_rejected ... ok
+test spend_v18_attacker_signed_intent_rejected ... ok
+test spend_vectors_v1_to_v14_in_order ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.40s
+

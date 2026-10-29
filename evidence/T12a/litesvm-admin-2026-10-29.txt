@@ -1,0 +1,13 @@
+test initialize_valid_and_hash_matches_canonical ... ok
+test initialize_invalid_rejected ... ok
+test reinit_fails_s12 ... ok
+test set_agent_owner_and_non_owner ... ok
+test set_frozen_owner_and_non_owner ... ok
+test set_policy_invalid_rejected ... ok
+test set_policy_non_owner_rejected_v12 ... ok
+test set_policy_owner_updates_hash ... ok
+test substitution_fails_s8 ... ok
+test withdraw_owner_token_and_non_owner_rejected ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.84s
+
