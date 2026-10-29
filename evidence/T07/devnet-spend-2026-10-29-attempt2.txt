@@ -1,0 +1,83 @@
+machine: agent
+program: BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC
+agent: 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 (must stay 0 lamports)
+submitter: 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+rpc: https://api.devnet.solana.com
+
+policy PDA: 2S7DmjooMbshtoDE8fWdkirmT6RCJrkV2oFiJZWYjy5X
+upgrade authority: HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v
+agent balance (before): 0 lamports
+policy spent before: 0 lamports
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+ws error: write EPROTO 401D5E884A790000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:../deps/openssl/openssl/ssl/record/methods/tlsany_meth.c:77:
+
+/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:4282
+        throw new TransactionExpiredTimeoutError(
+              ^
+
+TransactionExpiredTimeoutError: Transaction was not confirmed in 30.00 seconds. It is unknown if it succeeded or failed. Check signature 5CDkPSfBkecsCQm3qizE8WLtC3H94sxnyjzxi955oVz4UAWnTrEBj86h2QkPzZmTGMDMaChBgnhNmhyvC2JJMiHQ using the Solana Explorer or CLI tools.
+    at Connection.confirmTransactionUsingLegacyTimeoutStrategy (/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:4282:15)
+    at async Connection.confirmTransaction (/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:3896:14)
+    at async spend (/home/hatch/workspace/Spendfloor/sdk/solana-spend-devnet.ts:122:3)
+    at async <anonymous> (/home/hatch/workspace/Spendfloor/sdk/solana-spend-devnet.ts:140:13) {
+  signature: '5CDkPSfBkecsCQm3qizE8WLtC3H94sxnyjzxi955oVz4UAWnTrEBj86h2QkPzZmTGMDMaChBgnhNmhyvC2JJMiHQ'
+}
+
+Node.js v24.22.1

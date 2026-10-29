@@ -1,0 +1,21 @@
+machine: agent
+program: BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC
+agent: 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 (must stay 0 lamports)
+submitter: 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+rpc: https://api.devnet.solana.com
+
+policy PDA: 2S7DmjooMbshtoDE8fWdkirmT6RCJrkV2oFiJZWYjy5X
+upgrade authority: HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v
+agent balance (before): 0 lamports
+policy spent before: 100000 lamports
+resuming: 1/3 valid spends already landed, sending the remaining 2
+valid spend 2/3: to=HgLp84c1... amount=100000 sig=BtKkGuSE6rLde8dJ... err=null slot=516405676
+valid spend 3/3: to=8RrdXQBF... amount=100000 sig=49Yv2TNtBT4F1uJG... err=null slot=516405687
+agent balance (after valid spends): 0 lamports
+over-cap 1/3: sig=4EPw4B5HzJkJTjQJ... err={"InstructionError":[0,{"Custom":6004}]} logsDailyCapExceeded=true slot=516405697
+over-cap 2/3: sig=2cLkLzYXewe9zVzg... err={"InstructionError":[0,{"Custom":6004}]} logsDailyCapExceeded=true slot=516405708
+over-cap 3/3: sig=3Sy8edp3PjVB5gfq... err={"InstructionError":[0,{"Custom":6004}]} logsDailyCapExceeded=true slot=516405717
+agent balance (after over-cap attempts): 0 lamports
+policy spent after: 300000 lamports (expected 300000)
+
+solana-spend-devnet: PASS :: 3/3 valid null err, 3/3 over-cap meta.err + DailyCapExceeded, agent 0 throughout, upgrade authority OWNER

@@ -1,0 +1,17 @@
+[features]
+skip-lint = false
+
+[programs.localnet]
+# Local-test program id (VM keypair). The devnet id is replaced on the
+# deploy machine, which generates its own program keypair.
+spendfloor = "BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC"
+
+[programs.devnet]
+spendfloor = "BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

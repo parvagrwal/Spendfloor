@@ -1,0 +1,46 @@
+machine: agent
+program: BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC
+agent: 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 (must stay 0 lamports)
+submitter: 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+rpc: https://api.devnet.solana.com
+
+policy PDA: 2S7DmjooMbshtoDE8fWdkirmT6RCJrkV2oFiJZWYjy5X
+upgrade authority: HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v
+agent balance (before): 0 lamports
+policy spent before: 0 lamports
+/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:6087
+      throw new SendTransactionError({
+            ^
+
+SendTransactionError: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 0: invalid program argument. 
+Logs: 
+[
+  "Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC invoke [1]",
+  "Program log: Instruction: Spend",
+  "Program 11111111111111111111111111111111 invoke [2]",
+  "Transfer: `from` must not carry data",
+  "Program 11111111111111111111111111111111 failed: invalid program argument",
+  "Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC consumed 5828 of 200000 compute units",
+  "Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC failed: invalid program argument"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.
+    at Connection.sendEncodedTransaction (/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:6087:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async Connection.sendRawTransaction (/home/hatch/workspace/Spendfloor/node_modules/@solana/web3.js/src/connection.ts:6043:20)
+    at async spend (/home/hatch/workspace/Spendfloor/sdk/solana-spend-devnet.ts:123:15)
+    at async <anonymous> (/home/hatch/workspace/Spendfloor/sdk/solana-spend-devnet.ts:142:13) {
+  signature: '',
+  transactionMessage: 'Transaction simulation failed: Error processing Instruction 0: invalid program argument',
+  transactionLogs: [
+    'Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC invoke [1]',
+    'Program log: Instruction: Spend',
+    'Program 11111111111111111111111111111111 invoke [2]',
+    'Transfer: `from` must not carry data',
+    'Program 11111111111111111111111111111111 failed: invalid program argument',
+    'Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC consumed 5828 of 200000 compute units',
+    'Program BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC failed: invalid program argument'
+  ]
+}
+
+Node.js v24.22.1
