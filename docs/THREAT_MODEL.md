@@ -163,11 +163,67 @@ Setup (either path, Parv's choice):
    a repo secret named SOCKET_SECURITY_API_KEY. The socket-scan job
    then runs on every push and pull request.
 
-Scan report: pending the first CI run with Socket enabled. The link
-goes here once the first scan is green.
+Scan report (finished scan, NOT green — correction of an earlier
+premature "green" claim): Socket organization stats, generated
+2026-10-30 04:50 IST (SpendFloor org): 1 active repository, 2 commit
+reports, 1 PR report, 0 commits with new alerts, 0 PRs with new
+alerts. The early "No CVEs found" was the dashboard still processing.
+The FINISHED scan shows 623 dependencies, 16 total alerts, 13 CVEs
+(per the dashboard; the Alerts list rows visible show 12 CVE-labeled
+rows + 3 malicious + 1 deprecated = 16, so the dashboard's CVE count
+is one higher than the CVE-labeled rows — possibly a malicious entry
+counted as a CVE, or a row cut off; the 16 total matches). Socket's
+own assessment: 0 possibly reachable, 0 production, 0 critical,
+0 fixable.
+
+Alerts breakdown (Alerts page, 2026-10-30):
+- Malicious (3): cargo proc-macro1 (x2 rows), cargo arrayref (x1).
+- High CVE (6): npm toml x5 (CPU DoS via unbounded-length integer
+  literal; quadratic-complexity DoS via many array-of-tables headers;
+  prototype pollution via `__proto__` key; prototype pollution via
+  parsing; uncontrolled recursion), npm bigint-buffer x1 (buffer
+  overflow via toBigIntLE()).
+- Medium CVE (5): npm stream-json x3 (O(depth^2) filters on nested
+  input; parser re-scans accumulated comment; prototype pollution in
+  assembler), npm uuid x1 (missing buffer bounds check in v3/v5/v6),
+  cargo block-buffer x1 (panic corrupts inline buffer position).
+- Low CVE (1): cargo rand x1 (unsound with a custom logger).
+- Deprecated (1): npm uuid (deprecated by its maintainer).
+
+Tree check (local lockfiles, 2026-10-30): proc-macro1 is NOT in
+solana/Cargo.lock. arrayref 0.3.9, block-buffer 0.10.4/0.12.1, and
+rand 0.8.8 ARE in Cargo.lock (transitive, via Anchor/Solana).
+toml 3.0.0, bigint-buffer 1.1.5, stream-json 1.9.1, and uuid 8.3.2
+ARE in package-lock.json (transitive, not direct dependencies).
+None of the flagged packages are direct dependencies SpendFloor
+chose, and none are in SpendFloor's production code path (the
+on-chain programs do not run npm/cargo packages; the TypeScript
+tooling does not call the vulnerable functions with untrusted
+input). All 16 are pre-existing in the dependency tree (0 new
+alerts from SpendFloor's commits), none reachable, none in
+production, none fixable — so there is no patch to apply to clear
+them. The malicious flags need a note: proc-macro1 is not in the
+local lockfile (likely a Socket resolution artifact, since the repo
+does not commit Cargo.lock, or a name-based flag — the Alerts detail
+for the parent package would confirm it); arrayref 0.3.9 is a
+legitimate Solana transitive dependency (the "malicious" label
+needs detail confirmation, but on current evidence it is not a
+typosquat SpendFloor introduced).
+
+Conclusion: the scan is NOT green. T23a's acceptance ("no
+unresolved High findings") is not met literally (6 High CVEs
+exist), but none are actionable (0 fixable, 0 reachable, 0 new).
+Recorded as triaged, accepted risk (tick pending Parv's
+confirmation on that basis). Report files:
+evidence/T23a/socket-org-stats-2026-10-30.pdf and
+evidence/T23a/alerts-2026-10-30-1.png,
+evidence/T23a/alerts-2026-10-30-2.png,
+evidence/T23a/alerts-2026-10-30-3.png (Alerts page screenshots).
 
 Pre-check (not a substitute for the Socket scan): the manifests were
 reviewed by hand — all direct dependencies are mainstream, pinned
 packages (viem, @solana/web3.js, Anchor, LiteSVM, proptest); no
 typosquats or obviously malicious packages were found. The Socket
-scan is still required for the T23a acceptance.
+scan is still required for the T23a acceptance. (Direct deps only;
+Socket's transitive findings, including its malicious-package flags,
+are in the scan report above.)
