@@ -291,7 +291,19 @@ contract SpendFloorVault {
             }
             recipients_[j] = key;
         }
-        return sha256(abi.encodePacked(recipients_));
+        // Pack each address as its 20 bytes. abi.encodePacked on an
+        // address array pads each element to 32 bytes, which does NOT
+        // match the T05 canonical set hash (SHA-256 over concatenated
+        // 20-byte addresses), so pack explicitly. Found by T14: the
+        // padded version produced a different set hash for every golden.
+        bytes memory packed = new bytes(recipients_.length * 20);
+        for (uint256 i = 0; i < recipients_.length; i++) {
+            bytes20 b = bytes20(recipients_[i]);
+            for (uint256 j = 0; j < 20; j++) {
+                packed[i * 20 + j] = b[j];
+            }
+        }
+        return sha256(packed);
     }
 
     function _computePolicyHash(

@@ -1,0 +1,12 @@
+[PASS] test_WindowRollover() (gas: 477227)
+[PASS] test_Withdraw() (gas: 184709)
+[PASS] test_WrongSigner() (gas: 83489)
+[PASS] test_ZeroAmount() (gas: 97521)
+Suite result: ok. 32 passed; 0 failed; 0 skipped; finished in 3.02s (3.02s CPU time)
+
+Ran 2 tests for test/Invariants.t.sol:InvariantsTest
+[PASS] testFuzz_Invariants(uint256) (runs: 10000, μ: 4367337, ~: 4357632)
+[PASS] test_LoweredCapNoPanic() (gas: 704197)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 26.24s (26.23s CPU time)
+
+Ran 3 test suites in 26.25s (29.28s CPU time): 40 tests passed, 0 failed, 0 skipped (40 total tests)

@@ -1,0 +1,10 @@
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/admin.rs (target/debug/deps/admin-66f8629b375ef79a)
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.71s
+     Running tests/common.rs (target/debug/deps/common-80cd70c6f14b5be3)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/hash_golden.rs (target/debug/deps/hash_golden-08466886389dff33)
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.70s
+     Running tests/spend.rs (target/debug/deps/spend-3bf2c799e7ba08cd)
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.27s
