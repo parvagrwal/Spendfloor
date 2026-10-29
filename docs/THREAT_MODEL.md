@@ -227,3 +227,29 @@ typosquats or obviously malicious packages were found. The Socket
 scan is still required for the T23a acceptance. (Direct deps only;
 Socket's transitive findings, including its malicious-package flags,
 are in the scan report above.)
+
+## 6. Documented non-issues (T29): E15, S14
+
+E15 — EIP-7702 code on the agent EOA. The agent EOA holds no
+native balance, no SFUSD, and no approvals (verified by T18).
+EIP-7702 lets an EOA delegate code, but delegation does not
+create funds, does not change the signer address (so `ecrecover`
+on spend intents still recovers the agent address), and does not
+move vault funds: vault funds move only via `spend`/`withdraw`,
+gated by the on-chain policy (agent signer + recipient allowlist
++ caps + session) and the owner / agent roles — not by agent EOA
+code. Even if code were delegated to the agent EOA, it would have
+nothing to spend and no path around the vault. EIP-7702 does not
+open a spend path.
+
+S14 — Solana clock manipulation. The Solana Clock sysvar is the
+median of validator timestamps, bounded by the runtime's clock
+tolerance — no single validator sets it arbitrarily. The policy
+window uses `windowIndex = (now - anchor) / windowSeconds` with
+86400 s windows. A bounded clock skew (seconds to minutes) can
+only shift a window boundary slightly; it cannot create unbounded
+extra spend capacity, because spent resets only when a spend lands
+in a new window index, and the per-transaction and window caps
+still bind within any window. Boundary sensitivity to small skews
+is inherent to any time-window policy and is bounded by the skew,
+not an exploitable bypass.

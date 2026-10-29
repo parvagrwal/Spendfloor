@@ -296,6 +296,23 @@ async function main() {
         `localnet.json not found at ${localPath} — run sdk/solana-localnet-setup.ts first (with Surfpool running)`,
       );
     }
+    // Validate the Solana fields before constructing PublicKeys. The
+    // repo still ships the old T16 localnet.json (EVM-only), which
+    // lacks these fields; without this check, new PublicKey(undefined)
+    // throws a confusing error instead of the clear setup message.
+    const requiredSolFields = [
+      "program",
+      "policyPda",
+      "mint",
+      "vaultToken",
+      "merchantToken",
+    ] as const;
+    const missingSolFields = requiredSolFields.filter((k) => !local[k]);
+    if (missingSolFields.length > 0) {
+      throw new Error(
+        `deployments/localnet.json is missing the Solana fields (${missingSolFields.join(", ")}); it may be the old EVM-only version — run sdk/solana-localnet-setup.ts first (with Surfpool running) to regenerate it`,
+      );
+    }
     solProgram = new PublicKey(local.program);
     solPolicy = new PublicKey(local.policyPda);
     solVaultToken = new PublicKey(local.vaultToken);
