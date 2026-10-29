@@ -1,0 +1,338 @@
+{
+  "run1_evm_V1_V10": [
+    {
+      "chain": "EVM",
+      "vector": "V1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0xe22ec5eb40ed60a026f02693b113b0b9ad3c97506bd7c18cc5161044e2213704",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V2",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0xd085f74fd369963b1d6f73270c012527bbfb050197235d97a510dec6fa310ba3",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V3",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0xb0c585296f05cf1335156c4876e7f582a0a8efaf535d4b901963885ac5012a4c",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V4",
+      "expected": "ZeroAmount",
+      "actual": "ZeroAmount",
+      "hash": "0xf525cd1715cffacb2981dded973eca7b71e739fb321d847c3bea89298c8beaf6",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V5",
+      "expected": "PerTxCapExceeded",
+      "actual": "PerTxCapExceeded",
+      "hash": "0x50010e8b81ab04bb16eade64f0b59f9f29d1d23cc60a35957adc66d75e8bb131",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V6",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0x8720d73bc42dbe0cabe414a4582e7163231b64f51b08cd3cc4b61085428b37f3",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V7",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x5cfeeb8ed393853a41590e2a1ff7ac3e4a29b8da538784028980a0941e24ff8d",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V8",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x110fdc39650588b54baef50cd301c696f4a61ac4259fa96232389621b732d982",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V9",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0x359ca571b34060ef232c901e70730ac40d73be7df170dd11912e57e99a388b0d",
+      "pass": true,
+      "run": 1
+    },
+    {
+      "chain": "EVM",
+      "vector": "V10",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x33d64392d3fc7b128bd1d4e95156a242efcd4e392b1d0e40dabe0e67f49da332",
+      "pass": true,
+      "run": 1
+    }
+  ],
+  "resume_evm": [
+    {
+      "chain": "EVM",
+      "vector": "V11",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0xc8c1d61fc0959b57cf69672367d667c3e1dfcc860ece8b7d3d6fdc0eb76c9d0d",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V12",
+      "expected": "NotOwner",
+      "actual": "NotOwner",
+      "hash": null,
+      "pass": true,
+      "note": "testnet confirms all four revert; label proven by local 18/18",
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V18",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "hash": "0xc64822b3d08284152ef410d673924be80896bd42cf05430a319bb574a6a30034",
+      "pass": true,
+      "note": "attacker-signed intent",
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V13",
+      "expected": "Frozen",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER freeze (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V14",
+      "expected": "DailyCapExceeded",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER unfreeze (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V15",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0x49a54afe92d638c781e1ecdee980fa359a588d0342dcb14cff12cae358996300",
+      "pass": true,
+      "note": "P1 window rolled over naturally since T16",
+      "run": 2
+    },
+    {
+      "chain": "EVM",
+      "vector": "V16",
+      "expected": "SessionExpired",
+      "actual": "SessionExpired",
+      "hash": "0xf338d2dc7ed2bf8f2e0aeeac882925caf711a05333b24a106f6e513c287935f3",
+      "pass": true,
+      "note": "P2 expired naturally since T16",
+      "run": 2
+    }
+  ],
+  "resume_sol": [
+    {
+      "chain": "SOL",
+      "vector": "V1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "YhXnnhoDBYcDt57oNTPwrzYuvfhRjtAUtvADiGBFmHe2Rmn68KA8hDvBq79VpBctDgeTFNAag3cV5iVdE1KXhZW",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V2",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "4PqvbjMJTbv5DhQTx77A7Pf5uQewwAksW7omcxpL6fJLVpvRokL1uW9fkxCLtAAh9XKJwtVBYLer7Rh8Uwsmvg6g",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V3",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "5zwNATvkHtaDPgpK7ztXcqtpPWWJBe7zJvSoe1L3tQSfwarxnpASEJVx78Vra75RFvLZ77Uzw2yP2bySKEYg64DJ",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V4",
+      "expected": "ZeroAmount",
+      "actual": "ZeroAmount",
+      "hash": "3encEdAVUXWS6zPanxZtGqqSDFvJjeTzkEvwW6vq1NcQCJiXw73hD7peD7tEtLkHgcBscjcvKVLyzDFNMnTq1QwG",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V5",
+      "expected": "PerTxCapExceeded",
+      "actual": "PerTxCapExceeded",
+      "hash": "4xpbC7stKvm6S4wCEPYyinCPp8WT8GUEYmM2nRgQabaSZNHg1dJj9HiEZGzR5YmNdpCYbmnobVkNLkE1TCgZRgaj",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V6",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "2bFgyaPSvyiVG1kQ7h7oMxYjvRvW6eRm4BpPeGuZ8wwi52zyNUNHN5dT5EC49NxtEGNdkPGUrqg4PP1cArC6g4Gp",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V7",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "RvaikJ96uLUeou3cXPfAEDoUwmeJUZvLKQrcGg4BLvukVsNCYPTEkrpxpgRFUzg39epc8RxnxmDv8DdBs9Purd1",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V8",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "2uHazUyAcSveoJ6h7vVoRdJTRLLDpQdzuozJH8tWVonSj1JVsxNV11a7xNzqG8ZrF8WkTvjqZtoUfpfpdDLWdjpc",
+      "pass": true,
+      "note": "u64::MAX approx in SFUSD",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V9",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "a5WXxRmC7JWZifxziHJfPaZKEhZ3g9jL8pusJGs744Y5JBALRNDouG98oA1fAjq7UnceZpKhQXjSjWpXAACEXrY",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V10",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "38PyUT5ADGr4K8HVxHQCRe7AtvzmU92hLgo2hkPqMwbVt5S1LPDBRj67vPXhtmGM64k4EBqUcQtRgNECBBsJq1ay",
+      "pass": true,
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V11",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "4cBEEFx7PjWsdLXELt1CxKebHTg6VUqg8iQHmmyyaA4McS1YoQtPqdoBnLLgSC6gYm13k9Kb8Fd7ijJwygTACBs1",
+      "pass": true,
+      "note": "dest = PDA-owned ATA",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V12",
+      "expected": "NotOwner",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "agent owner-attempts need a separate check (local 18/18 proves NotOwner); testnet V12 via owner ix attempts is a follow-up",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V13",
+      "expected": "Frozen",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER freeze (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V14",
+      "expected": "DailyCapExceeded",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER unfreeze (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V15",
+      "expected": "ACCEPT",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER set_policy window 300 + wait (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V16",
+      "expected": "SessionExpired",
+      "actual": "pending-owner",
+      "hash": null,
+      "pass": false,
+      "note": "needs OWNER set_policy expiry + wait (Parv) then agent spend",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V17",
+      "expected": "duplicate (does not land)",
+      "actual": "pending",
+      "hash": null,
+      "pass": false,
+      "note": "SOL replay: resubmit V1 tx sig; documented difference (does not land)",
+      "run": 2
+    },
+    {
+      "chain": "SOL",
+      "vector": "V18",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "hash": "3D1n7yU4Kv27qVqozVkNxwBTqoASBpcbr6VJPDkuX9vaksJ5wNnUZZs9pNbJgQh4KByy67rQJ6vJdqjpNroRqBAF",
+      "pass": true,
+      "note": "attacker-signed SOL spend",
+      "run": 2
+    }
+  ]
+}

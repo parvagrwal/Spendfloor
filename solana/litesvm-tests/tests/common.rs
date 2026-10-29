@@ -13,7 +13,7 @@ use solana_keypair::Keypair;
 use solana_signer::Signer;
 use solana_transaction::Transaction;
 
-pub const PROGRAM_ID: &str = "BWVM3J3QfWoco8b1GUFCzX1T7vDhuKHQbN5FDShUXhbC";
+pub const PROGRAM_ID: &str = "CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE";
 pub const SYSTEM_PROGRAM_ID: &str = "11111111111111111111111111111111";
 pub const TOKEN_PROGRAM_ID: &str = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 pub const RENT_SYSVAR_ID: &str = "SysvarRent111111111111111111111111111111111";

@@ -138,8 +138,27 @@ async function decodeRevertLabel(
     return "Reverted";
   } catch (err) {
     const text = err instanceof Error ? err.message : String(err);
-    // viem wraps the revert data; decodeErrorResult pulls the custom
-    // error name out of it when the ABI knows the error.
+    // First: walk the error cause chain for a `data` field (viem's
+    // RawContractError carries the raw revert data there). The old
+    // regex grabbed the FIRST hex in the message, which is often the
+    // vault address from "Raw Call Arguments", not the revert data.
+    let cur: unknown = err;
+    for (let i = 0; i < 10 && cur && typeof cur === "object"; i++) {
+      const c = cur as Record<string, unknown>;
+      if (typeof c.data === "string" && c.data.startsWith("0x") && c.data.length >= 10) {
+        try {
+          const decoded = decodeErrorResult({ abi: VAULT_ABI, data: c.data as Hash });
+          if (decoded.errorName === "ERC20InsufficientBalance") return "InsufficientFunds";
+          if (EVM_ERROR_NAMES.has(decoded.errorName)) return decoded.errorName as SpendLabel;
+        } catch {
+          // Not a known error selector; keep walking.
+        }
+      }
+      const next = (c.cause ?? c.raw) as unknown;
+      if (!next || next === cur) break;
+      cur = next;
+    }
+    // Fallback: regex + name scan (as before).
     try {
       const m = text.match(/0x[0-9a-fA-F]+/);
       if (m) {

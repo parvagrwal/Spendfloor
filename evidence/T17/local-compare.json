@@ -1,0 +1,116 @@
+{
+  "identical": 18,
+  "total": 18,
+  "mismatches": [],
+  "rows": [
+    {
+      "vector": "V1",
+      "evm": "ACCEPT",
+      "sol": "ACCEPT",
+      "identical": true
+    },
+    {
+      "vector": "V2",
+      "evm": "RecipientNotAllowed",
+      "sol": "RecipientNotAllowed",
+      "identical": true
+    },
+    {
+      "vector": "V3",
+      "evm": "RecipientNotAllowed",
+      "sol": "RecipientNotAllowed",
+      "identical": true
+    },
+    {
+      "vector": "V4",
+      "evm": "ZeroAmount",
+      "sol": "ZeroAmount",
+      "identical": true
+    },
+    {
+      "vector": "V5",
+      "evm": "PerTxCapExceeded",
+      "sol": "PerTxCapExceeded",
+      "identical": true
+    },
+    {
+      "vector": "V6",
+      "evm": "ACCEPT",
+      "sol": "ACCEPT",
+      "identical": true
+    },
+    {
+      "vector": "V7",
+      "evm": "DailyCapExceeded",
+      "sol": "DailyCapExceeded",
+      "identical": true
+    },
+    {
+      "vector": "V8",
+      "evm": "DailyCapExceeded",
+      "sol": "DailyCapExceeded",
+      "identical": true
+    },
+    {
+      "vector": "V9",
+      "evm": "ACCEPT",
+      "sol": "ACCEPT",
+      "identical": true
+    },
+    {
+      "vector": "V10",
+      "evm": "DailyCapExceeded",
+      "sol": "DailyCapExceeded",
+      "identical": true
+    },
+    {
+      "vector": "V11",
+      "evm": "RecipientNotAllowed",
+      "sol": "RecipientNotAllowed",
+      "identical": true
+    },
+    {
+      "vector": "V12",
+      "evm": "NotOwner",
+      "sol": "NotOwner",
+      "identical": true
+    },
+    {
+      "vector": "V13",
+      "evm": "Frozen",
+      "sol": "Frozen",
+      "identical": true
+    },
+    {
+      "vector": "V14",
+      "evm": "DailyCapExceeded",
+      "sol": "DailyCapExceeded",
+      "identical": true
+    },
+    {
+      "vector": "V17",
+      "evm": "BadNonce",
+      "sol": "duplicate (does not land)",
+      "identical": true,
+      "note": "documented evidence difference; replay rejected on both"
+    },
+    {
+      "vector": "V18",
+      "evm": "Unauthorized",
+      "sol": "Unauthorized",
+      "identical": true
+    },
+    {
+      "vector": "V15",
+      "evm": "ACCEPT",
+      "sol": "ACCEPT",
+      "identical": true
+    },
+    {
+      "vector": "V16",
+      "evm": "SessionExpired",
+      "sol": "SessionExpired",
+      "identical": true
+    }
+  ]
+}

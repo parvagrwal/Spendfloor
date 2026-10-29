@@ -1,0 +1,58 @@
+{
+  "results": [
+    {
+      "chain": "EVM",
+      "vector": "V13",
+      "expected": "Frozen",
+      "actual": "Frozen",
+      "hash": "0x99eb39e9b2096dd4a7483687239afe35437f087783afe6227edd3478d7f1f340",
+      "pass": true,
+      "note": "owner freeze hash 0x6d28710c0c4231da9eb6ff68229b0542127853f5a15969a1be658a1c51a33108 (Parv), agent spend merchant 1 SFUSD via relay"
+    },
+    {
+      "chain": "EVM",
+      "vector": "V14",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x07838349540e4b461715aca9b4d18188475a7984f0fefa5d3cf10e11576257dd",
+      "pass": true,
+      "note": "owner unfreeze hash 0x459055d94662f2d749f6164a2ccabba76506bf236e06a08dfdf0afec7a4c71ad (Parv), agent spend merchant 1 SFUSD via relay (window already at 5)"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V13",
+      "expected": "Frozen",
+      "actual": "Frozen",
+      "hash": "3igtoKDgEon4j3bgKTRejLw7eyUFFvokvS38ftyTURYgKzDZvfy2v8bPf13Z2Jp3kbk6pGthzBJ41NAa2AKYqXiF",
+      "pass": true,
+      "note": "owner set_frozen(true) sig 4XcXEjG9WRsgnx4jHAo53ZwsLhbG1ZaXtUUj6GxARbDiwQC35zCH4DDG7Xoow2SB2M9Xc9viStxceLG1hTw96ozW (Parv), agent spend merchant token 1 SFUSD via relay"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V14",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "2ia9fb1itTuPYkcHbTXUYTZMExo5wV4LkEcRoDmtJ4GEYjguzVUDvqd5BjFauCCWjUQoue2ebHS6MLRwwXAPW6Un",
+      "pass": true,
+      "note": "owner set_frozen(false) sig 5CeNZMwnURqbXKjaLu6sWnpTpzJXMZGBfdb3ndmDb4685MptWGTS8GixchjDMFvDjAEXWvHLa2mTaruLyWzuXm5d (Parv), agent spend merchant token 1 SFUSD via relay (window already at 5)"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V15",
+      "expected": "ACCEPT (after rollover)",
+      "actual": "ACCEPT",
+      "hash": "2ApGxM4GeBCCrUmnxsReX73G5GBnwEXJcxR4QpuUaQbtQVLh7py6o7y6K9DApUvmpgH2PisXhhWQR6Su4rXtULic",
+      "pass": true,
+      "note": "owner set_policy window=300 sig 4RJK9bWq2KywWraqyAdkf1v6AxXgWvVappFmEkd4E8hsjssighFFdZS5V1W7jueDTjvB8uGxJrVmW3yFbfQBEDNA (Parv). Pre-rollover spend DailyCapExceeded hash 4yoHE9LE9YifT4GhfnusMW6gT81tj5pGHiV6xmVFHSQq5mReVDJgQi4Ru8sZnQEbfXRaD7AcaGzVhoMerNTKT7zP (spent still 5, window 0). Post-rollover (360s wait) spend ACCEPT sig 2ApG... (window 1, spent reset). Rollover proven."
+    },
+    {
+      "chain": "SOL",
+      "vector": "V16",
+      "expected": "SessionExpired",
+      "actual": "SessionExpired",
+      "hash": "4ENQLUuhrrX8rbQ3A8SCmH3LbS4pFAdtC4VqH55krYYW6hxzEAb4ww9adtpQefj1d3p9gTKei7No6HHybonALbA9",
+      "pass": true,
+      "note": "owner sol-set-expiry run by Parv (sig not pasted, confirmed by SessionExpired result). Agent spend merchant token 1 SFUSD via relay after 240s wait (past 180s expiry)."
+    }
+  ]
+}

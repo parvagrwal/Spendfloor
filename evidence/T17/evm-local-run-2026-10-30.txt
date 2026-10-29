@@ -1,0 +1,28 @@
+P0 vault: 0xf5059a5d33d5853360d16c683c16e67980206f36
+V1: expected=ACCEPT actual=ACCEPT hash=0x8f1dcd3ebc862cd0ada7f1b11fd647a7e4ffe0f4185210186242f5a7303a3740 PASS
+V2: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0xebc79ed1540a0385a51a804ea587bbc696b2682e7926b3bb87419dfd6d503325 PASS
+V3: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0x310bd78ec695e03c80319525b3a889a9c64170210ab6dea6200f236c3fbf33f6 PASS
+V4: expected=ZeroAmount actual=ZeroAmount hash=0x793ab5f3373e0fa39d353e941ab95d03075edf2d795ec9ea0d37a12ff9d5707a PASS
+V5: expected=PerTxCapExceeded actual=PerTxCapExceeded hash=0xfa281803f29a88bbf72f633b7e46483c1de76be289cce0d158ec275a791ad7ae PASS
+V6: expected=ACCEPT actual=ACCEPT hash=0x5a02f13bb9febcbcd97cf60afce470c7a425fca8c10cc673bdba076be157210e PASS
+V7: expected=DailyCapExceeded actual=DailyCapExceeded hash=0xed31ba9d7d9c14527cad3bed6a1ed9f19e3f26ae27c05adca7bb6f6b335b0efe PASS
+V8: expected=DailyCapExceeded actual=DailyCapExceeded hash=0x7a33383dc6273f801247d2b0f55c6bcb01bb92a245071e668e7a8b1744111296 PASS
+V9: expected=ACCEPT actual=ACCEPT hash=0xfe34c6a98a837dd22505c094d798719721ad872fbe54e991d8a0c92b00709810 PASS
+V10: expected=DailyCapExceeded actual=DailyCapExceeded hash=0x59e24ad093e33513edb5009565ce36e9d8798afa2eb376b3c4ef313f37bbdc7a PASS
+V11: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0x7437fe4dfcbbbae1c1b725e6132b10e8bce9ade3e8f5c6d18d0174dfe2f2ece6 PASS
+V12 setPolicy: reverted NotOwner=true
+V12 setAgent: reverted NotOwner=true
+V12 setFrozen: reverted NotOwner=true
+V12 withdraw: reverted NotOwner=true
+V12: expected=NotOwner actual=NotOwner hash= PASS (plan says Unauthorized; implementations use NotOwner on both chains)
+V13: expected=Frozen actual=Frozen hash=0x6203b59622537763b2bb66667aecc39e0cf11882dabb5ffb591767539eb61c60 PASS
+V14: expected=DailyCapExceeded actual=DailyCapExceeded hash=0x50146d86a557dd5cb3363bab177f69e937c30f1c50a11394b58d2abeb2cc6b69 PASS
+V17: expected=BadNonce actual=BadNonce hash=0x4da94f04e6cd7c50d394a6c534151504ff30236aa17c3f51b031c462941a526c PASS (replay of V1 payload)
+V18: expected=Unauthorized actual=Unauthorized hash=0xe980d530d501a518e093b3efaa2010ed6f244fd5e0dadedeab05c8074ae9a132 PASS (attacker-signed intent)
+P1 vault: 0x99bba657f2bbc93c02d617f8ba121cb8fc104acf
+V15 setup spend: ok=true
+V15: expected=ACCEPT actual=ACCEPT hash=0xb25950774aba70dfdf585373832a4ea5ae51b4dde7889e0079e9275e35cf6e4f PASS (P1 window 300s, warped +301s)
+P2 vault: 0x9d4454b023096f34b160d6b654540c56a1f81688
+V16: expected=SessionExpired actual=SessionExpired hash=0x0b2c88fda4c6ac3894bc3abebe601c6b4473b2c05d1e448c439845f873896389 PASS (P2 expiry +180s, warped +181s)
+
+EVM local: 18/18 pass

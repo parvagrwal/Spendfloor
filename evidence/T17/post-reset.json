@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "chain": "EVM",
+      "vector": "V1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0x9a487585c1021465b933fd71fa4702a624ac31a218c038ad2872a4ec75e251d9",
+      "pass": true,
+      "note": "post-reset V1 (proves EVM reset freed the window)"
+    },
+    {
+      "chain": "EVM",
+      "vector": "V17",
+      "expected": "BadNonce",
+      "actual": "BadNonce (deductive)",
+      "hash": "0x260a8af0d652d028a0328db81fdccc2daad0d38cbad58fde5c96f419e57ae282",
+      "pass": true,
+      "note": "replay of V1 payload; label deductive (nonce N vs current N+1, all other checks pass; Base Sepolia returns no revert data)"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "363oDpsTEjK5qAsFrFHqHzz9JGCroBnja42caMq8vxs3GSpcPXGD2JU9ASXLbJiNJkB2i3X1pbT4CHV9buXCbFrp",
+      "pass": true,
+      "note": "post-reset V1 (proves SOL reset freed the window)"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V17",
+      "expected": "duplicate (does not land)",
+      "actual": "duplicate (does not land)",
+      "hash": "363oDpsTEjK5qAsFrFHqHzz9JGCroBnja42caMq8vxs3GSpcPXGD2JU9ASXLbJiNJkB2i3X1pbT4CHV9buXCbFrp",
+      "pass": true,
+      "note": "resubmit V1 bytes returned same sig, spent before=1000000 after=1000000 (unchanged)"
+    },
+    {
+      "chain": "SOL",
+      "vector": "V12",
+      "expected": "NotOwner",
+      "actual": "NotOwner",
+      "hash": null,
+      "pass": true,
+      "note": "4/4 attempts returned Custom 6008; sigs 2aj4pMfkjgtFPsB9LfynR9oqfgb5rqKB5Vy9zvxum8119kwZZnVHu7oNGQift4bJHvh8NgSjJ2bG7XsY8PYkXHTe (set_policy), sTzrHiG4zQbCsJ3hrZt6LYg5QjpWMAuK7dejkFzCF8xsbnA2VyhEct7MmUhLv3sPDsxKk2FGwK1Erhjb6xNQ5kk (set_agent), 5WdvoTPZog5G62BEhnwWycWrQaeYPHXfj2ddFSXbsrez9fBfzoZfuM7jtb3JGcniQRubhLFf4SDZfN6w7XiXLBjj (set_frozen), 4gm7ncfht5NZ8DByGP28oskdJGXUidnDBtoBF5vk3TDq4udX1KGMGAFpuYGTRLZdXwA62F3asKQKmVqyxSnT8AKR (withdraw); fee payer submitter, ix signer agent"
+    }
+  ]
+}

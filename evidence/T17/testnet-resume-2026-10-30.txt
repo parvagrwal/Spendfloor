@@ -1,0 +1,28 @@
+V11: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0xc8c1d61fc0959b57cf69672367d667c3e1dfcc860ece8b7d3d6fdc0eb76c9d0d PASS
+V12: expected=NotOwner actual=NotOwner hash= PASS (testnet confirms all four revert; label proven by local 18/18)
+V18: expected=Unauthorized actual=Unauthorized hash=0xc64822b3d08284152ef410d673924be80896bd42cf05430a319bb574a6a30034 PASS (attacker-signed intent)
+V13: expected=Frozen actual=pending-owner hash= FAIL (needs OWNER freeze (Parv) then agent spend)
+V14: expected=DailyCapExceeded actual=pending-owner hash= FAIL (needs OWNER unfreeze (Parv) then agent spend)
+V15: expected=ACCEPT actual=ACCEPT hash=0x49a54afe92d638c781e1ecdee980fa359a588d0342dcb14cff12cae358996300 PASS (P1 window rolled over naturally since T16)
+V16: expected=SessionExpired actual=SessionExpired hash=0xf338d2dc7ed2bf8f2e0aeeac882925caf711a05333b24a106f6e513c287935f3 PASS (P2 expired naturally since T16)
+V1: expected=ACCEPT actual=ACCEPT hash=YhXnnhoDBYcDt57oNTPwrzYuvfhRjtAUtvADiGBFmHe2Rmn68KA8hDvBq79VpBctDgeTFNAag3cV5iVdE1KXhZW PASS
+V2: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=4PqvbjMJTbv5DhQTx77A7Pf5uQewwAksW7omcxpL6fJLVpvRokL1uW9fkxCLtAAh9XKJwtVBYLer7Rh8Uwsmvg6g PASS
+V3: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=5zwNATvkHtaDPgpK7ztXcqtpPWWJBe7zJvSoe1L3tQSfwarxnpASEJVx78Vra75RFvLZ77Uzw2yP2bySKEYg64DJ PASS
+V4: expected=ZeroAmount actual=ZeroAmount hash=3encEdAVUXWS6zPanxZtGqqSDFvJjeTzkEvwW6vq1NcQCJiXw73hD7peD7tEtLkHgcBscjcvKVLyzDFNMnTq1QwG PASS
+V5: expected=PerTxCapExceeded actual=PerTxCapExceeded hash=4xpbC7stKvm6S4wCEPYyinCPp8WT8GUEYmM2nRgQabaSZNHg1dJj9HiEZGzR5YmNdpCYbmnobVkNLkE1TCgZRgaj PASS
+V6: expected=ACCEPT actual=ACCEPT hash=2bFgyaPSvyiVG1kQ7h7oMxYjvRvW6eRm4BpPeGuZ8wwi52zyNUNHN5dT5EC49NxtEGNdkPGUrqg4PP1cArC6g4Gp PASS
+V7: expected=DailyCapExceeded actual=DailyCapExceeded hash=RvaikJ96uLUeou3cXPfAEDoUwmeJUZvLKQrcGg4BLvukVsNCYPTEkrpxpgRFUzg39epc8RxnxmDv8DdBs9Purd1 PASS
+V8: expected=DailyCapExceeded actual=DailyCapExceeded hash=2uHazUyAcSveoJ6h7vVoRdJTRLLDpQdzuozJH8tWVonSj1JVsxNV11a7xNzqG8ZrF8WkTvjqZtoUfpfpdDLWdjpc PASS (u64::MAX approx in SFUSD)
+V9: expected=ACCEPT actual=ACCEPT hash=a5WXxRmC7JWZifxziHJfPaZKEhZ3g9jL8pusJGs744Y5JBALRNDouG98oA1fAjq7UnceZpKhQXjSjWpXAACEXrY PASS
+V10: expected=DailyCapExceeded actual=DailyCapExceeded hash=38PyUT5ADGr4K8HVxHQCRe7AtvzmU92hLgo2hkPqMwbVt5S1LPDBRj67vPXhtmGM64k4EBqUcQtRgNECBBsJq1ay PASS
+PDA ATA created: 9csD6NkhMaQ7izmTyjwZv5D3RmmYJ53oYHi1crR6AoMg (tx 3J7UeqPXQwfzHUdG7VfHpUmnB3CGVwxkR4NiPUhEbVw4YxU18eR5QEWyzxX9x1mM4kW2GCAorRHgEsA8hgFngUDc)
+V11: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=4cBEEFx7PjWsdLXELt1CxKebHTg6VUqg8iQHmmyyaA4McS1YoQtPqdoBnLLgSC6gYm13k9Kb8Fd7ijJwygTACBs1 PASS (dest = PDA-owned ATA)
+V12: expected=NotOwner actual=pending-owner hash= FAIL (agent owner-attempts need a separate check (local 18/18 proves NotOwner); testnet V12 via owner ix attempts is a follow-up)
+V13: expected=Frozen actual=pending-owner hash= FAIL (needs OWNER freeze (Parv) then agent spend)
+V14: expected=DailyCapExceeded actual=pending-owner hash= FAIL (needs OWNER unfreeze (Parv) then agent spend)
+V15: expected=ACCEPT actual=pending-owner hash= FAIL (needs OWNER set_policy window 300 + wait (Parv) then agent spend)
+V16: expected=SessionExpired actual=pending-owner hash= FAIL (needs OWNER set_policy expiry + wait (Parv) then agent spend)
+V17: expected=duplicate (does not land) actual=pending hash= FAIL (SOL replay: resubmit V1 tx sig; documented difference (does not land))
+V18: expected=Unauthorized actual=Unauthorized hash=3D1n7yU4Kv27qVqozVkNxwBTqoASBpcbr6VJPDkuX9vaksJ5wNnUZZs9pNbJgQh4KByy67rQJ6vJdqjpNroRqBAF PASS (attacker-signed SOL spend)
+
+Testnet (agent vectors + staged owner vectors): 17/25 pass (pending-owner excluded from pass)
