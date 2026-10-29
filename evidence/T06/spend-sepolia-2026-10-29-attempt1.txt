@@ -1,0 +1,23 @@
+machine: agent
+vault: 0x8d084a81fb4236b9dd20d8cf86875293ab68c092
+agent: 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 (must stay 0 wei)
+submitter: 0x292e031155c7301eA14dd1a04b653B1c23855196
+rpc: https://sepolia.base.org
+
+agent balance (before): 0 ETH
+valid spend 1/3: to=0x292e031155c7301eA14dd1a04b653B1c23855196 amount=0.0001 ETH hash=0x006b38b461fe7df5f21bec2125e0ca1eabe69be28a2268eb371ae8c15172d8f6 status=success block=51722542
+valid spend 2/3: to=0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0 amount=0.0001 ETH hash=0xd96788a138aa7ccbd7b4ad9966be33e21ec4c7677493b191fb2df6145fc897af status=success block=51722565
+valid spend 3/3: to=0x292e031155c7301eA14dd1a04b653B1c23855196 amount=0.0001 ETH hash=0x1ec11bcf303b7bec97344f22665f527dffd80670467bf9819f3439fa117aa4cb status=success block=51722579
+agent balance (after valid spends): 0 ETH
+over-cap 1/3: hash=0x06dada79c08be8fe9608255791025f95bfd57a8d1dd70a1a3f458e7d2a5c0327 status=reverted block=51722604 minedIn=4.0s decoded=(undecoded revert: CallExecutionError: Execution reverted for an unknown reason.
+
+Raw Call Arguments:
+  from:  0x292e031155c7301eA14dd1a04b653B1c23855196
+  to:    0x8d084a81fb4236b9dd20d8cf86875293ab68c092
+  data:  0xc3bb2c11000000000000000000000000292e031155c7301ea14dd1a04b653b1c23855196000000000000000000000000000000)
+FAIL  over-cap 1 decoded to (undecoded revert: CallExecutionError: Execution reverted for an unknown reason.
+
+Raw Call Arguments:
+  from:  0x292e031155c7301eA14dd1a04b653B1c23855196
+  to:    0x8d084a81fb4236b9dd20d8cf86875293ab68c092
+  data:  0xc3bb2c11000000000000000000000000292e031155c7301ea14dd1a04b653b1c23855196000000000000000000000000000000), not DailyCapExceeded

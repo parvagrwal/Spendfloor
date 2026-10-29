@@ -1,0 +1,17 @@
+machine: agent
+vault: 0x8d084a81fb4236b9dd20d8cf86875293ab68c092
+agent: 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 (must stay 0 wei)
+submitter: 0x292e031155c7301eA14dd1a04b653B1c23855196
+rpc: https://sepolia.base.org
+
+agent balance (before): 0 ETH
+resume: prior valid spends confirmed, spent=0.0003 ETH
+over-cap 1/3 (replay of the already-mined attempt): decoded=DailyCapExceeded
+over-cap 2/3: hash=0xf45bc6eb944e973df01fe34679cc61dcbfb2577462bc21e29d5339a1df46633b status=reverted block=51723370 minedIn=1.2s decoded=DailyCapExceeded
+over-cap 3/3: hash=0xe7f7c6bc55815460eaec427764b6c013979ec1c566638336b91b1cfc0ebcda6f status=reverted block=51723379 minedIn=2.0s decoded=DailyCapExceeded
+agent balance (after over-cap attempts): 0 ETH
+tampered: signed=0.0001 submitted=0.0002 hash=0xb25b7df439583974823d44899537dc7d7a3c1ef75c67c39fea8b3f29a0aae68f status=reverted block=51723400 decoded=Unauthorized
+agent balance (after tampered intent): 0 ETH
+vault spent today: 0.0003 ETH (expected 0.0003 ETH)
+
+spend-sepolia: PASS :: 3/3 valid status 1, 3/3 over-cap status 0 + DailyCapExceeded, 1/1 tampered Unauthorized, agent 0 throughout

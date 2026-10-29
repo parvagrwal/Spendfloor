@@ -1,0 +1,20 @@
+No files changed, compilation skipped
+
+Ran 14 tests for test/Vault.t.sol:VaultTest
+[PASS] testFuzz_SpendInvariants(uint256,uint256,uint256) (runs: 10000, μ: 85542, ~: 76191)
+[PASS] test_DayRollover() (gas: 358439)
+[PASS] test_Frozen() (gas: 231893)
+[PASS] test_Funding() (gas: 35914)
+[PASS] test_NonAllowlisted() (gas: 73373)
+[PASS] test_OverDailyCap() (gas: 324952)
+[PASS] test_OverPerTxCap() (gas: 75817)
+[PASS] test_OwnerOnly() (gas: 57526)
+[PASS] test_Precedence() (gas: 578107)
+[PASS] test_TamperedAmount() (gas: 71012)
+[PASS] test_TamperedRecipient() (gas: 73190)
+[PASS] test_ValidSpend() (gas: 129973)
+[PASS] test_WrongSigner() (gas: 73019)
+[PASS] test_ZeroAmount() (gas: 71148)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 745.51ms (791.28ms CPU time)
+
+Ran 1 test suite in 746.86ms (745.51ms CPU time): 14 tests passed, 0 failed, 0 skipped (14 total tests)
