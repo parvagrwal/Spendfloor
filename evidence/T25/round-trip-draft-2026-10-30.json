@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-30",
+  "english": "Allow at most 3 SFUSD per transaction, 6 SFUSD per day, merchant only, for 24 hours.",
+  "intended": "{\"version\":1,\"decimals\":6,\"perTxMax\":\"3000000\",\"windowMax\":\"6000000\",\"windowSeconds\":\"86400\",\"windowAnchor\":\"0\",\"expiresAt\":\"0\",\"evmRecipients\":[\"0x61f1c99d674bcd333578AC4f538F46AbC7bB4106\"],\"solRecipients\":[\"8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS\"]}",
+  "triesUsed": 2,
+  "needsHuman": false,
+  "finalLooser": false,
+  "finalPolicy": "{\"version\":1,\"decimals\":6,\"perTxMax\":\"3000000\",\"windowMax\":\"6000000\",\"windowSeconds\":\"86400\",\"windowAnchor\":\"1633077600\",\"expiresAt\":\"1633250400\",\"evmRecipients\":[\"0x61f1c99d674bcd333578AC4f538F46AbC7bB4106\"],\"solRecipients\":[\"8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS\"]}",
+  "diff": {
+    "fields": {
+      "perTxMax": "equal",
+      "windowMax": "equal",
+      "windowSeconds": "equal",
+      "evmRecipients": "equal",
+      "solRecipients": "equal",
+      "expiresAt": "tighter",
+      "windowAnchor": "different"
+    },
+    "overall": "TIGHTER"
+  },
+  "contentClean": true,
+  "attempts": [
+    {
+      "try": 1,
+      "valid": true,
+      "validationErrors": [],
+      "looserFields": [
+        "evmRecipients",
+        "solRecipients"
+      ],
+      "draftJson": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "3000000",
+        "windowMax": "6000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1633077600",
+        "expiresAt": "1633250400",
+        "evmRecipients": [
+          "0x0000000000000000000000000000000000000001"
+        ],
+        "solRecipients": [
+          "4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofN"
+        ]
+      }
+    },
+    {
+      "try": 2,
+      "valid": true,
+      "validationErrors": [],
+      "looserFields": [],
+      "draftJson": {
+        "version": 1,
+        "decimals": 6,
+        "perTxMax": "3000000",
+        "windowMax": "6000000",
+        "windowSeconds": "86400",
+        "windowAnchor": "1633077600",
+        "expiresAt": "1633250400",
+        "evmRecipients": [
+          "0x61f1c99d674bcd333578AC4f538F46AbC7bB4106"
+        ],
+        "solRecipients": [
+          "8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS"
+        ]
+      }
+    }
+  ]
+}

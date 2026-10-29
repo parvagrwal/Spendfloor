@@ -1,0 +1,30 @@
+T25 round trip — owner-machine output (Parv, 2026-10-30).
+
+Step 1 — apply new policy (perTx 3, window 6):
+pre: EVM spent=1000000/5000000 (headroom 4000000), SOL spent=1000000/5000000 (headroom 4000000)
+EVM set-policy: ok hash=0xbfe54a564d4c9950058c673129f92bcaf7f2362435444f42fad53f4761e71212
+SOL set-policy: ok sig=5FYuKYbMWGwbEMbQfRj8rKYgP7vp54KFrQJTaKWzSTudiYtZRyeimguzW2JLEUx9PQ8MShQ1furRLmtiPUMYpYco
+set-policy landed on both chains; running verify...
+VERIFY RED: 14/15 checks pass; failing: cross.policy
+  (cross.policy FAIL here is the verifier still expecting the old
+  demo caps 2/5 while the new 3/6 policy is live on both chains.
+  Per-chain checks all pass, and both chains recompute the same
+  policyHash 0x369017fa13bcfcaf7fb598f5d0bd0c61e12bb79321f54920672dd66ac097eb64.
+  The chains agree; the verifier's expected caps are stale. This
+  intermediate RED is expected, not a chain disagreement.)
+
+Step 2 — restore demo policy (perTx 2, window 5):
+pre: EVM spent=1000000/6000000 (headroom 5000000), SOL spent=1000000/6000000 (headroom 5000000)
+EVM set-policy: ok hash=0xbf4335bb48a8c0a25d4ba8b7f8cc8c58969e2b62bb09b438dee8207c26b3a893
+SOL set-policy: ok sig=5MyjreX4pEGwTZvg2wXsSmhXDArbHJ1vnWAKQavpCy4ZukV6qYqo6nMYqUPCm1ubxyqvNYxpAFDMxJSZpyFmoFDo
+set-policy landed on both chains; running verify...
+VERIFY GREEN: 15/15 checks pass
+  (policyHash 0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820
+  identical on both chains; caps + recipients match; demo state
+  restored: spent 1, headroom 4 per chain.)
+
+A second verify run also GREEN 15/15 (same hash).
+
+Note from the run: SOL RPC2 == RPC1 (SOL_RPC2 env unset; Helius key
+lives on Parv's machine). SOL reads are NOT independently verified
+on this run. Pre-existing limitation, same as T18/T21.

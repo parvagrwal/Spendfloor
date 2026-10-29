@@ -1,0 +1,20 @@
+T25 round trip — English:
+  Allow at most 3 SFUSD per transaction, 6 SFUSD per day, merchant only, for 24 hours.
+Current demo policy (T21): perTx 2, window 5, 86400 s, merchant only.
+Intended new policy: perTx 3, window 6, 86400 s, merchant only.
+Drafting with guard + retry (qwen2.5:7b, max 3 tries)…
+Tries used: 2, needsHuman: false, finalLooser: false
+Final policy: {"version":1,"decimals":6,"perTxMax":"3000000","windowMax":"6000000","windowSeconds":"86400","windowAnchor":"1633077600","expiresAt":"1633250400","evmRecipients":["0x61f1c99d674bcd333578AC4f538F46AbC7bB4106"],"solRecipients":["8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS"]}
+Diff vs intended (content fields): {"perTxMax":"equal","windowMax":"equal","windowSeconds":"equal","evmRecipients":"equal","solRecipients":"equal","expiresAt":"tighter","windowAnchor":"different"}
+Content clean (caps + recipients equal, never looser): true
+DRAFT CLEAN — owner apply command (run on the OWNER machine):
+  npx tsx cli/spendfloor.ts owner set-policy --per-tx 3000000 --window 6000000 --window-secs 86400 --expiry-secs 86400
+Then verify (either machine): npx tsx cli/spendfloor.ts verify
+Then restore the demo policy (owner machine):
+  npx tsx cli/spendfloor.ts owner set-policy --per-tx 2000000 --window 5000000 --window-secs 86400 --expiry-secs 86400
+Then verify again (must be green).
+Evidence written: evidence/T25/round-trip-draft-2026-10-30.json
+
+Note: this log was recovered from the runner output. The original tee to
+this file failed (evidence/T25/ did not exist when the pipe started);
+the JSON evidence file was written by the runner itself and is intact.
