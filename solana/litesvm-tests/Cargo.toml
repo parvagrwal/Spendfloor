@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 litesvm = "0.10"
+proptest = "1"
 solana-address = "2"
 solana-keypair = "3"
 solana-signer = "3"
