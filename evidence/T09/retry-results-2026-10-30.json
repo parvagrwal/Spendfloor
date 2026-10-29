@@ -1,0 +1,190 @@
+{
+  "validCount": 10,
+  "looserCount": 0,
+  "pass": true,
+  "results": [
+    {
+      "name": "C1 daily merchant",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C2 weekly team",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C3 tight daily",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C4 max recipients",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "EQUAL"
+        }
+      ]
+    },
+    {
+      "name": "C5 minute window",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C6 year window",
+      "triesUsed": 2,
+      "firstLooser": [
+        "perTxMax",
+        "windowMax"
+      ],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [
+            "perTxMax",
+            "windowMax"
+          ],
+          "overall": "LOOSER"
+        },
+        {
+          "try": 2,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C7 cents",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C8 large amounts",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    },
+    {
+      "name": "C9 expiry date",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "TIGHTER"
+        }
+      ]
+    },
+    {
+      "name": "C10 anchored window",
+      "triesUsed": 1,
+      "firstLooser": [],
+      "finalLooser": false,
+      "needsHuman": false,
+      "valid": true,
+      "attempts": [
+        {
+          "try": 1,
+          "valid": true,
+          "validationErrors": [],
+          "looserFields": [],
+          "overall": "DIFFERENT"
+        }
+      ]
+    }
+  ]
+}

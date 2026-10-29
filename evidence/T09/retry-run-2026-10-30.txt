@@ -1,0 +1,13 @@
+C1 daily merchant: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C2 weekly team: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C3 tight daily: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C4 max recipients: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C5 minute window: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C6 year window: tries=2 first-looser=[perTxMax,windowMax] final-looser=false needsHuman=false valid=true
+C7 cents: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C8 large amounts: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C9 expiry date: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+C10 anchored window: tries=1 first-looser=[] final-looser=false needsHuman=false valid=true
+
+FINAL: valid=10/10 looser=0 (gate: valid>=8 AND looser==0)
+T09 RETRY PASS
