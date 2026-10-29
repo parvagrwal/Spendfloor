@@ -149,8 +149,12 @@ How CI runs it: `.github/workflows/ci.yml` has two jobs. `forge-tests`
 runs the EVM vault suite. `socket-scan` runs `socket ci` (Node CLI,
 alias for `socket scan create --report`), which exits non-zero when
 the scan does not pass the security policy, so unhealthy dependencies
-fail CI. The job runs only when a Socket API key is configured (see
-below); otherwise it is skipped, not failed.
+fail CI. The scan step skips gracefully (job stays green) when no
+Socket API key is configured; it fails CI only on a real unhealthy
+scan. (GitHub Actions does not allow `secrets` in a job-level `if`,
+so the missing-key case is handled inside the step, not by a job
+condition — that was the cause of the first CI run failing with no
+jobs.)
 
 Setup (either path, Parv's choice):
 1. (Recommended) Install the Socket GitHub App (free) on this repo.

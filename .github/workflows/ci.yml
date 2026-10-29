@@ -8,8 +8,8 @@
 #      as a repo secret named SOCKET_SECURITY_API_KEY. The socket-scan
 #      job below then runs `socket ci` (exits non-zero on an unhealthy
 #      scan, so unhealthy dependencies fail CI).
-# If neither is set up, the socket-scan job is skipped (not failed) so
-# CI stays green on the Foundry tests alone. The scan report link goes
+# If neither is set up, the scan step skips gracefully (job stays
+# green) so CI is not blocked. The scan report link goes
 # in docs/THREAT_MODEL.md once the first scan runs.
 
 name: ci
@@ -34,10 +34,13 @@ jobs:
   socket-scan:
     name: Socket dependency scan
     runs-on: ubuntu-latest
-    # Only run when a Socket API key is configured. If Parv uses the
-    # Socket GitHub App instead, the App provides the scan separately
-    # and this job is skipped (not failed).
-    if: secrets.SOCKET_SECURITY_API_KEY != ''
+    # No job-level `if` here: GitHub Actions does not allow `secrets`
+    # in a job-level `if` (it rejects the whole workflow file). The
+    # missing-secret case is handled inside the scan step instead, so
+    # the job succeeds (green) with a clear "skipping" message when
+    # Socket is not configured, and fails CI only on a real unhealthy
+    # scan. If Parv uses the Socket GitHub App instead, the App
+    # provides the scan separately and this step just skips.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,4 +51,9 @@ jobs:
       - name: Run Socket scan (fails CI on unhealthy deps)
         env:
           SOCKET_SECURITY_API_KEY: ${{ secrets.SOCKET_SECURITY_API_KEY }}
-        run: socket ci
+        run: |
+          if [ -z "$SOCKET_SECURITY_API_KEY" ]; then
+            echo "Socket not configured (no SOCKET_SECURITY_API_KEY secret). Skipping scan."
+            exit 0
+          fi
+          socket ci
