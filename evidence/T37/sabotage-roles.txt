@@ -1,0 +1,19 @@
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+NOTE: SOL RPC2 == RPC1 (SOL_RPC2 env unset; Helius key lives on Parv's machine). SOL reads are NOT independently verified on this run.
+PASS rpc.evm: RPC1 == RPC2 (policy)
+PASS evm.policy: recomputed == stored (0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820)
+PASS evm.recipient: isRecipient(merchant) == true
+PASS rpc.evm-code: RPC1 == RPC2 (code)
+PASS evm.code: on-chain code == local build (metadata + immutables stripped, 0x7bc70bdc5a035be4…)
+PASS evm.token: vault token == 0xb86eFe265BE37a521ddb271d750e6a41CB2471e2 (expected SFUSD 0xb86efe265be37a521ddb271d750e6a41cb2471e2)
+FAIL evm.roles: owner=0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0 (expected 0x0000000000000000000000000000000000000001), agent=0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 (expected 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772)
+PASS evm.agent: AGENT native=0 wei, SFUSD=0 (both must be 0, E1)
+PASS rpc.sol: RPC1 == RPC2 (policy)
+PASS sol.policy: recomputed == stored (0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820)
+PASS sol.recipients: recipients == [merchant]
+FAIL sol.upgrade: upgrade authority == HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v (expected OWNER 11111111111111111111111111111111)
+FAIL sol.roles: owner=HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v (expected 11111111111111111111111111111111), agent=5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 (expected 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3)
+PASS sol.agent: AGENT native=0 lamports, SFUSD=0 (both must be 0, E1)
+PASS cross.policy: caps + recipients match across chains (anchor/expiry/spent differ by session, not drift)
+
+VERIFY RED: 12/15 checks pass; failing: evm.roles, sol.upgrade, sol.roles
