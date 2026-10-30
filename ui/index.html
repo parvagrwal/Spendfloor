@@ -3,31 +3,58 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SpendFloor — Demo Dashboard</title>
+<title>SpendFloor — Try to break the vault</title>
 <style>
-  body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 900px; padding: 0 1rem; color: #111; }
-  h1 { font-size: 1.6rem; }
-  .card { border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  body { font-family: system-ui, sans-serif; margin: 0; color: #111; background: #f7f7f5; }
+  .hero { background: #101418; color: #f5f5f2; padding: 2.5rem 1rem 2rem; text-align: center; }
+  .hero h1 { font-size: 2rem; margin: 0 0 0.5rem; }
+  .hero p { font-size: 1.05rem; color: #c9cdd3; max-width: 640px; margin: 0 auto 1.2rem; }
+  .hero a.btn { display: inline-block; background: #00c853; color: #04120a; font-weight: 700; text-decoration: none; padding: 0.7rem 1.3rem; border-radius: 999px; margin: 0.2rem; }
+  .hero a.btn.alt { background: transparent; color: #f5f5f2; border: 1px solid #888; }
+  main { max-width: 900px; margin: 0 auto; padding: 0 1rem 2rem; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+  h2 { font-size: 1.25rem; margin-top: 0.2rem; }
   .green { color: #0a7a2f; font-weight: 700; }
+  .red { color: #b00020; font-weight: 700; }
   .mono { font-family: ui-monospace, monospace; font-size: 0.85rem; word-break: break-all; }
-  table { border-collapse: collapse; width: 100%; }
-  th, td { border-bottom: 1px solid #eee; padding: 0.4rem; text-align: left; font-size: 0.9rem; }
-  button { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; }
   .note { color: #555; font-size: 0.85rem; }
   .tag { display: inline-block; background: #eef; border-radius: 6px; padding: 0.1rem 0.5rem; font-size: 0.8rem; }
+  .bar-wrap { background: #eee; border-radius: 999px; height: 22px; overflow: hidden; margin: 0.4rem 0; }
+  .bar-fill { background: #00a152; height: 100%; transition: width 0.3s; }
+  .bar-fill.sim { background: #ff8f00; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #eee; padding: 0.4rem; text-align: left; font-size: 0.9rem; }
+  button { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; background: #fff; }
+  button.primary { background: #101418; color: #fff; border-color: #101418; font-weight: 700; }
+  input, select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; }
+  .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin: 0.8rem 0; }
+  .sim-grid label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 0.2rem; }
+  .sim-grid input, .sim-grid select { width: 100%; box-sizing: border-box; }
+  #sim-result { font-size: 1.2rem; margin: 0.8rem 0 0.2rem; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
+  .step { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1rem; }
+  .step b { font-size: 1.4rem; }
 </style>
 </head>
 <body>
-<h1>SpendFloor — Demo Dashboard</h1>
-<p class="note">One spend policy for AI agents, enforced on-chain on Base Sepolia + Solana devnet. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.</p>
+<div class="hero">
+<h1>SpendFloor</h1>
+<p>One spend policy for AI agents, enforced on-chain on Base Sepolia + Solana devnet. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.</p>
+<a class="btn" href="#simulator">Try to break it</a>
+<a class="btn alt" href="#proof">See the proof</a>
+</div>
 
+<main>
 <div class="card">
-<h2>Policy (same on both chains)</h2>
+<h2>Live policy (same on both chains)</h2>
 <p>Per-transaction cap: <b>2 SFUSD</b> &nbsp;|&nbsp; Window cap: <b>5 SFUSD</b> &nbsp;|&nbsp; Window: <b>86,400 s (24 h)</b></p>
 <p>Recipients: merchant only</p>
+<p>Window spent so far (live state):</p>
+<div class="bar-wrap"><div class="bar-fill" style="width:20%"></div></div>
+<p><b>Spent 1 SFUSD</b> &nbsp;|&nbsp; Headroom <b>4 SFUSD</b> &nbsp;|&nbsp; The bar fills as the window fills. At 5, every further spend is rejected until the window rolls over.</p>
 <p class="mono">EVM merchant: 0x61f1c99d674bcd333578AC4f538F46AbC7bB4106<br>
 SOL merchant: 8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS</p>
-<p>Policy hash (identical both chains, set by T21):</p>
+<p>Policy hash (identical both chains):</p>
 <p class="mono">0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820</p>
 <p class="mono">EVM demo vault: 0x8d13a6a31518b357a480659073b9db78ab861809<br>
 SOL policy PDA: 5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE<br>
@@ -41,9 +68,41 @@ SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
 <p class="note">The verify CLI recomputes the policy hash from live chain reads on both chains, checks the EVM runtime code, the Solana upgrade authority, zero agent balances, and cross-chain caps + recipients. Last full run: green on all 15 checks.</p>
 </div>
 
+<div class="card" id="simulator">
+<h2>Try to break it (simulator)</h2>
+<p>Pick a spend and see what the vault would do. This runs entirely in your browser. <b>No real transaction is sent, no keys are used, and nothing on-chain changes.</b> The real vault enforces the same rules on-chain; this is the same policy, played with safely.</p>
+<div class="sim-grid">
+<div><label>Amount (SFUSD)</label><input id="sim-amount" type="number" min="0" step="1" value="50"></div>
+<div><label>Recipient</label><select id="sim-recipient"><option value="merchant">Merchant (allowlisted)</option><option value="attacker" selected>Attacker (not allowlisted)</option></select></div>
+<div><label>Signer</label><select id="sim-signer"><option value="agent" selected>Agent</option><option value="attacker">Attacker</option></select></div>
+</div>
+<p>
+<button class="primary" onclick="attemptSpend()">Attempt spend</button>
+<button onclick="preset(50, 'attacker', 'agent')">Try the attack</button>
+<button onclick="preset(50, 'merchant', 'agent')">Try an overspend</button>
+<button onclick="preset(1, 'merchant', 'agent')">Try a valid spend</button>
+<button onclick="resetSim()">Reset simulation</button>
+</p>
+<p id="sim-result"></p>
+<p id="sim-explain" class="note"></p>
+<p>Simulated window state:</p>
+<div class="bar-wrap"><div class="bar-fill sim" id="sim-bar" style="width:20%"></div></div>
+<p id="sim-state">Spent 1 SFUSD &nbsp;|&nbsp; Headroom 4 SFUSD</p>
+<p class="note">Simulation starts from the live state (spent 1, headroom 4). An accepted simulated spend raises simulated spent; a rejected one leaves it unchanged. Reset restores the live state.</p>
+</div>
+
 <div class="card">
-<h2>Rejected injection attempts (counter)</h2>
-<p><b>10</b> on-chain-confirmed rejections: 5 rehearsal runs × 2 chains, all <b>RecipientNotAllowed</b>, amount fidelity true. Each rejection has a confirmed transaction hash/signature on-chain.</p>
+<h2>How it works</h2>
+<div class="steps">
+<div class="step"><b>1.</b><br>An agent drafts a spend. A prompt injection can make it draft a drain to an attacker.</div>
+<div class="step"><b>2.</b><br>The vault checks the policy on-chain: signer, recipient, caps, window. No app code stands between the draft and the chain.</div>
+<div class="step"><b>3.</b><br>Bad spends revert. The attacker gets nothing, the policy reads back unchanged, and the attempt is on-chain evidence.</div>
+</div>
+</div>
+
+<div class="card" id="proof">
+<h2>Rejected injection attempts (proof)</h2>
+<p><b>10</b> on-chain-confirmed rejections: 5 rehearsal runs × 2 chains, all <b>RecipientNotAllowed</b>, amount fidelity true. Each rejection has a confirmed transaction hash/signature on-chain. Click any hash to see it on the explorer.</p>
 <table>
 <tr><th>Run</th><th>Chain</th><th>Label</th><th>On-chain evidence</th></tr>
 <tr><td>1</td><td>Base Sepolia</td><td>RecipientNotAllowed</td><td><a class="mono" href="https://sepolia.basescan.org/tx/0x21af4ff6838995b1e3039fb9bc270b1c809180680cc2a71a303e555a6b57ac1d">0x21af…ac1d</a></td></tr>
@@ -69,17 +128,76 @@ SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
 <span class="note" id="refresh-note">Cached values are the last verified readings (T18/T27, 2026-10-30). Pressing Refresh reads both chains live; if a chain does not answer, its cached value stays.</span>
 </div>
 
-<p class="note">This page has no build step and no external libraries. Open ui/index.html directly, or serve the ui/ folder. Live reads go to the public Base Sepolia and Solana devnet RPCs; if either is unreachable, cached verified values are shown instead.</p>
+<p class="note">This page has no build step and no external libraries. Open ui/index.html directly, or serve the ui/ folder. Live reads go to the public Base Sepolia and Solana devnet RPCs; if either is unreachable, cached verified values are shown instead. The simulator never sends a transaction and never touches a key. Code: <a href="https://github.com/parvagrwal/SpendFloor">github.com/parvagrwal/SpendFloor</a>.</p>
+</main>
 
 <script>
+// --- Simulator: the policy, played with in the browser. No chain, no keys. ---
+// Policy: perTx 2,000,000, window 5,000,000, recipients {merchant}.
+// Frozen = false, session = live (fixed for the sim). Precedence matches the
+// on-chain vaults: Unauthorized -> ZeroAmount -> RecipientNotAllowed ->
+// DailyCapExceeded -> PerTxCapExceeded -> ACCEPT.
+const PER_TX = 2000000, WINDOW_MAX = 5000000;
+let simSpent = 1000000; // live state: spent 1 SFUSD
+const EXPLAIN = {
+  Unauthorized: "The signer is not the agent. Only the agent's key can authorize a spend.",
+  ZeroAmount: "The amount is zero. The vault rejects empty spends.",
+  RecipientNotAllowed: "The recipient is not on the allowlist. Only the merchant can receive.",
+  DailyCapExceeded: "Spent plus amount would pass the 5 SFUSD window cap.",
+  PerTxCapExceeded: "The amount passes the 2 SFUSD per-transaction cap.",
+  ACCEPT: "The vault would accept this spend. It fits the policy."
+};
+function simDecide(spent, amount, isMerchant, isAgent) {
+  if (!isAgent) return "Unauthorized";
+  if (amount === 0) return "ZeroAmount";
+  if (!isMerchant) return "RecipientNotAllowed";
+  if (spent + amount > WINDOW_MAX) return "DailyCapExceeded";
+  if (amount > PER_TX) return "PerTxCapExceeded";
+  return "ACCEPT";
+}
+function renderSim() {
+  const headroom = WINDOW_MAX - simSpent;
+  document.getElementById("sim-bar").style.width = (simSpent / WINDOW_MAX * 100) + "%";
+  document.getElementById("sim-state").innerHTML =
+    "Spent " + (simSpent / 1e6) + " SFUSD &nbsp;|&nbsp; Headroom " + (headroom / 1e6) + " SFUSD";
+}
+function attemptSpend() {
+  const raw = parseFloat(document.getElementById("sim-amount").value);
+  if (isNaN(raw) || raw < 0) {
+    document.getElementById("sim-result").innerHTML = "<span class=\"red\">Enter a non-negative amount.</span>";
+    document.getElementById("sim-explain").textContent = "";
+    return;
+  }
+  const amount = Math.round(raw * 1e6);
+  const isMerchant = document.getElementById("sim-recipient").value === "merchant";
+  const isAgent = document.getElementById("sim-signer").value === "agent";
+  const label = simDecide(simSpent, amount, isMerchant, isAgent);
+  const cls = label === "ACCEPT" ? "green" : "red";
+  document.getElementById("sim-result").innerHTML =
+    "Result: <span class=\"" + cls + "\">" + label + "</span>";
+  document.getElementById("sim-explain").textContent = EXPLAIN[label];
+  if (label === "ACCEPT") { simSpent += amount; renderSim(); }
+}
+function preset(amount, recipient, signer) {
+  document.getElementById("sim-amount").value = amount;
+  document.getElementById("sim-recipient").value = recipient;
+  document.getElementById("sim-signer").value = signer;
+  attemptSpend();
+}
+function resetSim() {
+  simSpent = 1000000;
+  renderSim();
+  document.getElementById("sim-result").textContent = "";
+  document.getElementById("sim-explain").textContent = "";
+}
+
+// --- Live reads (preserved from the earlier dashboard; reads only, no keys). ---
 const EVM_RPC = "https://sepolia.base.org";
 const SOL_RPC = "https://api.devnet.solana.com";
 const SFUSD = "0xb86efe265be37a521ddb271d750e6a41cb2471e2";
 const EVM_ATTACKER = "0x960b6582945D1447b55B032C9630a3Bc8E82C6D0";
 const SOL_ATTACKER_ATA = "94o4pwuHjHWu6GjFuxit9yNYFGg8V5Rgw8uPh6LzSNrz";
-
 async function readEvmAttacker() {
-  // balanceOf(address) = 0x70a08231 + 32-byte padded address.
   const data = "0x70a08231" + "000000000000000000000000" + EVM_ATTACKER.slice(2).toLowerCase();
   const res = await fetch(EVM_RPC, { method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -89,7 +207,6 @@ async function readEvmAttacker() {
   if (j.error) throw new Error(j.error.message);
   return parseInt(j.result, 16) / 1e6;
 }
-
 async function readSolAttacker() {
   const res = await fetch(SOL_RPC, { method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -99,7 +216,6 @@ async function readSolAttacker() {
   if (j.error) throw new Error(j.error.message);
   return j.result.value.uiAmount;
 }
-
 async function refreshLive() {
   document.getElementById("refresh-note").textContent = "Reading both chains…";
   try {
@@ -115,6 +231,7 @@ async function refreshLive() {
   document.getElementById("refresh-note").textContent =
     "Last refresh: " + new Date().toLocaleString() + ". Cached values are the last verified readings (T18/T27, 2026-10-30).";
 }
+renderSim();
 </script>
 </body>
 </html>
