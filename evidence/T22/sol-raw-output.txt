@@ -1,0 +1,13 @@
+agent (signer): 5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3
+submitter (fee payer): 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb
+submission failed (expected for a policy violation): Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 0: custom program error: 0x1773. 
+Logs: 
+[
+  "Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE invoke [1]",
+  "Program log: Instruction: Spend",
+  "Program log: AnchorError thrown in programs/spendfloor/src/lib.rs:400. Error Code: RecipientNotAllowed. Error Number: 6003. Error Message: Recipient is not allowlisted.",
+  "Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE consumed 8178 of 200000 compute units",
+  "Program CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE failed: custom program error: 0x1773"
+]. 
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.

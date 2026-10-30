@@ -1,0 +1,13 @@
+=== OWNER FN VIA AGENT: setFrozen(true) --from agent ===
+Error: execution reverted: NotOwner
+
+Context:
+- server returned an error response: error code 3: execution reverted, data: "0x30cd7471"
+exit: 1
+
+=== RAW OVERSPEND (attacker, 50 SFUSD, dummy signature) ===
+Error: execution reverted: Unauthorized
+
+Context:
+- server returned an error response: error code 3: execution reverted, data: "0x82b42900"
+exit: 1

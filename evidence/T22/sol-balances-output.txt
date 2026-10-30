@@ -1,0 +1,2 @@
+SOL agent native (lamports): 0
+SOL agent SFUSD (ATA): no token account (balance 0)
