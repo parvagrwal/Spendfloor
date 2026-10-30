@@ -1,0 +1,37 @@
+T02 evidence — sdk/fund-check.ts, 2026-10-20
+
+=== Agent machine (Muse VM) ===
+machine: agent
+Custody: OK evm owner private key absent; OK sol owner private key absent;
+OK evm/sol agent + submitter local keys match registry.
+Balances: EVM all read (owner 0, agent 0 -> OK exactly 0, submitter 0).
+SOL balance reads FAILED from this VM: api.devnet.solana.com unreachable
+(HTTP 000 via curl, solana CLI, and web3.js fetch). Also unreachable:
+devnet.solana.com. Reachable but unusable keyless: dRPC free (chain not on
+free plan), Ankr (auth required). Recorded for T04: the Muse VM egress
+cannot reach the official Solana devnet RPC; the owner machine can.
+
+=== Owner machine (Parv WSL) — reported by Parv in chat ===
+machine: owner
+OK evm owner local key matches registry address
+OK evm agent private key absent on this owner machine
+OK evm submitter private key absent on this owner machine
+OK sol owner local key matches registry address
+OK sol agent private key absent on this owner machine
+OK sol submitter private key absent on this owner machine
+EVM owner 0 / agent 0 (OK exactly 0) / submitter 0 ETH
+SOL owner 0 / agent 0 (OK exactly 0) / submitter 0 SOL
+fund-check: all asserts passed
+
+=== Addresses (public, in sdk/addresses.json) ===
+EVM owner     0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0  (owner machine only)
+EVM agent     0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772  (agent machine only)
+EVM submitter 0x292e031155c7301eA14dd1a04b653B1c23855196  (agent machine only)
+SOL owner     HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v  (owner machine only)
+SOL agent     5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3  (agent machine only)
+SOL submitter 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb  (agent machine only)
+
+=== Custody negative test (agent machine) ===
+gen-key --role owner on the agent machine -> REFUSED, exit 1:
+"a \"agent\" machine must never hold a \"owner\" key."
+Key files: ~/.spendfloor-keys (dir 0700, files 0600), outside the repo.

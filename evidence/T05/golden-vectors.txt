@@ -1,0 +1,33 @@
+T05 evidence — canonical encoding + TS reference hash + golden vectors
+Machine: Muse VM, 2026-10-20. All local; nothing on-chain.
+
+Encoding (policy/src/canonical.ts, per plan section 2):
+  preimage = "SPENDFLOOR/v1" (13 ASCII bytes) || version u32 || decimals u8
+  || per_tx_max u64 || window_max u64 || window_seconds u64
+  || window_anchor i64 || expires_at i64 || evmSetHash 32B || solSetHash 32B
+  All fixed-width big-endian; preimage = 122 bytes; policyHash = SHA-256.
+  Set hash = SHA-256 of recipient address bytes sorted ascending, concatenated.
+
+Commands:
+  npx tsc --noEmit -p policy/tsconfig.json   -> OK
+  npx tsx policy/test/generate-golden.ts    -> 5 vectors written
+  npx tsx --test policy/test/golden.test.ts  -> 11 pass, 0 fail
+
+Golden policy hashes (policy/test/golden-hashes.json):
+  G1-p0-conformance                    83a5665cf4043632bb2804323fe11659ede2b59bfb6e4bb5014885f3254b1003
+  G2-p1-short-window-two-recipients    7017b1560851daf96bb76a4ae39110b6b6c70d99903b400142b9d67a466f47d8
+  G3-p2-short-expiry-min-amounts        fc105fd9615d88e17549f5a433c0ddee4b6d2fff233bd0988a15ffbeb1655a0e
+  G4-large-values                      037f68a2b85b10e20a29e2350de7731a591cb534e1e0fee4880dddec90917f98
+  G5-order-invariance                  7017b1560851daf96bb76a4ae39110b6b6c70d99903b400142b9d67a466f47d8 (= G2, as required)
+
+Tests also cover: recipient-order invariance per set, empty-set hash =
+SHA-256 of empty input, 1-micro-unit tamper changes the hash, invalid
+inputs rejected (0 or 9 recipients, zero address, duplicates, u64/i64
+overflow). Root package.json: "policy" added to workspaces (npm install
+re-run; no dependency changes). Parv reproduces on his machine with the
+same three commands; the generator is deterministic (Solana pubkeys from
+fixed seeds), so his golden file must come out byte-identical.
+
+REPRODUCED on the owner machine (Parv WSL, 2026-10-20, reported in chat):
+same three commands -> typecheck OK, generator printed the identical 5
+policyHashes, tests 11 pass / 0 fail. Golden file is cross-machine stable.

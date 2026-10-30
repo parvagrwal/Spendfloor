@@ -1,0 +1,24 @@
+T01 evidence — scripts/check-toolchain.sh output, 2026-10-20
+
+=== Parv WSL (Ubuntu on Windows host) — reported by Parv in chat ===
+OK    rustc      pin 1.99.1   got 1.99.1
+OK    forge      pin 1.8.5    got 1.8.5
+OK    solana     pin 4.1.2    got 4.1.2
+OK    anchor     pin 1.2.0    got 1.2.0
+OK    ollama     pin 0.40.6   got 0.40.6
+OK    node       pin >=22     got v22.23.3
+OK    model      pin qwen2.5:7b pulled
+
+=== Muse VM — run locally at close-out ===
+OK    rustc      pin 1.99.1   got 1.99.1
+OK    forge      pin 1.8.5    got 1.8.5
+OK    solana     pin 4.1.2    got 4.1.2
+OK    anchor     pin 1.2.0    got 1.2.0
+OK    ollama     pin 0.40.6   got 0.40.6
+OK    node       pin >=22     got v24.20.0
+OK    model      pin qwen2.5:7b pulled
+exit: 0
+
+Scratch builds:
+- Parv WSL: forge build "Compiler run successful!" (Solc 0.8.37, forge-std v1.17.0); anchor build finished test profile, unittests ran.
+- Muse VM: forge build "Compiler run successful!" (forge-std v1.17.0); anchor build exit 0 (log: ~/workspace/anchor-scratch-build.log at build time).

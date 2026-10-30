@@ -1,0 +1,47 @@
+T03 fund-check, 2026-10-29 (Day 2) — Parv's machine output + VM independent verification
+====================================================================================
+Parv's fund-check output (~/spendfloor/sdk, WSL):
+  EVM owner     balance: 0 ETH
+  EVM agent     balance: 0 ETH
+  OK    evm AGENT balance is exactly 0
+  EVM submitter balance: 0 ETH
+  SOL owner     balance: 6 SOL
+  SOL agent     balance: 0 SOL
+  OK    sol AGENT balance is exactly 0
+  SOL submitter balance: 1 SOL
+
+VM independent verification (2026-10-29, devnet reachable from VM):
+  SOL owner     HgLp84c1mcmTVVohLRU6oDWqzWabjoMkbot65mQ785v : 6 SOL
+  SOL submitter 8RrdXQBFbrdyLyDnmFgSZU1CXGDknNDVVRLs2iLL84kb : 1 SOL
+  SOL agent     5Df6mNkbr8J6XETfKAhhwL7JsRVkbr3rgvS6J3tvEBo3 : 0 SOL
+  EVM owner     0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0 : 0x0
+  EVM submitter 0x292e031155c7301eA14dd1a04b653B1c23855196 : 0x0
+  EVM agent     0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 : 0x0
+
+Assessment vs plan §1 funds table:
+  SOL OWNER 6/6 SOL .......... MET
+  SOL SUBMITTER 1/0.5 SOL .... MET (0.5 above target; harmless fee runway)
+  SOL AGENT 0 ................ MET (CORE RULE intact)
+  EVM OWNER 0/0.02 ETH ....... NOT MET
+  EVM SUBMITTER 0/0.03 ETH ... NOT MET
+  EVM AGENT 0 ................ MET (CORE RULE intact)
+
+Status: T03 PARTIAL — SOL side complete, EVM side outstanding.
+Still owed for full T03 close: Base Sepolia faucet claims (OWNER 0.02, SUBMITTER 0.03),
+final fund-check green, and funding-route details (submitter route, claim counts, cooldowns).
+
+Second check, 2026-10-29 ~12:33 IST (VM, Base Sepolia dRPC + devnet CLI):
+  EVM OWNER 0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0 : 0x38d7ea4c68000 = 0.001 ETH (target 0.02 — NOT met)
+  EVM SUBMITTER 0x292e031155c7301eA14dd1a04b653B1c23855196 : 0x0 = 0 ETH (target 0.03 — NOT met)
+  EVM AGENT 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 : 0x0 = 0 ETH (correct)
+  SOL unchanged: OWNER 6, SUBMITTER 1, AGENT 0.
+  Verdict: NOT done. Still needed: OWNER +0.019 ETH, SUBMITTER +0.03 ETH. Route of the 0.001 unknown (Parv to confirm).
+
+Third check, 2026-10-29 ~13:24 IST (VM, Base Sepolia PublicNode RPC + devnet CLI):
+  Note: dRPC dropped connections and sepolia.base.org returned 403 on this check, so the PublicNode alternate endpoint was used. dRPC later confirmed AGENT = 0 on a partial retry.
+  EVM OWNER 0xA8f24e57FA6d16569d22F22B5fF3f264E4AC51D0 : 26000000000000000 wei = 0.026 ETH (target 0.02 — MET, 0.006 above target)
+  EVM SUBMITTER 0x292e031155c7301eA14dd1a04b653B1c23855196 : 30000000000000000 wei = 0.03 ETH (target 0.03 — MET exactly)
+  EVM AGENT 0xe2c8508E2eE033fD1D401AC49Ca7D1dfabd06772 : 0 wei = 0 ETH (correct)
+  SOL unchanged: OWNER 6, SUBMITTER 1, AGENT 0.
+  Verdict: ALL SIX GREEN — T03 funding thresholds met.
+  Route: final EVM leg funded by personal-wallet transfer on Base Sepolia (0.02 to OWNER, 0.03 to SUBMITTER from Parv's personal wallet, which held 0.06 Base Sepolia ETH). No faucet, bridge, mining, or Discord ask was used for this leg. OWNER shows 0.026, not the expected 0.021 (0.001 pre-existing + 0.02 transfer) — 0.005 extra, source unconfirmed (possibly an additional faucet drip between the 12:33 and 13:24 checks). Still unconfirmed: route of the original 0.001, route of the SOL SUBMITTER's 1 SOL, and the 0.005 extra. None blocks the balance thresholds.
