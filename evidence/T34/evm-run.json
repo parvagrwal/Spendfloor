@@ -1,0 +1,68 @@
+{
+  "chain": "evm",
+  "checks": 10,
+  "passed": 10,
+  "failed": [],
+  "detail": [
+    {
+      "name": "baseline valid spend",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "pass": true
+    },
+    {
+      "name": "tamper to (merchant -> attacker)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "tamper amount (1 -> 2 SFUSD)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "tamper deadline (+1s)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "tamper nonce (+1)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "tamper chainId (sign 1, submit 31337)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "tamper domain (sign dummy vault, submit real vault)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "replay after rotation (old agent signs)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    },
+    {
+      "name": "replay on frozen (current agent signs)",
+      "expected": "Frozen",
+      "actual": "Frozen",
+      "pass": true
+    },
+    {
+      "name": "second deployment (vault1 sig to vault2)",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "pass": true
+    }
+  ]
+}

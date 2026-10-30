@@ -1,0 +1,11 @@
+PASS: baseline valid spend (expected ACCEPT, got ACCEPT)
+PASS: tamper to (merchant -> attacker) (expected Unauthorized, got Unauthorized)
+PASS: tamper amount (1 -> 2 SFUSD) (expected Unauthorized, got Unauthorized)
+PASS: tamper deadline (+1s) (expected Unauthorized, got Unauthorized)
+PASS: tamper nonce (+1) (expected Unauthorized, got Unauthorized)
+PASS: tamper chainId (sign 1, submit 31337) (expected Unauthorized, got Unauthorized)
+PASS: tamper domain (sign dummy vault, submit real vault) (expected Unauthorized, got Unauthorized)
+PASS: replay after rotation (old agent signs) (expected Unauthorized, got Unauthorized)
+PASS: replay on frozen (current agent signs) (expected Frozen, got Frozen)
+PASS: second deployment (vault1 sig to vault2) (expected Unauthorized, got Unauthorized)
+EVM T34 done: 10/10 pass

@@ -1,0 +1,133 @@
+   Compiling litesvm-tests v0.1.0 (/home/hatch/workspace/Spendfloor/solana/litesvm-tests)
+warning: unused import: `solana_signer::Signer`
+  --> tests/t34.rs:24:5
+   |
+24 | use solana_signer::Signer;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `policy_args` is never used
+  --> tests/common.rs:87:8
+   |
+87 | pub fn policy_args(
+   |        ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `ix_set_policy` is never used
+   --> tests/common.rs:156:8
+    |
+156 | pub fn ix_set_policy(
+    |        ^^^^^^^^^^^^^
+
+warning: function `ix_withdraw` is never used
+   --> tests/common.rs:212:8
+    |
+212 | pub fn ix_withdraw(
+    |        ^^^^^^^^^^^
+
+warning: function `ix_spend_with_token_program` is never used
+   --> tests/common.rs:261:8
+    |
+261 | pub fn ix_spend_with_token_program(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `assert_err` is never used
+   --> tests/common.rs:294:8
+    |
+294 | pub fn assert_err(res: &TransactionResult) {
+    |        ^^^^^^^^^^
+
+warning: function `assert_custom` is never used
+   --> tests/common.rs:309:8
+    |
+309 | pub fn assert_custom(res: &TransactionResult, code: u32) {
+    |        ^^^^^^^^^^^^^
+
+warning: function `policy_data` is never used
+   --> tests/common.rs:314:8
+    |
+314 | pub fn policy_data(svm: &LiteSVM, policy: &Address) -> Vec<u8> {
+    |        ^^^^^^^^^^^
+
+warning: function `read_u32` is never used
+   --> tests/common.rs:318:8
+    |
+318 | pub fn read_u32(d: &[u8], off: usize) -> u32 {
+    |        ^^^^^^^^
+
+warning: function `read_u64` is never used
+   --> tests/common.rs:322:8
+    |
+322 | pub fn read_u64(d: &[u8], off: usize) -> u64 {
+    |        ^^^^^^^^
+
+warning: function `read_bytes` is never used
+   --> tests/common.rs:326:8
+    |
+326 | pub fn read_bytes(d: &[u8], off: usize, len: usize) -> Vec<u8> {
+    |        ^^^^^^^^^^
+
+warning: function `policy_hash_off` is never used
+   --> tests/common.rs:332:8
+    |
+332 | pub fn policy_hash_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^
+
+warning: function `policy_frozen_off` is never used
+   --> tests/common.rs:336:8
+    |
+336 | pub fn policy_frozen_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `policy_mint_off` is never used
+   --> tests/common.rs:344:8
+    |
+344 | pub fn policy_mint_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^
+
+warning: function `set_hash` is never used
+   --> tests/common.rs:348:8
+    |
+348 | pub fn set_hash(recipients: &[Address]) -> [u8; 32] {
+    |        ^^^^^^^^
+
+warning: function `canonical_hash` is never used
+   --> tests/common.rs:358:8
+    |
+358 | pub fn canonical_hash(
+    |        ^^^^^^^^^^^^^^
+
+warning: function `token_balance` is never used
+   --> tests/common.rs:492:8
+    |
+492 | pub fn token_balance(svm: &LiteSVM, account: &Address) -> u64 {
+    |        ^^^^^^^^^^^^^
+
+warning: function `token_owner` is never used
+   --> tests/common.rs:498:8
+    |
+498 | pub fn token_owner(svm: &LiteSVM, account: &Address) -> Vec<u8> {
+    |        ^^^^^^^^^^^
+
+warning: function `token_mint` is never used
+   --> tests/common.rs:504:8
+    |
+504 | pub fn token_mint(svm: &LiteSVM, account: &Address) -> Vec<u8> {
+    |        ^^^^^^^^^^
+
+warning: `litesvm-tests` (test "t34") generated 19 warnings (run `cargo fix --test "t34" -p litesvm-tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 6.22s
+     Running tests/t34.rs (target/release/deps/t34-94ffc31eefbfdf4b)
+
+running 1 test
+tamper-signer: expected Unauthorized got Unauthorized
+tamper-recipient: expected RecipientNotAllowed got RecipientNotAllowed
+replay-after-rotation: expected Unauthorized got Unauthorized
+replay-on-frozen: expected Frozen got Frozen
+T34 SOL: 4/4 policy cases pass
+test t34_sol_tamper_replay ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
