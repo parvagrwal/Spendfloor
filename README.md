@@ -139,6 +139,18 @@ Latest finished scan: 623 dependencies scanned, 16 alerts found (3 malicious, 6 
 
 Cake Wallet is a wallet sponsor, and SpendFloor is about agent spending safety, so it is a narrative fit for Cake's judging table. There is no Cake SDK, no code integration, and no claim otherwise. The distinction matters: Socket is the code integration, Cake is the story fit.
 
+### Dodo Payments — narrative fit, no code
+
+SpendFloor is borderless payments for agents, on-chain and policy enforced, the same vision as Dodo for humans. There is no Dodo integration, no fiat on-ramp, and no claim otherwise. SFUSD here is a test token with no fiat value, so a fiat on-ramp would make no sense.
+
+### Edge City India — venue and community, not a technical integration
+
+Built at HH Goa inside Edge City India. Intended first users are builders there. This is venue and community, not a technical integration, and no claim otherwise.
+
+### AIGI — grants path, not technology
+
+AIGI is a grants sponsor, not a technology integration. There is no AIGI code and no AIGI integration. The AIGI path is a grants application planned post-Goa for Nov 1, not a submitted application and not a current integration.
+
 ## Repo layout
 
 - `evm/` — Solidity vault and SFUSD token (Foundry)
