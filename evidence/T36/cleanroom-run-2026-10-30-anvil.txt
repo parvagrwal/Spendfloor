@@ -1,0 +1,519 @@
+=== check-toolchain ===
+OK    rustc      pin 1.99.1   got 1.99.1
+OK    forge      pin 1.8.5    got 1.8.5
+OK    solana     pin 4.1.2    got 4.1.2
+OK    anchor     pin 1.2.0    got 1.2.0
+OK    ollama     pin 0.40.6   got 0.40.6
+OK    node       pin >=22     got v24.22.1
+OK    model      pin qwen2.5:7b pulled
+=== npm ci (fallback: npm install) ===
+npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+
+added 246 packages, and audited 251 packages in 28s
+
+20 packages are looking for funding
+  run `npm fund` for details
+
+12 vulnerabilities (7 moderate, 5 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+=== forge test (evm) ===
+Compiling 1 files with Solc 0.8.37
+Solc 0.8.37 finished in 495.55ms
+Compiler run successful!
+
+Ran 6 tests for test/Hash.t.sol:HashConformanceTest
+[PASS] testHashGoldenG1() (gas: 11792)
+[PASS] testHashGoldenG2() (gas: 11997)
+[PASS] testHashGoldenG3() (gas: 11771)
+[PASS] testHashGoldenG4() (gas: 11748)
+[PASS] testHashGoldenG5OrderInvariance() (gas: 12020)
+[PASS] testHashTamperedFieldDiffers() (gas: 11814)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 8.53ms (1.67ms CPU time)
+
+Ran 32 tests for test/Vault.t.sol:SpendFloorVaultTest
+[PASS] testFuzz_SpendOutcomes(uint256,uint256,uint256) (runs: 10000, μ: 132937, ~: 98080)
+[PASS] test_AgentAsRecipient() (gas: 38431)
+[PASS] test_BadNonce() (gas: 93286)
+[PASS] test_DeadlineBoundaries() (gas: 252008)
+[PASS] test_DeadlineTooFar() (gas: 93273)
+[PASS] test_ExactBoundaries() (gas: 457051)
+[PASS] test_Frozen() (gas: 318598)
+[PASS] test_IntentExpired() (gas: 93106)
+[PASS] test_MalleableSignature() (gas: 78103)
+[PASS] test_NoReceive() (gas: 32815)
+[PASS] test_NonAllowlisted() (gas: 99883)
+[PASS] test_OverDailyCap() (gas: 449665)
+[PASS] test_OverPerTxCap() (gas: 107361)
+[PASS] test_OwnerOnly() (gas: 109169)
+[PASS] test_PolicyHashStable() (gas: 15023)
+[PASS] test_Precedence() (gas: 1292677)
+[PASS] test_Replay() (gas: 210343)
+[PASS] test_SessionExpired() (gas: 176131)
+[PASS] test_SessionExpiredAtBoundary() (gas: 176109)
+[PASS] test_SetAgent() (gas: 305914)
+[PASS] test_SetPolicy() (gas: 524518)
+[PASS] test_TamperedAmount() (gas: 90936)
+[PASS] test_TamperedDeadline() (gas: 91003)
+[PASS] test_TamperedNonce() (gas: 91024)
+[PASS] test_TamperedTo() (gas: 90959)
+[PASS] test_U64MaxAmount() (gas: 107261)
+[PASS] test_ValidSpend() (gas: 200745)
+[PASS] test_VaultAsRecipient() (gas: 125392)
+[PASS] test_WindowRollover() (gas: 477227)
+[PASS] test_Withdraw() (gas: 184709)
+[PASS] test_WrongSigner() (gas: 83489)
+[PASS] test_ZeroAmount() (gas: 97521)
+Suite result: ok. 32 passed; 0 failed; 0 skipped; finished in 3.74s (3.74s CPU time)
+
+Ran 2 tests for test/Invariants.t.sol:InvariantsTest
+[PASS] testFuzz_Invariants(uint256) (runs: 10000, μ: 4394050, ~: 4381674)
+[PASS] test_LoweredCapNoPanic() (gas: 704197)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 27.84s (27.84s CPU time)
+
+Ran 3 test suites in 27.84s (31.59s CPU time): 40 tests passed, 0 failed, 0 skipped (40 total tests)
+=== cargo build-sbf (solana) ===
+warning: unexpected `cfg` condition value: `custom-heap`
+  --> programs/spendfloor/src/lib.rs:23:1
+   |
+23 | #[program]
+   | ^^^^^^^^^^
+   |
+   = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+   = note: using a cfg inside a macro will use the cfgs from the destination crate and not the ones from the defining crate
+   = help: try referring to `$crate::custom_heap_default` crate for guidance on how handle this unexpected cfg
+   = help: the macro `$crate::custom_heap_default` may come from an old version of the `solana_program_entrypoint` crate, try updating your dependency with `cargo update -p solana_program_entrypoint`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+   = note: this warning originates in the macro `$crate::custom_heap_default` which comes from the expansion of the attribute macro `program` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `custom-panic`
+  --> programs/spendfloor/src/lib.rs:23:1
+   |
+23 | #[program]
+   | ^^^^^^^^^^
+   |
+   = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+   = note: using a cfg inside a macro will use the cfgs from the destination crate and not the ones from the defining crate
+   = help: try referring to `$crate::custom_panic_default` crate for guidance on how handle this unexpected cfg
+   = help: the macro `$crate::custom_panic_default` may come from an old version of the `solana_program_entrypoint` crate, try updating your dependency with `cargo update -p solana_program_entrypoint`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: this warning originates in the macro `$crate::custom_panic_default` which comes from the expansion of the attribute macro `program` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `anchor-debug`
+  --> programs/spendfloor/src/lib.rs:23:1
+   |
+23 | #[program]
+   | ^^^^^^^^^^
+   |
+   = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+   = note: using a cfg inside a attribute macro will use the cfgs from the destination crate and not the ones from the defining crate
+   = help: try referring to `program` crate for guidance on how handle this unexpected cfg
+   = help: the attribute macro `program` may come from an old version of the `anchor_attribute_program` crate, try updating your dependency with `cargo update -p anchor_attribute_program`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: this warning originates in the attribute macro `program` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `anchor-debug`
+   --> programs/spendfloor/src/lib.rs:412:10
+    |
+412 | #[derive(Accounts)]
+    |          ^^^^^^^^
+    |
+    = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+    = note: using a cfg inside a derive macro will use the cfgs from the destination crate and not the ones from the defining crate
+    = help: try referring to `Accounts` crate for guidance on how handle this unexpected cfg
+    = help: the derive macro `Accounts` may come from an old version of the `anchor_derive_accounts` crate, try updating your dependency with `cargo update -p anchor_derive_accounts`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: this warning originates in the derive macro `Accounts` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `anchor-debug`
+   --> programs/spendfloor/src/lib.rs:427:10
+    |
+427 | #[derive(Accounts)]
+    |          ^^^^^^^^
+    |
+    = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+    = note: using a cfg inside a derive macro will use the cfgs from the destination crate and not the ones from the defining crate
+    = help: try referring to `Accounts` crate for guidance on how handle this unexpected cfg
+    = help: the derive macro `Accounts` may come from an old version of the `anchor_derive_accounts` crate, try updating your dependency with `cargo update -p anchor_derive_accounts`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: this warning originates in the derive macro `Accounts` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `anchor-debug`
+   --> programs/spendfloor/src/lib.rs:434:10
+    |
+434 | #[derive(Accounts)]
+    |          ^^^^^^^^
+    |
+    = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+    = note: using a cfg inside a derive macro will use the cfgs from the destination crate and not the ones from the defining crate
+    = help: try referring to `Accounts` crate for guidance on how handle this unexpected cfg
+    = help: the derive macro `Accounts` may come from an old version of the `anchor_derive_accounts` crate, try updating your dependency with `cargo update -p anchor_derive_accounts`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: this warning originates in the derive macro `Accounts` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unexpected `cfg` condition value: `anchor-debug`
+   --> programs/spendfloor/src/lib.rs:452:10
+    |
+452 | #[derive(Accounts)]
+    |          ^^^^^^^^
+    |
+    = note: expected values for `feature` are: `cpi`, `default`, `idl-build`, `no-entrypoint`, `no-idl`, and `no-log-ix-name`
+    = note: using a cfg inside a derive macro will use the cfgs from the destination crate and not the ones from the defining crate
+    = help: try referring to `Accounts` crate for guidance on how handle this unexpected cfg
+    = help: the derive macro `Accounts` may come from an old version of the `anchor_derive_accounts` crate, try updating your dependency with `cargo update -p anchor_derive_accounts`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: this warning originates in the derive macro `Accounts` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: `spendfloor` (lib) generated 7 warnings
+    Finished `release` profile [optimized] target(s) in 0.63s
+=== cargo test --release (litesvm-tests) ===
+warning: constant `TOKEN_ACCOUNT_LEN` is never used
+  --> tests/common.rs:22:11
+   |
+22 | pub const TOKEN_ACCOUNT_LEN: usize = 165;
+   |           ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `ix_set_agent` is never used
+   --> tests/common.rs:184:8
+    |
+184 | pub fn ix_set_agent(pid: &Address, owner: &Address, policy: &Address, new_agent: &Address) -> Instruction {
+    |        ^^^^^^^^^^^^
+
+warning: function `ix_set_frozen` is never used
+   --> tests/common.rs:197:8
+    |
+197 | pub fn ix_set_frozen(pid: &Address, owner: &Address, policy: &Address, frozen: bool) -> Instruction {
+    |        ^^^^^^^^^^^^^
+
+warning: function `ix_withdraw` is never used
+   --> tests/common.rs:212:8
+    |
+212 | pub fn ix_withdraw(
+    |        ^^^^^^^^^^^
+
+warning: function `ix_spend` is never used
+   --> tests/common.rs:237:8
+    |
+237 | pub fn ix_spend(
+    |        ^^^^^^^^
+
+warning: function `ix_spend_with_token_program` is never used
+   --> tests/common.rs:261:8
+    |
+261 | pub fn ix_spend_with_token_program(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `assert_err` is never used
+   --> tests/common.rs:294:8
+    |
+294 | pub fn assert_err(res: &TransactionResult) {
+    |        ^^^^^^^^^^
+
+warning: function `custom_code` is never used
+   --> tests/common.rs:301:8
+    |
+301 | pub fn custom_code(res: &TransactionResult) -> Option<u32> {
+    |        ^^^^^^^^^^^
+
+warning: function `assert_custom` is never used
+   --> tests/common.rs:309:8
+    |
+309 | pub fn assert_custom(res: &TransactionResult, code: u32) {
+    |        ^^^^^^^^^^^^^
+
+warning: function `read_u32` is never used
+   --> tests/common.rs:318:8
+    |
+318 | pub fn read_u32(d: &[u8], off: usize) -> u32 {
+    |        ^^^^^^^^
+
+warning: function `read_u64` is never used
+   --> tests/common.rs:322:8
+    |
+322 | pub fn read_u64(d: &[u8], off: usize) -> u64 {
+    |        ^^^^^^^^
+
+warning: function `policy_frozen_off` is never used
+   --> tests/common.rs:336:8
+    |
+336 | pub fn policy_frozen_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^^^
+
+warning: function `policy_mint_off` is never used
+   --> tests/common.rs:344:8
+    |
+344 | pub fn policy_mint_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^
+
+warning: function `set_hash` is never used
+   --> tests/common.rs:348:8
+    |
+348 | pub fn set_hash(recipients: &[Address]) -> [u8; 32] {
+    |        ^^^^^^^^
+
+warning: function `canonical_hash` is never used
+   --> tests/common.rs:358:8
+    |
+358 | pub fn canonical_hash(
+    |        ^^^^^^^^^^^^^^
+
+warning: function `ix_token_initialize_account` is never used
+   --> tests/common.rs:427:8
+    |
+427 | pub fn ix_token_initialize_account(account: &Address, mint: &Address, owner: &Address) -> Instruction {
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `ix_token_mint_to` is never used
+   --> tests/common.rs:441:8
+    |
+441 | pub fn ix_token_mint_to(mint: &Address, dest: &Address, authority: &Address, amount: u64) -> Instruction {
+    |        ^^^^^^^^^^^^^^^^
+
+warning: function `create_token_account` is never used
+   --> tests/common.rs:472:8
+    |
+472 | pub fn create_token_account(
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `token_balance` is never used
+   --> tests/common.rs:492:8
+    |
+492 | pub fn token_balance(svm: &LiteSVM, account: &Address) -> u64 {
+    |        ^^^^^^^^^^^^^
+
+warning: function `token_owner` is never used
+   --> tests/common.rs:498:8
+    |
+498 | pub fn token_owner(svm: &LiteSVM, account: &Address) -> Vec<u8> {
+    |        ^^^^^^^^^^^
+
+warning: function `token_mint` is never used
+   --> tests/common.rs:504:8
+    |
+504 | pub fn token_mint(svm: &LiteSVM, account: &Address) -> Vec<u8> {
+    |        ^^^^^^^^^^
+
+warning: `litesvm-tests` (test "hash_golden") generated 21 warnings
+warning: field `mint` is never read
+  --> tests/spend_props.rs:82:5
+   |
+75 | struct PropFixture {
+   |        ----------- field in this struct
+...
+82 |     mint: Address,
+   |     ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `policy_args` is never used
+  --> tests/common.rs:87:8
+   |
+87 | pub fn policy_args(
+   |        ^^^^^^^^^^^
+
+warning: function `ix_set_policy` is never used
+   --> tests/common.rs:156:8
+    |
+156 | pub fn ix_set_policy(
+    |        ^^^^^^^^^^^^^
+
+warning: function `policy_hash_off` is never used
+   --> tests/common.rs:332:8
+    |
+332 | pub fn policy_hash_off(n_recipients: usize) -> usize {
+    |        ^^^^^^^^^^^^^^^
+
+warning: unused import: `solana_signer::Signer`
+  --> tests/conformance.rs:18:5
+   |
+18 | use solana_signer::Signer;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `ix_spend_with_token_program` is never used
+   --> tests/common.rs:261:8
+    |
+261 | pub fn ix_spend_with_token_program(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `read_bytes` is never used
+   --> tests/common.rs:326:8
+    |
+326 | pub fn read_bytes(d: &[u8], off: usize, len: usize) -> Vec<u8> {
+    |        ^^^^^^^^^^
+
+warning: `litesvm-tests` (test "spend_props") generated 17 warnings (13 duplicates)
+warning: `litesvm-tests` (test "conformance") generated 14 warnings (11 duplicates) (run `cargo fix --test "conformance" -p litesvm-tests` to apply 1 suggestion)
+warning: unused import: `solana_signer::Signer`
+  --> tests/spend.rs:14:5
+   |
+14 | use solana_signer::Signer;
+   |     ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `policy_args` is never used
+  --> tests/common.rs:87:8
+   |
+87 | pub fn policy_args(
+   |        ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `ix_spend` is never used
+   --> tests/common.rs:237:8
+    |
+237 | pub fn ix_spend(
+    |        ^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `litesvm-tests` (test "spend") generated 13 warnings (11 duplicates) (run `cargo fix --test "spend" -p litesvm-tests` to apply 1 suggestion)
+warning: `litesvm-tests` (test "admin") generated 4 warnings (3 duplicates)
+    Finished `release` profile [optimized] target(s) in 1.24s
+     Running tests/admin.rs (target/release/deps/admin-d5b2b308fd77e2a3)
+
+running 10 tests
+test initialize_invalid_rejected ... ok
+test initialize_valid_and_hash_matches_canonical ... ok
+test reinit_fails_s12 ... ok
+test set_agent_owner_and_non_owner ... ok
+test set_frozen_owner_and_non_owner ... ok
+test set_policy_invalid_rejected ... ok
+test set_policy_non_owner_rejected_v12 ... ok
+test set_policy_owner_updates_hash ... ok
+test substitution_fails_s8 ... ok
+test withdraw_owner_token_and_non_owner_rejected ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/common.rs (target/release/deps/common-2c320dcbc08ebfef)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/conformance.rs (target/release/deps/conformance-f27d92bc97806156)
+
+running 1 test
+test conformance_v1_to_v18 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/hash_golden.rs (target/release/deps/hash_golden-51cc7971279e6117)
+
+running 3 tests
+test hash_set_policy_updates_to_golden ... ok
+test hash_tampered_field_differs ... ok
+test hash_golden_all_five ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+     Running tests/spend.rs (target/release/deps/spend-8a003662b27b9e3e)
+
+running 6 tests
+test spend_s15_submitter_cannot_alter_payload ... ok
+test spend_s13_duplicate_accounts_rejected ... ok
+test spend_s6_wrong_mint_rejected ... ok
+test spend_s7_fake_token_program_rejected ... ok
+test spend_v18_attacker_signed_intent_rejected ... ok
+test spend_vectors_v1_to_v14_in_order ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/spend_props.rs (target/release/deps/spend_props-4ca88d5e95a1a5c9)
+
+running 2 tests
+test window_rollover_resets_spent ... ok
+test spend_properties has been running for over 60 seconds
+test spend_properties ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 188.39s
+
+=== policy TS tests ===
+✔ golden file holds exactly 5 vectors (1.37894ms)
+✔ G1-p0-conformance: encoding, set hashes and policyHash reproduce (1.502225ms)
+✔ G2-p1-short-window-two-recipients: encoding, set hashes and policyHash reproduce (1.008173ms)
+✔ G3-p2-short-expiry-min-amounts: encoding, set hashes and policyHash reproduce (0.433261ms)
+✔ G4-large-values: encoding, set hashes and policyHash reproduce (0.388093ms)
+✔ G5-order-invariance: encoding, set hashes and policyHash reproduce (0.481052ms)
+✔ G5 (reversed recipients) hashes identically to G2 (0.623947ms)
+✔ recipient order does not change a set hash (0.336565ms)
+✔ empty set hash is the SHA-256 of empty input (0.3263ms)
+✔ a one-micro-unit change changes the policyHash (0.682985ms)
+✔ invalid inputs are rejected (0.949476ms)
+✔ V1: merchant 1 accepts, spent becomes 1 (1.739512ms)
+✔ V2: attacker 0.000001 -> RecipientNotAllowed (0.236024ms)
+✔ V3: attacker, full vault balance -> RecipientNotAllowed (recipient beats caps) (0.140822ms)
+✔ V4: merchant 0 -> ZeroAmount (0.292719ms)
+✔ V5: spent 1, merchant 2.000001 -> PerTxCapExceeded (window still fits) (0.202404ms)
+✔ V6: spent 1, merchant 2 exactly -> ACCEPT (exact per-tx boundary) (0.165509ms)
+✔ V7: spent 3, merchant 6 -> DailyCapExceeded (daily beats per-tx) (0.144496ms)
+✔ V8: spent 3, merchant 2^64-1 -> DailyCapExceeded, no overflow (0.141763ms)
+✔ V9: spent 3, merchant 2 exactly -> ACCEPT (exact window boundary) (0.198628ms)
+✔ V10: spent 5, merchant 0.000001 -> DailyCapExceeded (0.279139ms)
+✔ V11: recipient = the vault itself -> RecipientNotAllowed (0.224557ms)
+✔ V13: frozen -> Frozen (0.16675ms)
+✔ V14: unfreeze does NOT reset spent -> DailyCapExceeded (0.162454ms)
+✔ V15: P1 rollover (300 s window) -> spent resets, merchant 1 accepts (0.129794ms)
+✔ V16: P2 past expiry -> SessionExpired (0.135092ms)
+✔ V17 EVM: resubmit (nonce mismatch) -> BadNonce, lands (0.10637ms)
+✔ V17 SOL: duplicate -> NotLanded, does not land (0.088153ms)
+✔ V18: intent signed by the attacker key -> Unauthorized (0.087471ms)
+✔ V19: now == expires_at -> SessionExpired (0.083806ms)
+✔ V20: first instant of a new window -> spent resets, small spend accepts (0.245248ms)
+✔ V21: +-1 s around a window edge, under local clock control (0.133029ms)
+✔ windowIndexAt clamps now < anchor to 0 (both programs) (0.172449ms)
+✔ precedence chain: first failing check wins (0.17283ms)
+✔ SOL: transport is runtime-level (NotLanded) and SOL ignores EVM nonce/deadline (0.097276ms)
+✔ agent is never a recipient, even if a rotation made it one (0.114412ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1312.114075
+=== Anvil conformance (conformance/run-local-evm.ts) ===
+P0 vault: 0xe7f1725e7734ce288f8367e1bb143e90bb3f0512
+V1: expected=ACCEPT actual=ACCEPT hash=0xc29ccd340ea990e03bdec9584133aa25376f439d9f25cfd0834ff68adacb5da1 PASS
+V2: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0xa11515f9d74cf410871edd5ccbfca58274697d6d7d849ef1e4c3a81399c7404c PASS
+V3: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0xd16f8e21e4021130be41366e1bed97d6fa868a42b0edcd3692ecee43e040c625 PASS
+V4: expected=ZeroAmount actual=ZeroAmount hash=0xe0081ff36c687772bf4f62cdafa49be3fe352949875ca5caa5419e5ffe1a851c PASS
+V5: expected=PerTxCapExceeded actual=PerTxCapExceeded hash=0xb05396a8c6d2dc0978e2a7419fd3fd529340524b8015e4da15e0c5d6adb61008 PASS
+V6: expected=ACCEPT actual=ACCEPT hash=0xce3757658d354d30ce1b5bc9552d3f7b0ef53ead070b4b9b4c89c2e67466e6ea PASS
+V7: expected=DailyCapExceeded actual=DailyCapExceeded hash=0x47bfde97f94878ddc9d81ac3e06d0c8849d03b7e3ed98be5d805a0f282a25c4c PASS
+V8: expected=DailyCapExceeded actual=DailyCapExceeded hash=0xb62c121638b120f29065319c7ae193ed65a34a4c50684a05fb34c4f2995e5029 PASS
+V9: expected=ACCEPT actual=ACCEPT hash=0xa0bc4f1fe31e29f45f700bebe134229f32c9c0d318eb6b2e9dfdf9ad8f1bb9a0 PASS
+V10: expected=DailyCapExceeded actual=DailyCapExceeded hash=0x84f1e264de6063c338f1785b80b7ef6707df03c9115cb99a584531bbba810aca PASS
+V11: expected=RecipientNotAllowed actual=RecipientNotAllowed hash=0x59e66255df6d33a3d3569ab2a5fe78c1a2340d849c0c01987b6f3a8cdfd65cd8 PASS
+V12 setPolicy: reverted NotOwner=true
+V12 setAgent: reverted NotOwner=true
+V12 setFrozen: reverted NotOwner=true
+V12 withdraw: reverted NotOwner=true
+V12: expected=NotOwner actual=NotOwner hash= PASS (plan says Unauthorized; implementations use NotOwner on both chains)
+V13: expected=Frozen actual=Frozen hash=0x059f56a43dcbce24aef2807ffd697cb296a63622528b8cf8d4a109b997a09b9b PASS
+V14: expected=DailyCapExceeded actual=DailyCapExceeded hash=0xd41e3ca58aadbf173a8a69dfb0a1c38ffc23a08d8180d631e1bb90f774fa8703 PASS
+V17: expected=BadNonce actual=BadNonce hash=0x00eff57a4de6a248af08b62855b8290babd3cc8aecc3b02303f074e9ca441f8c PASS (replay of V1 payload)
+V18: expected=Unauthorized actual=Unauthorized hash=0x56cd19a408e049aca11bf2acb081e70bf30338253008aa82f26cbb5f8f16d040 PASS (attacker-signed intent)
+P1 vault: 0x0165878a594ca255338adfa4d48449f69242eb8f
+V15 setup spend: ok=true
+V15: expected=ACCEPT actual=ACCEPT hash=0x05e11cfde0cd0ca66c6d5d1f860c8535b2d3bc529bc51833e3d034f059868d28 PASS (P1 window 300s, warped +301s)
+P2 vault: 0x8a791620dd6260079bf849dc5567adc3f2fdc318
+V16: expected=SessionExpired actual=SessionExpired hash=0x339d110e8b75e48de8b18f2d770c23bc8edb1c287121de05da7b63d5e9c34647 PASS (P2 expiry +180s, warped +181s)
+
+EVM local: 18/18 pass
+=== CLEANROOM DONE ===

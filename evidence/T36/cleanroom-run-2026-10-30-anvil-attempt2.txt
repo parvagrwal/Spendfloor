@@ -1,0 +1,79 @@
+=== check-toolchain ===
+OK    rustc      pin 1.99.1   got 1.99.1
+OK    forge      pin 1.8.5    got 1.8.5
+OK    solana     pin 4.1.2    got 4.1.2
+OK    anchor     pin 1.2.0    got 1.2.0
+OK    ollama     pin 0.40.6   got 0.40.6
+OK    node       pin >=22     got v24.22.1
+OK    model      pin qwen2.5:7b pulled
+=== npm ci (fallback: npm install) ===
+npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+
+added 246 packages in 23s
+
+20 packages are looking for funding
+  run `npm fund` for details
+=== forge test (evm) ===
+No files changed, compilation skipped
+
+Ran 6 tests for test/Hash.t.sol:HashConformanceTest
+[PASS] testHashGoldenG1() (gas: 11792)
+[PASS] testHashGoldenG2() (gas: 11997)
+[PASS] testHashGoldenG3() (gas: 11771)
+[PASS] testHashGoldenG4() (gas: 11748)
+[PASS] testHashGoldenG5OrderInvariance() (gas: 12020)
+[PASS] testHashTamperedFieldDiffers() (gas: 11814)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 21.87ms (3.75ms CPU time)
+
+Ran 32 tests for test/Vault.t.sol:SpendFloorVaultTest
+[PASS] testFuzz_SpendOutcomes(uint256,uint256,uint256) (runs: 10000, μ: 131597, ~: 98080)
+[PASS] test_AgentAsRecipient() (gas: 38431)
+[PASS] test_BadNonce() (gas: 93286)
+[PASS] test_DeadlineBoundaries() (gas: 252008)
+[PASS] test_DeadlineTooFar() (gas: 93273)
+[PASS] test_ExactBoundaries() (gas: 457051)
+[PASS] test_Frozen() (gas: 318598)
+[PASS] test_IntentExpired() (gas: 93106)
+[PASS] test_MalleableSignature() (gas: 78103)
+[PASS] test_NoReceive() (gas: 32815)
+[PASS] test_NonAllowlisted() (gas: 99883)
+[PASS] test_OverDailyCap() (gas: 449665)
+[PASS] test_OverPerTxCap() (gas: 107361)
+[PASS] test_OwnerOnly() (gas: 109169)
+[PASS] test_PolicyHashStable() (gas: 15023)
+[PASS] test_Precedence() (gas: 1292677)
+[PASS] test_Replay() (gas: 210343)
+[PASS] test_SessionExpired() (gas: 176131)
+[PASS] test_SessionExpiredAtBoundary() (gas: 176109)
+[PASS] test_SetAgent() (gas: 305914)
+[PASS] test_SetPolicy() (gas: 524518)
+[PASS] test_TamperedAmount() (gas: 90936)
+[PASS] test_TamperedDeadline() (gas: 91003)
+[PASS] test_TamperedNonce() (gas: 91024)
+[PASS] test_TamperedTo() (gas: 90959)
+[PASS] test_U64MaxAmount() (gas: 107261)
+[PASS] test_ValidSpend() (gas: 200745)
+[PASS] test_VaultAsRecipient() (gas: 125392)
+[PASS] test_WindowRollover() (gas: 477227)
+[PASS] test_Withdraw() (gas: 184709)
+[PASS] test_WrongSigner() (gas: 83489)
+[PASS] test_ZeroAmount() (gas: 97521)
+Suite result: ok. 32 passed; 0 failed; 0 skipped; finished in 3.39s (3.39s CPU time)
+
+Ran 2 tests for test/Invariants.t.sol:InvariantsTest
+[FAIL: I6 agent SFUSD; counterexample: calldata=0x5ae3b49f000000022c20c4c7e152e8de1a4ab76ddcb1040114b1251564832922021e063d args=[58567114418701210669295986782527678757345998852370411009951680824893 [5.856e67]]] testFuzz_Invariants(uint256) (runs: 3816, μ: 4367639, ~: 4354452)
+[PASS] test_LoweredCapNoPanic() (gas: 704197)
+Suite result: FAILED. 1 passed; 1 failed; 0 skipped; finished in 10.69s (10.67s CPU time)
+
+Ran 3 test suites in 10.69s (14.10s CPU time): 39 tests passed, 1 failed, 0 skipped (40 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/Invariants.t.sol:InvariantsTest
+[FAIL: I6 agent SFUSD; counterexample: calldata=0x5ae3b49f000000022c20c4c7e152e8de1a4ab76ddcb1040114b1251564832922021e063d args=[58567114418701210669295986782527678757345998852370411009951680824893 [5.856e67]]] testFuzz_Invariants(uint256) (runs: 3816, μ: 4367639, ~: 4354452)
+
+Encountered a total of 1 failing tests, 39 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
+
+Fuzz seed: 0xea97e9f703aafde1daf63c014ca4656ed2ce76505e1fe169f2b90f6da48672e0 (use `--fuzz-seed` to reproduce)

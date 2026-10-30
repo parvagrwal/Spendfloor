@@ -1,0 +1,9 @@
+=== check-toolchain ===
+OK    rustc      pin 1.99.1   got 1.99.1
+OK    forge      pin 1.8.5    got 1.8.5
+OK    solana     pin 4.1.2    got 4.1.2
+OK    anchor     pin 1.2.0    got 1.2.0
+FAIL  ollama     pin 0.40.6   got connect
+is
+OK    node       pin >=22     got v24.22.1
+FAIL  model      pin qwen2.5:7b not pulled (run: ollama pull qwen2.5:7b)
