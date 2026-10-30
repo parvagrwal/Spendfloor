@@ -1,0 +1,33 @@
+✔ V1: merchant 1 accepts, spent becomes 1 (1.810237ms)
+✔ V2: attacker 0.000001 -> RecipientNotAllowed (0.293621ms)
+✔ V3: attacker, full vault balance -> RecipientNotAllowed (recipient beats caps) (0.175804ms)
+✔ V4: merchant 0 -> ZeroAmount (0.168042ms)
+✔ V5: spent 1, merchant 2.000001 -> PerTxCapExceeded (window still fits) (0.17986ms)
+✔ V6: spent 1, merchant 2 exactly -> ACCEPT (exact per-tx boundary) (0.215554ms)
+✔ V7: spent 3, merchant 6 -> DailyCapExceeded (daily beats per-tx) (0.145448ms)
+✔ V8: spent 3, merchant 2^64-1 -> DailyCapExceeded, no overflow (0.136605ms)
+✔ V9: spent 3, merchant 2 exactly -> ACCEPT (exact window boundary) (0.2064ms)
+✔ V10: spent 5, merchant 0.000001 -> DailyCapExceeded (0.39298ms)
+✔ V11: recipient = the vault itself -> RecipientNotAllowed (1.101643ms)
+✔ V13: frozen -> Frozen (0.170236ms)
+✔ V14: unfreeze does NOT reset spent -> DailyCapExceeded (0.580381ms)
+✔ V15: P1 rollover (300 s window) -> spent resets, merchant 1 accepts (0.236515ms)
+✔ V16: P2 past expiry -> SessionExpired (0.160331ms)
+✔ V17 EVM: resubmit (nonce mismatch) -> BadNonce, lands (0.153711ms)
+✔ V17 SOL: duplicate -> NotLanded, does not land (0.110575ms)
+✔ V18: intent signed by the attacker key -> Unauthorized (0.550637ms)
+✔ V19: now == expires_at -> SessionExpired (0.210496ms)
+✔ V20: first instant of a new window -> spent resets, small spend accepts (0.155964ms)
+✔ V21: +-1 s around a window edge, under local clock control (0.223035ms)
+✔ windowIndexAt clamps now < anchor to 0 (both programs) (0.110987ms)
+✔ precedence chain: first failing check wins (0.204246ms)
+✔ SOL: transport is runtime-level (NotLanded) and SOL ignores EVM nonce/deadline (0.147972ms)
+✔ agent is never a recipient, even if a rotation made it one (0.118878ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 242.955104
