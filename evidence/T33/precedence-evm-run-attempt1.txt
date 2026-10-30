@@ -1,0 +1,5 @@
+... 20 cases, 0 mismatches
+Error: case 36 buildup failed: SessionExpired
+    at run (/home/hatch/workspace/Spendfloor/conformance/run-precedence-evm.ts:134:26)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async main (/home/hatch/workspace/Spendfloor/conformance/run-precedence-evm.ts:58:5)

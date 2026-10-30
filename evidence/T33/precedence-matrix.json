@@ -1,0 +1,1527 @@
+{
+  "totalSubsets": 128,
+  "feasible": 80,
+  "infeasible": 48,
+  "mismatches": 0,
+  "combos": [
+    {
+      "subset": [],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "ACCEPT",
+      "decideLabel": "ACCEPT",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "ZeroAmount",
+      "decideLabel": "ZeroAmount",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "ZeroAmount"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "RecipientNotAllowed",
+      "decideLabel": "RecipientNotAllowed",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "1000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "ZeroAmount",
+      "decideLabel": "ZeroAmount",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "ZeroAmount",
+        "RecipientNotAllowed"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "0",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "DailyCapExceeded",
+      "decideLabel": "DailyCapExceeded",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "RecipientNotAllowed",
+      "decideLabel": "RecipientNotAllowed",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "2000000",
+        "spent": "4000000",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "PerTxCapExceeded",
+      "decideLabel": "PerTxCapExceeded",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "RecipientNotAllowed",
+      "decideLabel": "RecipientNotAllowed",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "3000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "DailyCapExceeded",
+      "decideLabel": "DailyCapExceeded",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "merchant"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "RecipientNotAllowed",
+      "decideLabel": "RecipientNotAllowed",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "50000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "SessionExpired",
+      "decideLabel": "SessionExpired",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": false,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    },
+    {
+      "subset": [
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "agent",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Frozen",
+      "decideLabel": "Frozen",
+      "match": true
+    },
+    {
+      "subset": [
+        "Unauthorized",
+        "Frozen",
+        "SessionExpired",
+        "RecipientNotAllowed",
+        "DailyCapExceeded",
+        "PerTxCapExceeded"
+      ],
+      "request": {
+        "signer": "attacker",
+        "frozen": true,
+        "now": "100000",
+        "expiry": "100000",
+        "amount": "6000000",
+        "spent": "0",
+        "recipient": "attacker"
+      },
+      "expectedWinner": "Unauthorized",
+      "decideLabel": "Unauthorized",
+      "match": true
+    }
+  ]
+}

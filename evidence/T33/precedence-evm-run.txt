@@ -1,0 +1,5 @@
+... 20 cases, 0 mismatches
+... 40 cases, 0 mismatches
+... 60 cases, 0 mismatches
+... 80 cases, 0 mismatches
+EVM precedence done: 80 cases, 0 mismatches
