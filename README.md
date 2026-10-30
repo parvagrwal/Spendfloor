@@ -18,7 +18,9 @@ AI agents that move money can be prompt-injected into draining the wallets they 
 
 ## Live demo
 
-No terminal needed. Open `ui/index.html` directly in a browser, or serve the `ui/` folder.
+Live: https://parvagrwal.github.io/Spendfloor/ui/
+
+No terminal needed. Open the live link above, or open `ui/index.html` directly in a browser, or serve the `ui/` folder.
 
 The page has two parts:
 
