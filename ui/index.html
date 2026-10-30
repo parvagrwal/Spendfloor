@@ -5,53 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SpendFloor — Try to break the vault</title>
 <style>
-  body { font-family: system-ui, sans-serif; margin: 0; color: #111; background: #f7f7f5; }
-  .hero { background: #101418; color: #f5f5f2; padding: 2.5rem 1rem 2rem; text-align: center; }
-  .hero h1 { font-size: 2rem; margin: 0 0 0.5rem; }
-  .hero p { font-size: 1.05rem; color: #c9cdd3; max-width: 640px; margin: 0 auto 1.2rem; }
-  .hero a.btn { display: inline-block; background: #00c853; color: #04120a; font-weight: 700; text-decoration: none; padding: 0.7rem 1.3rem; border-radius: 999px; margin: 0.2rem; }
-  .hero a.btn.alt { background: transparent; color: #f5f5f2; border: 1px solid #888; }
-  main { max-width: 900px; margin: 0 auto; padding: 0 1rem 2rem; }
-  .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
-  h2 { font-size: 1.25rem; margin-top: 0.2rem; }
-  .green { color: #0a7a2f; font-weight: 700; }
-  .red { color: #b00020; font-weight: 700; }
-  .mono { font-family: ui-monospace, monospace; font-size: 0.85rem; word-break: break-all; }
-  .note { color: #555; font-size: 0.85rem; }
-  .tag { display: inline-block; background: #eef; border-radius: 6px; padding: 0.1rem 0.5rem; font-size: 0.8rem; }
-  .bar-wrap { background: #eee; border-radius: 999px; height: 22px; overflow: hidden; margin: 0.4rem 0; }
-  .bar-fill { background: #00a152; height: 100%; transition: width 0.3s; }
-  .bar-fill.sim { background: #ff8f00; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; margin: 0; color: #f5f5f2; background: #0c0d0f; }
+  a { color: #ffa040; }
+  .topbar { position: sticky; top: 0; background: #0c0d0f; border-bottom: 1px solid #2a2d33; padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+  .topbar b { font-size: 1.2rem; letter-spacing: -0.02em; }
+  .topbar b span { color: #ff6a00; }
+  .topbar nav a { color: #c9cdd3; text-decoration: none; margin-left: 1rem; font-size: 0.9rem; }
+  .topbar nav a:hover { color: #fff; }
+  .hero { text-align: center; padding: 3.5rem 1rem 2.5rem; max-width: 720px; margin: 0 auto; }
+  .hero h1 { font-size: 3rem; line-height: 1.05; margin: 0 0 0.8rem; letter-spacing: -0.03em; }
+  .hero h1 span { color: #ff6a00; }
+  .hero p { font-size: 1.15rem; color: #c9cdd3; margin: 0 auto 1.5rem; line-height: 1.5; }
+  .btn { display: inline-block; background: #ff6a00; color: #111; font-weight: 800; text-decoration: none; padding: 0.8rem 1.6rem; border-radius: 999px; margin: 0.2rem; font-size: 1rem; }
+  .btn.alt { background: transparent; color: #f5f5f2; border: 1px solid #555; }
+  .pills { margin-top: 1.5rem; }
+  .pill { display: inline-block; background: #1e2126; border: 1px solid #2a2d33; border-radius: 999px; padding: 0.25rem 0.8rem; font-size: 0.8rem; color: #c9cdd3; margin: 0.2rem; }
+  main { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } .hero h1 { font-size: 2.2rem; } .topbar nav { display: none; } }
+  .card { background: #16181c; border: 1px solid #2a2d33; border-radius: 16px; padding: 1.2rem 1.4rem; margin: 1rem 0; }
+  .card.feature { border-color: #ff6a00; }
+  h2 { font-size: 1.3rem; margin-top: 0.2rem; }
+  .green { color: #00c853; font-weight: 800; }
+  .red { color: #ff5252; font-weight: 800; }
+  .mono { font-family: ui-monospace, monospace; font-size: 0.85rem; word-break: break-all; color: #c9cdd3; }
+  .note { color: #9aa0a6; font-size: 0.85rem; line-height: 1.5; }
+  .tag { display: inline-block; background: #1e2126; border: 1px solid #2a2d33; border-radius: 6px; padding: 0.1rem 0.5rem; font-size: 0.8rem; color: #c9cdd3; }
+  .bar-wrap { background: #2a2d33; border-radius: 999px; height: 24px; overflow: hidden; margin: 0.5rem 0; }
+  .bar-fill { background: #00c853; height: 100%; transition: width 0.3s; }
+  .bar-fill.sim { background: #ff6a00; }
   table { border-collapse: collapse; width: 100%; }
-  th, td { border-bottom: 1px solid #eee; padding: 0.4rem; text-align: left; font-size: 0.9rem; }
-  button { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #ccc; cursor: pointer; background: #fff; }
-  button.primary { background: #101418; color: #fff; border-color: #101418; font-weight: 700; }
-  input, select { padding: 0.5rem; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; }
+  th, td { border-bottom: 1px solid #2a2d33; padding: 0.5rem; text-align: left; font-size: 0.9rem; }
+  th { color: #9aa0a6; }
+  button { padding: 0.55rem 1rem; border-radius: 999px; border: 1px solid #444; cursor: pointer; background: #1e2126; color: #f5f5f2; font-size: 0.9rem; }
+  button.primary { background: #ff6a00; color: #111; border-color: #ff6a00; font-weight: 800; }
+  input, select { padding: 0.55rem; border-radius: 10px; border: 1px solid #444; font-size: 1rem; background: #0c0d0f; color: #f5f5f2; }
   .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin: 0.8rem 0; }
-  .sim-grid label { display: block; font-size: 0.85rem; color: #555; margin-bottom: 0.2rem; }
-  .sim-grid input, .sim-grid select { width: 100%; box-sizing: border-box; }
-  #sim-result { font-size: 1.2rem; margin: 0.8rem 0 0.2rem; }
-  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; }
-  .step { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1rem; }
-  .step b { font-size: 1.4rem; }
+  .sim-grid label { display: block; font-size: 0.85rem; color: #9aa0a6; margin-bottom: 0.2rem; }
+  .sim-grid input, .sim-grid select { width: 100%; }
+  #sim-result { font-size: 1.4rem; margin: 0.8rem 0 0.2rem; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .step { background: #16181c; border: 1px solid #2a2d33; border-radius: 16px; padding: 1.2rem; line-height: 1.5; }
+  .step b { font-size: 1.6rem; color: #ff6a00; }
+  footer { text-align: center; padding: 1rem; }
 </style>
 </head>
 <body>
+<div class="topbar"><b>Spend<span>Floor</span></b><nav><a href="#policy">Policy</a><a href="#simulator">Try it</a><a href="#proof">Proof</a><a href="#how">How it works</a></nav></div>
+
 <div class="hero">
-<h1>SpendFloor</h1>
+<h1>Try to break <span>the vault.</span></h1>
 <p>One spend policy for AI agents, enforced on-chain on Base Sepolia + Solana devnet. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.</p>
 <a class="btn" href="#simulator">Try to break it</a>
 <a class="btn alt" href="#proof">See the proof</a>
+<div class="pills"><span class="pill">Base Sepolia</span><span class="pill">Solana devnet</span><span class="pill">Testnet only</span><span class="pill">No wallet</span><span class="pill">No keys in the page</span></div>
 </div>
 
 <main>
-<div class="card">
+<div class="grid2">
+<div class="card" id="policy">
 <h2>Live policy (same on both chains)</h2>
 <p>Per-transaction cap: <b>2 SFUSD</b> &nbsp;|&nbsp; Window cap: <b>5 SFUSD</b> &nbsp;|&nbsp; Window: <b>86,400 s (24 h)</b></p>
 <p>Recipients: merchant only</p>
 <p>Window spent so far (live state):</p>
 <div class="bar-wrap"><div class="bar-fill" style="width:20%"></div></div>
-<p><b>Spent 1 SFUSD</b> &nbsp;|&nbsp; Headroom <b>4 SFUSD</b> &nbsp;|&nbsp; The bar fills as the window fills. At 5, every further spend is rejected until the window rolls over.</p>
+<p><b>Spent 1 SFUSD</b> &nbsp;|&nbsp; Headroom <b>4 SFUSD</b></p>
+<p class="note">The bar fills as the window fills. At 5, every further spend is rejected until the window rolls over.</p>
 <p class="mono">EVM merchant: 0x61f1c99d674bcd333578AC4f538F46AbC7bB4106<br>
 SOL merchant: 8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS</p>
 <p>Policy hash (identical both chains):</p>
@@ -66,9 +86,16 @@ SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
 <h2>Verify status</h2>
 <p><span class="green">GREEN 15/15</span> <span class="tag">T18, 2026-10-30</span></p>
 <p class="note">The verify CLI recomputes the policy hash from live chain reads on both chains, checks the EVM runtime code, the Solana upgrade authority, zero agent balances, and cross-chain caps + recipients. Last full run: green on all 15 checks.</p>
+<h2>Lost to the attacker</h2>
+<p>Attacker balances read from both chains (what the attacker actually got):</p>
+<p>EVM attacker (0x960b6582945D1447b55B032C9630a3Bc8E82C6D0): <b id="evm-lost">0 SFUSD</b> <span class="tag" id="evm-tag">cached</span></p>
+<p>SOL attacker ATA (94o4pwuHjHWu6GjFuxit9yNYFGg8V5Rgw8uPh6LzSNrz): <b id="sol-lost">0 SFUSD</b> <span class="tag" id="sol-tag">cached</span></p>
+<button onclick="refreshLive()">Refresh live</button>
+<span class="note" id="refresh-note">Cached values are the last verified readings (T18/T27, 2026-10-30). Pressing Refresh reads both chains live; if a chain does not answer, its cached value stays.</span>
+</div>
 </div>
 
-<div class="card" id="simulator">
+<div class="card feature" id="simulator">
 <h2>Try to break it (simulator)</h2>
 <p>Pick a spend and see what the vault would do. This runs entirely in your browser. <b>No real transaction is sent, no keys are used, and nothing on-chain changes.</b> The real vault enforces the same rules on-chain; this is the same policy, played with safely.</p>
 <div class="sim-grid">
@@ -91,8 +118,8 @@ SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
 <p class="note">Simulation starts from the live state (spent 1, headroom 4). An accepted simulated spend raises simulated spent; a rejected one leaves it unchanged. Reset restores the live state.</p>
 </div>
 
-<div class="card">
-<h2>How it works</h2>
+<div id="how">
+<h2 style="margin-left:0.2rem">How it works</h2>
 <div class="steps">
 <div class="step"><b>1.</b><br>An agent drafts a spend. A prompt injection can make it draft a drain to an attacker.</div>
 <div class="step"><b>2.</b><br>The vault checks the policy on-chain: signer, recipient, caps, window. No app code stands between the draft and the chain.</div>
@@ -119,16 +146,7 @@ SOL SFUSD mint: ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U</p>
 <p class="note">Source: evidence/T27/rehearsal-2026-10-30.json (T27, 5 runs, all under 90 s).</p>
 </div>
 
-<div class="card">
-<h2>Lost to the attacker</h2>
-<p>Attacker balances read from both chains (what the attacker actually got):</p>
-<p>EVM attacker (0x960b6582945D1447b55B032C9630a3Bc8E82C6D0): <b id="evm-lost">0 SFUSD</b> <span class="tag" id="evm-tag">cached</span></p>
-<p>SOL attacker ATA (94o4pwuHjHWu6GjFuxit9yNYFGg8V5Rgw8uPh6LzSNrz): <b id="sol-lost">0 SFUSD</b> <span class="tag" id="sol-tag">cached</span></p>
-<button onclick="refreshLive()">Refresh live</button>
-<span class="note" id="refresh-note">Cached values are the last verified readings (T18/T27, 2026-10-30). Pressing Refresh reads both chains live; if a chain does not answer, its cached value stays.</span>
-</div>
-
-<p class="note">This page has no build step and no external libraries. Open ui/index.html directly, or serve the ui/ folder. Live reads go to the public Base Sepolia and Solana devnet RPCs; if either is unreachable, cached verified values are shown instead. The simulator never sends a transaction and never touches a key. Code: <a href="https://github.com/parvagrwal/SpendFloor">github.com/parvagrwal/SpendFloor</a>.</p>
+<footer><p class="note">This page has no build step and no external libraries. Open ui/index.html directly, or serve the ui/ folder. Live reads go to the public Base Sepolia and Solana devnet RPCs; if either is unreachable, cached verified values are shown instead. The simulator never sends a transaction and never touches a key. Code: <a href="https://github.com/parvagrwal/SpendFloor">github.com/parvagrwal/SpendFloor</a>.</p></footer>
 </main>
 
 <script>
