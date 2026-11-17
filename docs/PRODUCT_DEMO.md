@@ -17,9 +17,9 @@ Open `http://localhost:8080`, or open `ui/index.html` directly in a modern brows
 
 The frontend uses a **forensic policy ledger** art direction rather than a generic dashboard: a warm editorial display face frames the product narrative, while a neutral UI face and monospace labels keep policy data and evidence legible. The palette remains intentionally constrained to mint (verified/allowed), amber (attention/in-flight), and coral (blocked), against layered graphite surfaces.
 
-- The hero’s animated policy seal visualizes the actual trust relationship—owner, agent, and vault—not an invented product metric.
+- The hero’s policy seal visualizes the actual trust relationship—owner, agent, and vault—not an invented product metric. Its orbital motion is user-triggered on hover, rather than a constant ambient animation.
 - Trace rows visibly emphasize the first failed guardrail or the final successful policy check. The meter is segmented into the five-SFUSD window budget.
-- Native CSS handles the ambient signal motion, hover depth, pipeline activity, and reduced-motion behavior. `IntersectionObserver` provides one-time section reveals with a visible fallback where it is unavailable.
+- Native CSS handles selective hover depth, user-triggered signal motion, and run-specific pipeline activity; it does not run ornamental motion continuously. `IntersectionObserver` provides one-time section reveals with a visible fallback where it is unavailable.
 - A dependency-free **Presentation command deck** supports `⌘/Ctrl + K` or `/`, with keyboard actions for injection, valid payout, clear, evidence, and reset. It is useful for a live client walkthrough rather than decorative functionality.
 - No visual library was added deliberately. This is a no-build, offline-first demonstration; native browser primitives preserve its portability, fast load, and predictable presentation behavior better than a framework or a motion dependency would.
 
