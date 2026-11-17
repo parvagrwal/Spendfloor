@@ -22,10 +22,14 @@ Live: https://parvagrwal.github.io/Spendfloor/ui/
 
 No terminal needed. Open the live link above, or open `ui/index.html` directly in a browser, or serve the `ui/` folder.
 
-The page has two parts:
+The page is a client-ready, dependency-free product demonstration:
 
-- **Demo:** a guided walkthrough of one injection. Press Play and narrate, or step through it yourself. Setup, injection, draft, vault checks, a real on-chain rejection hash, and a valid spend that still works.
-- **Playground:** try it yourself. Pick an amount, a recipient, and a signer, and see what the vault would do. It runs entirely in the browser, sends no transaction, and touches no keys.
+- **Interactive policy lab:** choose a prepared prompt injection, legitimate merchant payout, frozen vault, or exhausted-window scenario—or change the amount, recipient, signer, transport, and policy state yourself. The local browser model exposes the documented EVM and Solana first-failure order and provides clear accepted, rejected, invalid-input, activity, and reset states.
+- **Trust boundary explorer:** inspect the authority of the owner, agent, submitter, and on-chain vaults without pretending that a relay or prompt is the enforcement point.
+- **Policy drafting guard:** compare aligned, looser, and tighter candidate policies using the same directional semantics as `policy/src/diff.ts`.
+- **Historical evidence:** recorded T27 testnet rejection hashes remain explicitly separate from the simulation. The demo sends no transaction, touches no keys, makes no RPC writes, and never claims that a local result landed on-chain.
+
+For the suggested presentation flow, capability map, simulation boundary, known limitations, and testing notes, see [docs/PRODUCT_DEMO.md](docs/PRODUCT_DEMO.md).
 
 ### Live deployments (testnet)
 
@@ -173,7 +177,8 @@ AIGI is a grants sponsor, not a technology integration. There is no AIGI code an
 - [docs/EVIDENCE.md](docs/EVIDENCE.md) — rehearsal runs, hashes, explorer links
 - [docs/HONEST_MATRIX.md](docs/HONEST_MATRIX.md) — live state and honest gaps
 - [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) — threats, Socket scan triage, residual risks
-- [docs/DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) — how to run the demo, testnet and localnet
+- [docs/DEMO_RUNBOOK.md](docs/DEMO_RUNBOOK.md) — how to run the terminal demo, testnet and localnet
+- [docs/PRODUCT_DEMO.md](docs/PRODUCT_DEMO.md) — client-facing UI presentation flow, feature mapping, assumptions, and test notes
 - [TOOLCHAIN.md](TOOLCHAIN.md) — pinned toolchain versions
 
 ## Limitations (honest)
