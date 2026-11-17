@@ -13,6 +13,16 @@ python3 -m http.server 8080 --directory ui
 
 Open `http://localhost:8080`, or open `ui/index.html` directly in a modern browser. The page is deliberately self-contained so it can be used reliably in a live presentation. It makes **no RPC writes**, does not request a wallet, and never handles a private key.
 
+## Visual system and interaction model
+
+The frontend uses a **forensic policy ledger** art direction rather than a generic dashboard: a warm editorial display face frames the product narrative, while a neutral UI face and monospace labels keep policy data and evidence legible. The palette remains intentionally constrained to mint (verified/allowed), amber (attention/in-flight), and coral (blocked), against layered graphite surfaces.
+
+- The hero’s animated policy seal visualizes the actual trust relationship—owner, agent, and vault—not an invented product metric.
+- Trace rows visibly emphasize the first failed guardrail or the final successful policy check. The meter is segmented into the five-SFUSD window budget.
+- Native CSS handles the ambient signal motion, hover depth, pipeline activity, and reduced-motion behavior. `IntersectionObserver` provides one-time section reveals with a visible fallback where it is unavailable.
+- A dependency-free **Presentation command deck** supports `⌘/Ctrl + K` or `/`, with keyboard actions for injection, valid payout, clear, evidence, and reset. It is useful for a live client walkthrough rather than decorative functionality.
+- No visual library was added deliberately. This is a no-build, offline-first demonstration; native browser primitives preserve its portability, fast load, and predictable presentation behavior better than a framework or a motion dependency would.
+
 ### Suggested presentation path
 
 1. Click **Run the injection scenario**. It works immediately from the prepared 50 SFUSD, non-allowlisted-attacker intent; no configuration panel needs to be opened.
@@ -78,7 +88,7 @@ The product demo was checked as a standalone static artifact:
 - Installed the repository's pinned Node dependencies with `npm ci` and ran `npm run typecheck --workspace=@spendfloor/policy` successfully.
 - Extracted JavaScript from `ui/index.html` and ran `node --check` successfully.
 - Ran structural assertions for a single HTML/style/script document and the required presentation states.
-- Ran a temporary jsdom interaction smoke test against the rendered page. It exercised: no-setup initial/empty state; injection rejection; merchant acceptance and local-meter advance; frozen rejection; exhausted-window rejection; inline invalid-precision error; loading accessibility state and locked intent controls; quick recovery to a valid payout; clear-trace recovery; safe reset during an in-flight evaluation; and absence of jsdom runtime errors.
+- Ran a temporary jsdom interaction smoke test against the rendered page. It exercised: the command deck, `Ctrl+K` and `Escape`, keyboard-triggered valid payout, visible success/failure trace emphasis, no-setup initial/empty state; injection rejection; merchant acceptance and local-meter advance; frozen rejection; exhausted-window rejection; inline invalid-precision error; loading accessibility state and locked intent controls; quick recovery to a valid payout; clear-trace recovery; safe reset during a scheduled hero evaluation; and absence of jsdom runtime errors.
 - Ran `git diff --check` to verify no whitespace errors.
 
 Repository-level contract and policy test evidence predates this UI work and is intentionally cited rather than rerun or recharacterized by the page. See `docs/HONEST_MATRIX.md`, `docs/EVIDENCE.md`, and the source test suites for the underlying verification record.
