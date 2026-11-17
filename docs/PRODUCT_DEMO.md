@@ -15,7 +15,7 @@ Open `http://localhost:8080`, or open `ui/index.html` directly in a modern brows
 
 ### Suggested presentation path
 
-1. Click **Run the injection scenario**. The prepared intent is a 50 SFUSD payment to a non-allowlisted attacker.
+1. Click **Run the injection scenario**. It works immediately from the prepared 50 SFUSD, non-allowlisted-attacker intent; no configuration panel needs to be opened.
 2. Read the dual-chain trace. Both represented vault paths stop at `RecipientNotAllowed`; the trace also exposes the EVM-only nonce/deadline transport stage.
 3. Choose **Merchant payout** and run it. A 1 SFUSD payment to the allowlisted merchant is accepted by the local model and moves only the **sandbox** window meter.
 4. Try **Emergency freeze**, **Window exhausted**, a bad signer, or a replayed EVM nonce to show the first-failure rule.
@@ -47,7 +47,7 @@ The core problem demonstrated is prompt injection: an LLM can be instructed to d
 | Separation of authority | Vault/program roles, relay, and key custody logic | Clickable trust-boundary architecture | Select Owner, Agent, Submitter, or Vaults to see what it can and cannot do. | `README.md`, source comments, `docs/THREAT_MODEL.md` |
 | Guarded policy drafting | `policy/src/diff.ts`, retry/drafting modules | Policy authoring guard | Select a policy proposal. Added recipient is `LOOSER` and represented as blocked; aligned/tighter drafts are distinguished, not automatically applied. | `policy/src/diff.ts`, T09 summary in honest matrix |
 | On-chain injection evidence | `evidence/T27/rehearsal-2026-10-30.json` | Recorded-rejection table | Opens five Base and five Solana explorer records. These do not change when page controls are used. | `docs/EVIDENCE.md` and T27 JSON |
-| Resettable presentation state | Browser-only UI state | Reset buttons and activity log | Reset returns to the 50-SFUSD injection, 1/5 SFUSD sandbox window state, blank trace, and empty local activity. | Manual browser rehearsal |
+| Resettable and recoverable presentation state | Browser-only UI state | Prepared scenarios, quick recovery controls, clear-trace action, and reset buttons | Starts directly in a ready injection state. Reset safely cancels any in-flight simulated evaluation, restores the 50-SFUSD injection and 1/5 SFUSD sandbox window, and clears local activity. | Browser interaction smoke test |
 
 ## Simulation boundary
 
@@ -61,7 +61,7 @@ It models the documented first-failure precedence and uses representative policy
 - send an RPC request or mutate any chain state;
 - claim that a local `ACCEPT` result landed on-chain.
 
-An accepted sandbox run advances only the meter and local activity log in the current browser session. Historical explorer records are labeled separately so they cannot be mistaken for newly produced evidence.
+An accepted sandbox run advances only the meter and local activity log in the current browser session. Historical explorer records are labeled separately so they cannot be mistaken for newly produced evidence. The primary presentation path starts with prepared scenarios and keeps customization collapsed; invalid values automatically reveal inline guidance, and recovery actions never depend on a network response.
 
 ## Assumptions and known limitations
 
@@ -78,7 +78,7 @@ The product demo was checked as a standalone static artifact:
 - Installed the repository's pinned Node dependencies with `npm ci` and ran `npm run typecheck --workspace=@spendfloor/policy` successfully.
 - Extracted JavaScript from `ui/index.html` and ran `node --check` successfully.
 - Ran structural assertions for a single HTML/style/script document and the required presentation states.
-- Ran a temporary jsdom interaction smoke test against the rendered page. It exercised: empty state; injection rejection; merchant acceptance and local-meter advance; frozen rejection; exhausted-window rejection; invalid precision error; looser-draft block; architecture selection; full reset; and absence of jsdom runtime errors.
+- Ran a temporary jsdom interaction smoke test against the rendered page. It exercised: no-setup initial/empty state; injection rejection; merchant acceptance and local-meter advance; frozen rejection; exhausted-window rejection; inline invalid-precision error; loading accessibility state and locked intent controls; quick recovery to a valid payout; clear-trace recovery; safe reset during an in-flight evaluation; and absence of jsdom runtime errors.
 - Ran `git diff --check` to verify no whitespace errors.
 
 Repository-level contract and policy test evidence predates this UI work and is intentionally cited rather than rerun or recharacterized by the page. See `docs/HONEST_MATRIX.md`, `docs/EVIDENCE.md`, and the source test suites for the underlying verification record.
