@@ -19,7 +19,7 @@ The frontend uses a **forensic policy ledger** art direction rather than a gener
 
 - The hero’s policy seal visualizes the actual trust relationship—owner, agent, and vault—not an invented product metric. Its orbital motion is user-triggered on hover, rather than a constant ambient animation.
 - Trace rows visibly emphasize the first failed guardrail or the final successful policy check. The meter is segmented into the five-SFUSD window budget.
-- Native CSS handles selective hover depth, user-triggered signal motion, and run-specific pipeline activity; it does not run ornamental motion continuously. `IntersectionObserver` provides one-time section reveals with a visible fallback where it is unavailable.
+- Native CSS handles selective hover depth, user-triggered signal motion, and run-specific pipeline activity; it does not run ornamental motion continuously. Content is intentionally rendered immediately rather than hidden behind scroll-triggered reveals, so a long presentation page never opens into an empty section.
 - A dependency-free **Presentation command deck** supports `⌘/Ctrl + K` or `/`, with keyboard actions for injection, valid payout, clear, evidence, and reset. It is useful for a live client walkthrough rather than decorative functionality.
 - No visual library was added deliberately. This is a no-build, offline-first demonstration; native browser primitives preserve its portability, fast load, and predictable presentation behavior better than a framework or a motion dependency would.
 
@@ -83,12 +83,14 @@ An accepted sandbox run advances only the meter and local activity log in the cu
 
 ## Test summary
 
-The product demo was checked as a standalone static artifact:
+The product demo was checked as a standalone static artifact and through a real local browser session:
 
-- Installed the repository's pinned Node dependencies with `npm ci` and ran `npm run typecheck --workspace=@spendfloor/policy` successfully.
+- Added the repeatable `npm run test:demo` suite (`ui/test/product-demo.test.cjs`). It drives the real page DOM and inline application script through all stateful controls: prepared scenarios, direct submit/reset/recovery controls, every command-deck action, keyboard interaction and focus wrap, advanced intent fields, error states, architecture explorer, policy-diff tabs, evidence/footer references, full reset, repeatability, reduced-motion CSS contract, and responsive CSS contract.
+- Installed the repository's pinned Node dependencies with `npm ci`, then ran `npm run test:demo` and `npm run typecheck --workspace=@spendfloor/policy` successfully.
 - Extracted JavaScript from `ui/index.html` and ran `node --check` successfully.
-- Ran structural assertions for a single HTML/style/script document and the required presentation states.
-- Ran a temporary jsdom interaction smoke test against the rendered page. It exercised: the command deck, `Ctrl+K` and `Escape`, keyboard-triggered valid payout, visible success/failure trace emphasis, no-setup initial/empty state; injection rejection; merchant acceptance and local-meter advance; frozen rejection; exhausted-window rejection; inline invalid-precision error; loading accessibility state and locked intent controls; quick recovery to a valid payout; clear-trace recovery; safe reset during a scheduled hero evaluation; and absence of jsdom runtime errors.
+- Ran actual Chromium interaction QA against the local presentation server at **1440 × 1000**, **768 × 1024**, and **390 × 844**, plus a Chromium `prefers-reduced-motion: reduce` session. The browser test covered command-deck actions, direct scenario/form interactions, input validation, recovery, architecture and draft controls, reset behavior, viewport overflow/stacking, and console/page/request failures. No browser runtime errors, console errors, or failed local requests were observed.
+- Captured and visually inspected the desktop, tablet, and mobile browser renders. This surfaced a scroll-reveal implementation that left full-page captures looking empty below the hero; it was removed so all presentation content renders immediately at every viewport.
+- Rehearsed the complete presentation path in Chromium: reset to initial state → hero-triggered 50-SFUSD injection rejection → valid merchant payout acceptance → evidence command. The sequence completed reliably.
 - Ran `git diff --check` to verify no whitespace errors.
 
 Repository-level contract and policy test evidence predates this UI work and is intentionally cited rather than rerun or recharacterized by the page. See `docs/HONEST_MATRIX.md`, `docs/EVIDENCE.md`, and the source test suites for the underlying verification record.

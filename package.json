@@ -13,7 +13,8 @@
     "policy"
   ],
   "scripts": {
-    "check-toolchain": "bash scripts/check-toolchain.sh"
+    "check-toolchain": "bash scripts/check-toolchain.sh",
+    "test:demo": "node ui/test/product-demo.test.cjs"
   },
   "dependencies": {
     "@anchor-lang/core": "1.2.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
+    "jsdom": "24.1.3",
     "litesvm": "1.6.1",
     "typescript": "5.9.3",
     "tsx": "4.23.15"
