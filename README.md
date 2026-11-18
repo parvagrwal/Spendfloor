@@ -16,17 +16,6 @@ AI agents that move money can be prompt-injected into draining the wallets they 
 - **Only `spend` and `withdraw` move vault funds.** The relay submits spends but enforces no policy, so it cannot steal and cannot bypass the vault. A server-off test proves nothing moves without the chain: with all app processes stopped, raw spends still fail.
 - **Precedence is fixed.** Unauthorized, then Frozen, then SessionExpired, then ZeroAmount, then RecipientNotAllowed, then DailyCapExceeded, then PerTxCapExceeded. The EVM adds transport errors (BadNonce, IntentExpired, DeadlineTooFar) between Unauthorized and Frozen. Solana transport failures (expired blockhash, duplicate) never land and are reported as NotLanded, a documented difference.
 
-## Live demo
-
-Live: https://parvagrwal.github.io/Spendfloor/ui/
-
-No terminal needed. Open the live link above, or open `ui/index.html` directly in a browser, or serve the `ui/` folder.
-
-The page has two parts:
-
-- **Demo:** a guided walkthrough of one injection. Press Play and narrate, or step through it yourself. Setup, injection, draft, vault checks, a real on-chain rejection hash, and a valid spend that still works.
-- **Playground:** try it yourself. Pick an amount, a recipient, and a signer, and see what the vault would do. It runs entirely in the browser, sends no transaction, and touches no keys.
-
 ### Live deployments (testnet)
 
 | | Base Sepolia | Solana devnet |
