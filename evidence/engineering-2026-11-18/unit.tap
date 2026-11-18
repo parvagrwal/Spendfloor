@@ -1,0 +1,326 @@
+
+> spendfloor@0.1.0 test
+> tsx --test policy/test/*.test.ts test/*.test.ts
+
+TAP version 13
+# Subtest: golden file holds exactly 5 vectors
+ok 1 - golden file holds exactly 5 vectors
+  ---
+  duration_ms: 0.670271
+  type: 'test'
+  ...
+# Subtest: G1-p0-conformance: encoding, set hashes and policyHash reproduce
+ok 2 - G1-p0-conformance: encoding, set hashes and policyHash reproduce
+  ---
+  duration_ms: 1.026682
+  type: 'test'
+  ...
+# Subtest: G2-p1-short-window-two-recipients: encoding, set hashes and policyHash reproduce
+ok 3 - G2-p1-short-window-two-recipients: encoding, set hashes and policyHash reproduce
+  ---
+  duration_ms: 0.528946
+  type: 'test'
+  ...
+# Subtest: G3-p2-short-expiry-min-amounts: encoding, set hashes and policyHash reproduce
+ok 4 - G3-p2-short-expiry-min-amounts: encoding, set hashes and policyHash reproduce
+  ---
+  duration_ms: 0.323493
+  type: 'test'
+  ...
+# Subtest: G4-large-values: encoding, set hashes and policyHash reproduce
+ok 5 - G4-large-values: encoding, set hashes and policyHash reproduce
+  ---
+  duration_ms: 0.318697
+  type: 'test'
+  ...
+# Subtest: G5-order-invariance: encoding, set hashes and policyHash reproduce
+ok 6 - G5-order-invariance: encoding, set hashes and policyHash reproduce
+  ---
+  duration_ms: 0.23525
+  type: 'test'
+  ...
+# Subtest: G5 (reversed recipients) hashes identically to G2
+ok 7 - G5 (reversed recipients) hashes identically to G2
+  ---
+  duration_ms: 0.348325
+  type: 'test'
+  ...
+# Subtest: recipient order does not change a set hash
+ok 8 - recipient order does not change a set hash
+  ---
+  duration_ms: 0.188491
+  type: 'test'
+  ...
+# Subtest: empty set hash is the SHA-256 of empty input
+ok 9 - empty set hash is the SHA-256 of empty input
+  ---
+  duration_ms: 0.247934
+  type: 'test'
+  ...
+# Subtest: a one-micro-unit change changes the policyHash
+ok 10 - a one-micro-unit change changes the policyHash
+  ---
+  duration_ms: 0.498486
+  type: 'test'
+  ...
+# Subtest: invalid inputs are rejected
+ok 11 - invalid inputs are rejected
+  ---
+  duration_ms: 0.524887
+  type: 'test'
+  ...
+# Subtest: V1: merchant 1 accepts, spent becomes 1
+ok 12 - V1: merchant 1 accepts, spent becomes 1
+  ---
+  duration_ms: 1.193643
+  type: 'test'
+  ...
+# Subtest: V2: attacker 0.000001 -> RecipientNotAllowed
+ok 13 - V2: attacker 0.000001 -> RecipientNotAllowed
+  ---
+  duration_ms: 0.155745
+  type: 'test'
+  ...
+# Subtest: V3: attacker, full vault balance -> RecipientNotAllowed (recipient beats caps)
+ok 14 - V3: attacker, full vault balance -> RecipientNotAllowed (recipient beats caps)
+  ---
+  duration_ms: 0.099632
+  type: 'test'
+  ...
+# Subtest: V4: merchant 0 -> ZeroAmount
+ok 15 - V4: merchant 0 -> ZeroAmount
+  ---
+  duration_ms: 0.127451
+  type: 'test'
+  ...
+# Subtest: V5: spent 1, merchant 2.000001 -> PerTxCapExceeded (window still fits)
+ok 16 - V5: spent 1, merchant 2.000001 -> PerTxCapExceeded (window still fits)
+  ---
+  duration_ms: 0.224079
+  type: 'test'
+  ...
+# Subtest: V6: spent 1, merchant 2 exactly -> ACCEPT (exact per-tx boundary)
+ok 17 - V6: spent 1, merchant 2 exactly -> ACCEPT (exact per-tx boundary)
+  ---
+  duration_ms: 0.178233
+  type: 'test'
+  ...
+# Subtest: V7: spent 3, merchant 6 -> DailyCapExceeded (daily beats per-tx)
+ok 18 - V7: spent 3, merchant 6 -> DailyCapExceeded (daily beats per-tx)
+  ---
+  duration_ms: 0.153534
+  type: 'test'
+  ...
+# Subtest: V8: spent 3, merchant 2^64-1 -> DailyCapExceeded, no overflow
+ok 19 - V8: spent 3, merchant 2^64-1 -> DailyCapExceeded, no overflow
+  ---
+  duration_ms: 0.095391
+  type: 'test'
+  ...
+# Subtest: V9: spent 3, merchant 2 exactly -> ACCEPT (exact window boundary)
+ok 20 - V9: spent 3, merchant 2 exactly -> ACCEPT (exact window boundary)
+  ---
+  duration_ms: 0.268112
+  type: 'test'
+  ...
+# Subtest: V10: spent 5, merchant 0.000001 -> DailyCapExceeded
+ok 21 - V10: spent 5, merchant 0.000001 -> DailyCapExceeded
+  ---
+  duration_ms: 0.431288
+  type: 'test'
+  ...
+# Subtest: V11: recipient = the vault itself -> RecipientNotAllowed
+ok 22 - V11: recipient = the vault itself -> RecipientNotAllowed
+  ---
+  duration_ms: 0.168511
+  type: 'test'
+  ...
+# Subtest: V13: frozen -> Frozen
+ok 23 - V13: frozen -> Frozen
+  ---
+  duration_ms: 0.085867
+  type: 'test'
+  ...
+# Subtest: V14: unfreeze does NOT reset spent -> DailyCapExceeded
+ok 24 - V14: unfreeze does NOT reset spent -> DailyCapExceeded
+  ---
+  duration_ms: 0.070734
+  type: 'test'
+  ...
+# Subtest: V15: P1 rollover (300 s window) -> spent resets, merchant 1 accepts
+ok 25 - V15: P1 rollover (300 s window) -> spent resets, merchant 1 accepts
+  ---
+  duration_ms: 0.086625
+  type: 'test'
+  ...
+# Subtest: V16: P2 past expiry -> SessionExpired
+ok 26 - V16: P2 past expiry -> SessionExpired
+  ---
+  duration_ms: 0.065105
+  type: 'test'
+  ...
+# Subtest: V17 EVM: resubmit (nonce mismatch) -> BadNonce, lands
+ok 27 - V17 EVM: resubmit (nonce mismatch) -> BadNonce, lands
+  ---
+  duration_ms: 0.060057
+  type: 'test'
+  ...
+# Subtest: V17 SOL: duplicate -> NotLanded, does not land
+ok 28 - V17 SOL: duplicate -> NotLanded, does not land
+  ---
+  duration_ms: 0.113167
+  type: 'test'
+  ...
+# Subtest: V18: intent signed by the attacker key -> Unauthorized
+ok 29 - V18: intent signed by the attacker key -> Unauthorized
+  ---
+  duration_ms: 0.066858
+  type: 'test'
+  ...
+# Subtest: V19: now == expires_at -> SessionExpired
+ok 30 - V19: now == expires_at -> SessionExpired
+  ---
+  duration_ms: 0.066166
+  type: 'test'
+  ...
+# Subtest: V20: first instant of a new window -> spent resets, small spend accepts
+ok 31 - V20: first instant of a new window -> spent resets, small spend accepts
+  ---
+  duration_ms: 0.117052
+  type: 'test'
+  ...
+# Subtest: V21: +-1 s around a window edge, under local clock control
+ok 32 - V21: +-1 s around a window edge, under local clock control
+  ---
+  duration_ms: 0.121945
+  type: 'test'
+  ...
+# Subtest: windowIndexAt clamps now < anchor to 0 (both programs)
+ok 33 - windowIndexAt clamps now < anchor to 0 (both programs)
+  ---
+  duration_ms: 0.089789
+  type: 'test'
+  ...
+# Subtest: precedence chain: first failing check wins
+ok 34 - precedence chain: first failing check wins
+  ---
+  duration_ms: 0.137661
+  type: 'test'
+  ...
+# Subtest: SOL: transport is runtime-level (NotLanded) and SOL ignores EVM nonce/deadline
+ok 35 - SOL: transport is runtime-level (NotLanded) and SOL ignores EVM nonce/deadline
+  ---
+  duration_ms: 0.084667
+  type: 'test'
+  ...
+# Subtest: agent is never a recipient, even if a rotation made it one
+ok 36 - agent is never a recipient, even if a rotation made it one
+  ---
+  duration_ms: 0.109886
+  type: 'test'
+  ...
+# Subtest: concurrent generation has one winner; exports are exclusive and restricted by role and mode
+ok 37 - concurrent generation has one winner; exports are exclusive and restricted by role and mode
+  ---
+  duration_ms: 2458.895653
+  type: 'test'
+  ...
+# Subtest: unsigned six-decimal amounts without binary rounding; preserve conformance large-value inputs
+ok 38 - unsigned six-decimal amounts without binary rounding; preserve conformance large-value inputs
+  ---
+  duration_ms: 0.973359
+  type: 'test'
+  ...
+# Subtest: untrusted model output never coerces booleans/strings or pays from surrounding prose
+ok 39 - untrusted model output never coerces booleans/strings or pays from surrounding prose
+  ---
+  duration_ms: 13.013415
+  type: 'test'
+  ...
+# Subtest: owner flags reject typos and out-of-range values before either chain is contacted
+ok 40 - owner flags reject typos and out-of-range values before either chain is contacted
+  ---
+  duration_ms: 0.419424
+  type: 'test'
+  ...
+# Subtest: drafts match non-negative on-chain time constraints
+ok 41 - drafts match non-negative on-chain time constraints
+  ---
+  duration_ms: 42.156916
+  type: 'test'
+  ...
+# Subtest: malformed account metadata and lengths fail closed
+ok 42 - malformed account metadata and lengths fail closed
+  ---
+  duration_ms: 0.661248
+  type: 'test'
+  ...
+# Subtest: verifier aggregates multiple token accounts and propagates RPC failures
+ok 43 - verifier aggregates multiple token accounts and propagates RPC failures
+  ---
+  duration_ms: 3.635134
+  type: 'test'
+  ...
+# Subtest: runtime comparison checks every immutable reference and rejects extra bytes
+ok 44 - runtime comparison checks every immutable reference and rejects extra bytes
+  ---
+  duration_ms: 0.449149
+  type: 'test'
+  ...
+# Subtest: release preflight attests loader linkage, upgrade authority and program bytes, not just program ID
+ok 45 - release preflight attests loader linkage, upgrade authority and program bytes, not just program ID
+  ---
+  duration_ms: 59.522908
+  type: 'test'
+  ...
+# Subtest: relay signs only canonical spend, preserving the independent signature
+ok 46 - relay signs only canonical spend, preserving the independent signature
+  ---
+  duration_ms: 78.024089
+  type: 'test'
+  ...
+# Subtest: refuse missing signature, altered payload, extra instruction and untrusted deployment
+ok 47 - refuse missing signature, altered payload, extra instruction and untrusted deployment
+  ---
+  duration_ms: 43.297676
+  type: 'test'
+  ...
+# Subtest: local relay refuses unconfigured targets without making any RPC calls
+ok 48 - local relay refuses unconfigured targets without making any RPC calls
+  ---
+  duration_ms: 3.720006
+  type: 'test'
+  ...
+# Subtest: single sliding window bounds all identities and expires exactly at 60 seconds
+ok 49 - single sliding window bounds all identities and expires exactly at 60 seconds
+  ---
+  duration_ms: 0.247564
+  type: 'test'
+  ...
+# Subtest: confirmed success needs zero log lookups; failures and uncertain sends keep the signature
+ok 50 - confirmed success needs zero log lookups; failures and uncertain sends keep the signature
+  ---
+  duration_ms: 20.515181
+  type: 'test'
+  ...
+# Subtest: web3.js JSON-RPC transport handles a request, batch, and provider rejection with the pinned client
+ok 51 - web3.js JSON-RPC transport handles a request, batch, and provider rejection with the pinned client
+  ---
+  duration_ms: 15.650336
+  type: 'test'
+  ...
+# Subtest: Solana pay tool through relay yields a fully signed on-wire transaction and receipt (RPC double)
+ok 52 - Solana pay tool through relay yields a fully signed on-wire transaction and receipt (RPC double)
+  ---
+  duration_ms: 689.772834
+  type: 'test'
+  ...
+1..52
+# tests 52
+# suites 0
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5390.264544

@@ -43,7 +43,7 @@ const fail = (msg: string) => {
 
 const kind = machineKind();
 console.log(`machine: ${kind}`);
-console.log(`rpc:     evm=${EVM_RPC} sol=${SOL_RPC}`);
+console.log(`rpc:     evm=${new URL(EVM_RPC).origin} sol=${new URL(SOL_RPC).origin}`);
 console.log("");
 
 const registry = loadRegistry();
@@ -87,8 +87,8 @@ for (const chain of CHAINS) {
       }
     }
     if (allowed.includes(role) && !present) {
-      console.log(
-        `NOTE  ${chain} ${role} key not generated on this machine yet`
+      fail(
+        `${chain} ${role} key missing on this machine`
       );
     }
   }
@@ -121,8 +121,8 @@ for (const chain of CHAINS) {
         if (bal === 0n) ok(`${chain} AGENT balance is exactly 0`);
         else fail(`${chain} AGENT balance is NOT zero (${human})`);
       }
-    } catch (e) {
-      fail(`${chain} ${role} balance read failed: ${(e as Error).message}`);
+    } catch {
+      fail(`${chain} ${role} balance read failed`);
     }
   }
 }

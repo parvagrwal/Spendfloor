@@ -1,0 +1,139 @@
+{
+  "chain": "evm",
+  "net": "local",
+  "passed": 18,
+  "total": 18,
+  "results": [
+    {
+      "vector": "V1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0xa6ea03a714445f4c4e64ed4c1780232c5e7427162560a7a6959ce77f3d290093",
+      "pass": true
+    },
+    {
+      "vector": "V2",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0x6d049d4826eca5e63bbd20f991f781422313fb7274236f5ed95ed76f8d881e2d",
+      "pass": true
+    },
+    {
+      "vector": "V3",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0x932ceabd50f8dd63a6fcf661f8b5d7dcadbabb3a3ccd33f9b7717a674d6d120c",
+      "pass": true
+    },
+    {
+      "vector": "V4",
+      "expected": "ZeroAmount",
+      "actual": "ZeroAmount",
+      "hash": "0xfd15ea531b0b149771676886daced827e163636b3939dca79586dbf1be65d3bf",
+      "pass": true
+    },
+    {
+      "vector": "V5",
+      "expected": "PerTxCapExceeded",
+      "actual": "PerTxCapExceeded",
+      "hash": "0xea2379f2206a0ea3ce9dbd1a3047d56b3abb054078c81188c13bba8f715aaa94",
+      "pass": true
+    },
+    {
+      "vector": "V6",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0xba79678d3e5e08d101388129213f308bb50ff4f408b83ccef69ceda32d4b16a4",
+      "pass": true
+    },
+    {
+      "vector": "V7",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0xc7ddb140b0d62c7a43063232039c77346e8bd1170a4b5aa331a2259c703aefdd",
+      "pass": true
+    },
+    {
+      "vector": "V8",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x9f860c9ba86a6d998945dbd928089f4ead4725545a832d165e7a978022d477ae",
+      "pass": true
+    },
+    {
+      "vector": "V9",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0xab2226d3da6e5703b351f8bbd95b00154073e8d32612afecfba65a4ce2e2807f",
+      "pass": true
+    },
+    {
+      "vector": "V10",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x871e1db1402b263315e66286a4e9712cdb916435b6b7d03ef9de15ad22013ad6",
+      "pass": true
+    },
+    {
+      "vector": "V11",
+      "expected": "RecipientNotAllowed",
+      "actual": "RecipientNotAllowed",
+      "hash": "0x1b8efa5b00cfb996988dd6554838c242bc726c16efc3bee743d607ae0e439c4c",
+      "pass": true
+    },
+    {
+      "vector": "V12",
+      "expected": "NotOwner",
+      "actual": "NotOwner",
+      "hash": null,
+      "pass": true,
+      "note": "plan says Unauthorized; implementations use NotOwner on both chains"
+    },
+    {
+      "vector": "V13",
+      "expected": "Frozen",
+      "actual": "Frozen",
+      "hash": "0x24f2dfd7dbf3c512678241b555987961ad1fbad43c56f4c8a58c14807b906d68",
+      "pass": true
+    },
+    {
+      "vector": "V14",
+      "expected": "DailyCapExceeded",
+      "actual": "DailyCapExceeded",
+      "hash": "0x00760fd7e6fa2e52591c55e5ccd443fb18a21f26067ef3c8cd3274fae90961d9",
+      "pass": true
+    },
+    {
+      "vector": "V17",
+      "expected": "BadNonce",
+      "actual": "BadNonce",
+      "hash": "0xc5507afcca4a8810e578825d328be411db8ea01fe90ab6959ee576a97ed34622",
+      "pass": true,
+      "note": "replay of V1 payload"
+    },
+    {
+      "vector": "V18",
+      "expected": "Unauthorized",
+      "actual": "Unauthorized",
+      "hash": "0x0903facac0fdc2f670c5aef2d0f8f0bba073214388c6de829680604a74e46be5",
+      "pass": true,
+      "note": "attacker-signed intent"
+    },
+    {
+      "vector": "V15",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "hash": "0xf8120d82f68fd8834e91c826ae23c57e1307b607403b373aebd00d3408c17fae",
+      "pass": true,
+      "note": "P1 window 300s, warped +301s"
+    },
+    {
+      "vector": "V16",
+      "expected": "SessionExpired",
+      "actual": "SessionExpired",
+      "hash": "0x6ccb85cd1dc771c2cc613008c4eca8eb7ea3ab811eeeb85337b890df5f5ad5ad",
+      "pass": true,
+      "note": "P2 expiry +180s, warped +181s"
+    }
+  ]
+}

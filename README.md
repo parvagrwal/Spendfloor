@@ -4,6 +4,8 @@
 
 One spend policy for AI agents, enforced on-chain on Base and Solana. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.
 
+**Release status:** testnet software; not approved for real funds. Start with [production readiness](PRODUCTION_READINESS.md), [tests and measurements](TESTING_REPORT.md), and the [deployment and recovery guide](DEPLOYMENT.md). No web frontend or hosted API is included.
+
 ## The problem
 
 AI agents that move money can be prompt-injected into draining the wallets they control. Existing defences are off-chain policies, allowlists, or human approvals, all bypassable once the agent's key is compromised. SpendFloor moves the policy on-chain, so the vault itself rejects a bad spend, no matter what the agent was told to do.
@@ -16,7 +18,7 @@ AI agents that move money can be prompt-injected into draining the wallets they 
 - **Only `spend` and `withdraw` move vault funds.** The relay submits spends but enforces no policy, so it cannot steal and cannot bypass the vault. A server-off test proves nothing moves without the chain: with all app processes stopped, raw spends still fail.
 - **Precedence is fixed.** Unauthorized, then Frozen, then SessionExpired, then ZeroAmount, then RecipientNotAllowed, then DailyCapExceeded, then PerTxCapExceeded. The EVM adds transport errors (BadNonce, IntentExpired, DeadlineTooFar) between Unauthorized and Frozen. Solana transport failures (expired blockhash, duplicate) never land and are reported as NotLanded, a documented difference.
 
-### Live deployments (testnet)
+### Recorded deployments (testnet)
 
 | | Base Sepolia | Solana devnet |
 | --- | --- | --- |
@@ -24,11 +26,11 @@ AI agents that move money can be prompt-injected into draining the wallets they 
 | Token | SFUSD `0xb86efe265be37a521ddb271d750e6a41cb2471e2` | Mint `ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U` |
 | Policy PDA / merchant | Merchant `0x61f1c99d674bcd333578AC4f538F46AbC7bB4106` | Policy PDA `5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE` |
 
-Policy (same on both chains): per-transaction cap 2 SFUSD, window cap 5 SFUSD, window 86,400 s (24 h), recipients merchant only. Policy hash `0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820` on both chains. Live state: spent 1 SFUSD per chain, headroom 4 SFUSD. Verify: GREEN 15/15.
+Policy (same on both chains): per-transaction cap 2 SFUSD, window cap 5 SFUSD, window 86,400 s (24 h), recipients merchant only. Policy hash `0xf36d290ed7e1cc23af0ea7f08ae4f3ee0b1bcfead65e4a4744c76c70a7f5b820` on both chains. October 30 snapshot (not a current attestation): spent 1 SFUSD per chain, headroom 4 SFUSD. Verify: GREEN 15/15.
 
 ### Proof
 
-10 on-chain-confirmed rejections: 5 rehearsal runs x 2 chains, all RecipientNotAllowed, all under 90 s, amount fidelity true. Full hashes and explorer links are in [docs/EVIDENCE.md](docs/EVIDENCE.md) and on the demo page.
+10 on-chain-confirmed rejections: 5 rehearsal runs x 2 chains, all RecipientNotAllowed, all under 90 s, amount fidelity true. Full hashes and explorer links are in [docs/EVIDENCE.md](docs/EVIDENCE.md).
 
 ## How to use
 
@@ -41,7 +43,8 @@ Node.js 22 or later, Foundry (for the EVM vault), Solana CLI plus Anchor (for th
 ```bash
 git clone https://github.com/parvagrwal/SpendFloor.git
 cd SpendFloor
-npm ci
+npm ci --ignore-scripts
+npm run typecheck && npm test
 bash scripts/check-toolchain.sh
 ```
 
@@ -53,7 +56,7 @@ Keys live outside the repo, never in it, and are never printed. Generate one rol
 npx tsx sdk/gen-key.ts --chain evm|sol --role owner|agent|submitter [--machine owner|agent]
 ```
 
-The first run on a machine must pass `--machine`, which writes the machine marker. After that the marker rules. Owner keys stay off the agent machine. Agent keys hold zero native, zero tokens, and zero approvals, checked by the funding check before any spend.
+The first run on a machine must pass `--machine`, which writes the machine marker. After that the marker rules. Owner keys stay off the agent machine. Agent keys hold zero native, zero tokens, and zero approvals by design. The funding check verifies local custody and native balances; it does not enumerate all token approvals.
 
 ### 3. Deploy (owner machine only)
 
@@ -70,15 +73,7 @@ For localnet (Anvil, throwaway accounts, no custody check):
 SPENDFLOOR_LOCALNET=1 npx tsx sdk/deploy-t16.ts
 ```
 
-Deploy the Solana program, then create the mint, the vault token account, and the policy PDA, and mint 100 SFUSD to the vault, all from the owner key:
-
-```bash
-solana program deploy --url https://api.devnet.solana.com \
-  --keypair ~/.spendfloor-keys/sol-owner.json \
-  --program-id solana/target/deploy/spendfloor-keypair.json \
-  solana/target/deploy/spendfloor.so
-SPENDFLOOR_SOL_PROGRAM_ID=<program-id> npx tsx sdk/solana-deploy-t16.ts
-```
+For Solana, follow [DEPLOYMENT.md](DEPLOYMENT.md): the compiled program ID, signing authority and mint must match the approved deployment. The wrapped SpendFloor key JSON is **not** a Solana CLI keypair. Never deploy or transfer funds using addresses from a historical run without verification.
 
 Demo policy (both chains, SFUSD 6 decimals): per-transaction 2, window 5, window 86,400 s, anchor now, expiry now plus 86,400, recipients merchant only. The demo merchant is receive-only and its keys are stored nowhere.
 
@@ -88,7 +83,7 @@ Demo policy (both chains, SFUSD 6 decimals): per-transaction 2, window 5, window
 npx tsx cli/spendfloor.ts verify [--net testnet] [--json]
 ```
 
-15 checks, exit code 0 if all pass. It reads the enforced state from both chains, recomputes everything from what it reads (trusting neither stored hash), and reports PASS/FAIL per check with a precise diff on failure. If the Solana second RPC is unset, it reuses the first and flags the output as not independent, rather than claiming independence it does not have.
+Exit code 0 only if all checks pass. Verify compares independently read policy fields, runtime code, custody and approved addresses. It needs local EVM/SBF artifacts and a second independent Solana RPC (`SOL_RPC2`); an absent second provider cannot produce green. `--json` writes the completed report on stdout and progress on stderr. This is a consistency check, not proof of liveness, solvency or current user intent.
 
 ### 5. Run the agent and the relay
 
@@ -120,9 +115,9 @@ Note: `setPolicy` never resets spent. To force a reset, move to a new window ind
 
 ### Socket.dev — code integration (CI)
 
-Socket scans the repo's dependencies on every push, via `.github/workflows/ci.yml`, for malicious packages and known CVEs. This is the one real sponsor code integration, not a narrative claim: the scan actually runs in CI.
+The CI workflow supports Socket when configured with its API key; it explicitly skips that step without credentials. Installation of the GitHub App is a separate operator choice. The npm audit gate is not optional.
 
-Latest finished scan: 623 dependencies scanned, 16 alerts found (3 malicious, 6 high CVE, 5 medium CVE, 1 low CVE, 1 deprecated). Triage: 0 new, 0 reachable, 0 fixable, 0 in production, and none are direct dependencies (all transitive in lockfiles). Status is triaged, accepted risk, not a clean bill. Full triage is in [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) section 5.
+Historical scan (not this revision): 623 dependencies scanned, 16 alerts found (3 malicious, 6 high CVE, 5 medium CVE, 1 low CVE, 1 deprecated). Triage: 0 new, 0 reachable, 0 fixable, 0 in production, and none are direct dependencies (all transitive in lockfiles). Status is triaged, accepted risk, not a clean bill. Full triage is in [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) section 5.
 
 ### Cake Wallet — narrative fit, no code
 

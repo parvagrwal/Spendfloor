@@ -65,8 +65,8 @@ if (!expected || submitter.address !== expected) {
 }
 console.log(`machine: ${kind}`);
 console.log(`submitter: ${submitter.address}`);
-console.log(`read rpc: ${READ_RPC} (alternate: ${READ_RPC_ALT})`);
-console.log(`sequencer rpc: ${SEQUENCER_RPC}`);
+console.log(`read rpc: ${new URL(READ_RPC).origin} (alternate: ${new URL(READ_RPC_ALT).origin})`);
+console.log(`sequencer rpc: ${new URL(SEQUENCER_RPC).origin}`);
 console.log(`self-send value: ${formatEther(SELF_SEND_VALUE)} ETH`);
 console.log("");
 
@@ -85,12 +85,12 @@ async function pickReadUrl(): Promise<string> {
       });
       const body = (await res.json()) as { result?: unknown; error?: { message?: string } };
       if (res.ok && body.result !== undefined && body.error === undefined) {
-        console.log(`read rpc OK: ${url} (block ${body.result})`);
+        console.log(`read rpc OK: ${new URL(url).origin} (block ${body.result})`);
         return url;
       }
-      console.log(`read rpc FAILED: ${url} :: HTTP ${res.status} :: ${body.error?.message ?? "no result"}`);
+      console.log(`read rpc FAILED: ${new URL(url).origin} :: HTTP ${res.status} :: ${body.error?.message ?? "no result"}`);
     } catch (e) {
-      console.log(`read rpc FAILED: ${url} :: ${(e as Error).message.slice(0, 160)}`);
+      console.log(`read rpc FAILED: ${new URL(url).origin} :: ${(e as Error).message.slice(0, 160)}`);
     }
   }
   console.log("FAIL  no read RPC answered");
@@ -142,7 +142,7 @@ async function broadcast(url: string, raw: `0x${string}`): Promise<string> {
   });
   const body = (await res.json()) as { result?: string; error?: { message?: string } };
   if (!res.ok || body.error || !body.result) {
-    throw new Error(`broadcast rejected via ${url}: HTTP ${res.status} :: ${body.error?.message ?? "no result"}`);
+    throw new Error(`broadcast rejected via ${new URL(url).origin}: HTTP ${res.status} :: ${body.error?.message ?? "no result"}`);
   }
   return body.result;
 }

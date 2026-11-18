@@ -1,0 +1,123 @@
+
+> spendfloor@0.1.0 test:integration
+> tsx --test --test-concurrency=1 sdk/test/sdk.test.ts relay/test/submitter.test.ts
+
+TAP version 13
+# Subtest: relay on: V1 lands through the relay
+ok 1 - relay on: V1 lands through the relay
+  ---
+  duration_ms: 1370.693217
+  type: 'test'
+  ...
+# Subtest: relay off: agent cannot spend (fails closed)
+ok 2 - relay off: agent cannot spend (fails closed)
+  ---
+  duration_ms: 14.149302
+  type: 'test'
+  ...
+# Subtest: relay forwards over-cap spend; vault rejects it (no policy in relay)
+ok 3 - relay forwards over-cap spend; vault rejects it (no policy in relay)
+  ---
+  duration_ms: 16.425442
+  type: 'test'
+  ...
+# Subtest: rate limit: third submit in a minute is rejected
+ok 4 - rate limit: third submit in a minute is rejected
+  ---
+  duration_ms: 1033.444817
+  type: 'test'
+  ...
+# Subtest: rate limiter unit test (no chain)
+ok 5 - rate limiter unit test (no chain)
+  ---
+  duration_ms: 0.392955
+  type: 'test'
+  ...
+# Subtest: relay off unit test (no chain, never started)
+ok 6 - relay off unit test (no chain, never started)
+  ---
+  duration_ms: 1.063264
+  type: 'test'
+  ...
+# Subtest: an intent is isolated to its vault and concurrent submissions consume it once
+ok 7 - an intent is isolated to its vault and concurrent submissions consume it once
+  ---
+  duration_ms: 29.585736
+  type: 'test'
+  ...
+# Subtest: operator runtime check matches local deployment, including all immutable sites
+ok 8 - operator runtime check matches local deployment, including all immutable sites
+  ---
+  duration_ms: 4.612892
+  type: 'test'
+  ...
+# Solana tests skipped: SBF artifact missing.
+# Subtest: evm: valid spend lands and updates state
+ok 9 - evm: valid spend lands and updates state
+  ---
+  duration_ms: 1347.972241
+  type: 'test'
+  ...
+# Subtest: evm: non-recipient spend lands as RecipientNotAllowed with a hash
+ok 10 - evm: non-recipient spend lands as RecipientNotAllowed with a hash
+  ---
+  duration_ms: 28.286848
+  type: 'test'
+  ...
+# Subtest: evm: read state matches the deployed policy
+ok 11 - evm: read state matches the deployed policy
+  ---
+  duration_ms: 7.772946
+  type: 'test'
+  ...
+# Subtest: sol: valid spend lands and updates state
+ok 12 - sol: valid spend lands and updates state # SKIP program .so missing
+  ---
+  duration_ms: 0.215175
+  type: 'test'
+  ...
+# Subtest: sol: non-recipient spend lands as RecipientNotAllowed with a signature
+ok 13 - sol: non-recipient spend lands as RecipientNotAllowed with a signature # SKIP program .so missing
+  ---
+  duration_ms: 0.1118
+  type: 'test'
+  ...
+# Subtest: sol: read state matches the initialized policy
+ok 14 - sol: read state matches the initialized policy # SKIP program .so missing
+  ---
+  duration_ms: 0.089809
+  type: 'test'
+  ...
+# Subtest: sol: discriminators match the program's Anchor discriminators
+ok 15 - sol: discriminators match the program's Anchor discriminators
+  ---
+  duration_ms: 0.241012
+  type: 'test'
+  ...
+# Subtest: sol: spend instruction has the right data and account order
+ok 16 - sol: spend instruction has the right data and account order
+  ---
+  duration_ms: 38.474748
+  type: 'test'
+  ...
+# Subtest: sol: policy account parses from the Borsh layout
+ok 17 - sol: policy account parses from the Borsh layout
+  ---
+  duration_ms: 7.398854
+  type: 'test'
+  ...
+# Subtest: sol: program error codes map to labels
+ok 18 - sol: program error codes map to labels
+  ---
+  duration_ms: 0.276473
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 3
+# todo 0
+# duration_ms 9510.084973

@@ -43,6 +43,7 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const RPC = process.env.SPENDFLOOR_SOL_RPC ?? "http://127.0.0.1:8899";
+if (!["localhost", "127.0.0.1", "[::1]"].includes(new URL(RPC).hostname)) throw new Error("local setup requires a loopback RPC");
 const PROGRAM_ID = new PublicKey(
   process.env.SPENDFLOOR_SOL_PROGRAM_ID ??
     "CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE",
@@ -100,7 +101,7 @@ async function main(): Promise<void> {
   const agentPubkey = new PublicKey(AGENT);
   const merchantPubkey = new PublicKey(SOL_MERCHANT);
   const submitterPubkey = new PublicKey(SUBMITTER);
-  console.log(`rpc: ${RPC}`);
+  console.log(`rpc origin: ${new URL(RPC).origin}`);
   console.log(`program: ${PROGRAM_ID.toBase58()}`);
   console.log(`local owner: ${owner.publicKey.toBase58()} (THROWAWAY, localnet only)`);
   console.log(`agent: ${AGENT}`);

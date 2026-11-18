@@ -34,7 +34,7 @@ import {
 import {
   createPublicClient,
   createWalletClient,
-  http,
+  http, isAddress,
   type Abi,
   type Address,
   type Hash,
@@ -57,6 +57,7 @@ const SOL_PROGRAM = new PublicKey("CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE"
 const SOL_POLICY = new PublicKey("5MUi1eZAfjaCukRDZNntAMJCr5Xz6gCRJ9s7D2iJyfuE");
 const SOL_MINT = new PublicKey("ESB1d6WUnz6e9yRmC9hv8MrHHzrQs8eFSV6aosDHNt2U");
 const SOL_VAULT_TOKEN = new PublicKey("GhanJGGQhwhSL9q1Uvsy7MopiA2aDH7QERmrvqz1xn6N");
+const SOL_MERCHANT = "8e6f1AWYV4unGiaoDciMkAXvPdUZvpNCtPK6pz2kmZhS";
 const SOL_MERCHANT_TOKEN = new PublicKey("GiKhKyYKuMQjJZrMLmRxhggrzRPkDrwLEAbr7SuUcnMV");
 const SOL_ATTACKER = new PublicKey("Hk851CTYdPGq8NuLGwz66kKzsu5HP66WNtie3Yhbw33F");
 const TOKEN_PROGRAM_ID = new PublicKey(
@@ -78,6 +79,7 @@ if (!MESSAGE) {
   console.log("usage: npx tsx agent/demo-injection.ts --message \"<text>\" [--net testnet|local]");
   process.exit(1);
 }
+if (NET !== "testnet" && NET !== "local") throw new Error("unsupported demo network");
 const LOCALNET = NET === "local";
 
 async function sendAndConfirmPoll(
@@ -136,6 +138,7 @@ async function ensureAttackerAta(
   return ata;
 }
 
+let anvilProc: ChildProcess | null = null;
 async function main() {
   // --- Network label (T26: the demo must show which network it runs on) ---
   console.log(
@@ -154,15 +157,12 @@ async function main() {
     chain: LOCALNET ? foundry : baseSepolia,
     transport: http(LOCALNET ? "http://127.0.0.1:8545" : "https://sepolia.base.org"),
   });
-  let relay = createRelay(DEFAULT_RELAY_CONFIG, evmSubmitter, solSubmitter, {
-    localnet: LOCALNET,
-  });
-  relay.start();
+  let sponsor: Parameters<typeof createRelay>[1] = evmSubmitter;
 
   // --- Localnet vault (fresh Anvil deploy) ---
   let vault = EVM_VAULT;
   let merchant = EVM_MERCHANT;
-  let anvilProc: ChildProcess | null = null;
+
   if (LOCALNET) {
     const here = dirname(fileURLToPath(import.meta.url));
     const evmDir = join(here, "..", "evm");
@@ -221,12 +221,7 @@ async function main() {
     });
     // Rebuild the relay on the local submitter (Anvil account 2) and
     // the local Solana RPC (Surfpool) for the SOL leg.
-    relay.stop();
-    relay = createRelay(DEFAULT_RELAY_CONFIG, localSubmitter, solSubmitter, {
-      localnet: true,
-      solRpc: "http://127.0.0.1:8899",
-    });
-    relay.start();
+    sponsor = localSubmitter;
     const tokenHash = await localOwner.deployContract({
       account: ownerAcc,
       chain: foundry,
@@ -326,13 +321,17 @@ async function main() {
     attackerAta = await ensureAttackerAta(conn, solSubmitter, SOL_MINT);
   }
 
+  const relay = createRelay(DEFAULT_RELAY_CONFIG, sponsor, solSubmitter, {
+    localnet: LOCALNET, targets: {evmVaults: [vault], solVault: {program: solProgram, vaultToken: solVaultToken, agent: solAgent.publicKey}},
+  });
+  relay.start();
   // --- LLM turn ---
   console.log(`message: ${MESSAGE}`);
   const loop = await runAgentLoop(MESSAGE);
   console.log(`llm raw: ${loop.raw}`);
   if (!loop.pay) {
     console.log(`no pay: ${loop.noPayReason}`);
-    if (anvilProc) anvilProc.kill();
+
     return;
   }
   const { to, amount, toEvm, toSol } = loop.pay;
@@ -346,55 +345,18 @@ async function main() {
     );
   }
 
-  // --- Resolve recipients per chain ---
-  const evmTo: Address = (
-    toEvm ?? (to.startsWith("0x") ? to : EVM_ATTACKER)
-  ) as Address;
-  // Solana dest: derived with the EFFECTIVE mint (local mint on
-  // localnet, devnet mint on testnet). The merchant dest is the
-  // merchant TOKEN ACCOUNT (not an ATA) on either network.
-  // The LLM may answer with a placeholder word ("attacker",
-  // "merchant_address") instead of an address. Parsing such a word
-  // as a PublicKey crashes (run 1: "attacker" -> Invalid public key
-  // input; run 2: "merchant_address" -> Non-base58 character), so
-  // only parse when the string is a valid pubkey; otherwise fall
-  // back to the attacker ATA (the injection dest). The merchant
-  // case is overridden below by namesMerchant anyway.
-  function tryPubkey(s: string): PublicKey | null {
-    try {
-      return new PublicKey(s);
-    } catch {
-      return null;
-    }
-  }
-  let solDest: PublicKey = solMerchantToken;
-  const toSolKey = toSol ? tryPubkey(toSol) : null;
-  if (toSolKey) {
-    const [ata] = PublicKey.findProgramAddressSync(
-      [toSolKey.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()],
-      ATA_PROGRAM_ID,
-    );
-    solDest = ata;
-  } else if (!to.startsWith("0x") && to) {
-    const toKey = tryPubkey(to);
-    if (toKey) {
-      const [ata] = PublicKey.findProgramAddressSync(
-        [toKey.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()],
-        ATA_PROGRAM_ID,
-      );
-      solDest = ata;
-    } else {
-      solDest = attackerAta ?? solMerchantToken;
-    }
-  } else {
-    solDest = attackerAta ?? solMerchantToken;
-  }
-  // If the message names the merchant (legit pay), use the merchant accounts.
-  const namesMerchant =
-    MESSAGE.toLowerCase().includes("merchant") ||
-    to.toLowerCase() === merchant.toLowerCase();
-  const finalEvmTo = namesMerchant ? merchant : evmTo;
-  const finalSolDest = namesMerchant ? solMerchantToken : solDest;
+  // Only the two named demo contacts have a cross-chain address mapping.
+  // Never infer a recipient by searching unrelated words in the user's message.
+  const merchantAlias = ["merchant", "merchant_address", merchant.toLowerCase()];
+  const attackerAlias = ["attacker", "attacker_address", EVM_ATTACKER.toLowerCase()];
+  const contact = to.startsWith("0x") ? to.toLowerCase() : to;
+  const isMerchant = merchantAlias.includes(contact) || to === SOL_MERCHANT;
+  const isAttacker = attackerAlias.includes(contact) || to === SOL_ATTACKER.toBase58();
+  const finalEvmTo = toEvm ?? (isMerchant ? merchant : isAttacker ? EVM_ATTACKER : to);
+  if (!isAddress(finalEvmTo)) throw new Error("no unambiguous EVM recipient; not paying");
+  const solWallet = toSol ? new PublicKey(toSol) : isMerchant ? new PublicKey(SOL_MERCHANT) : isAttacker ? SOL_ATTACKER : new PublicKey(to);
+  const finalSolDest = solWallet.toBase58() === SOL_MERCHANT ? solMerchantToken : PublicKey.findProgramAddressSync(
+    [solWallet.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()], ATA_PROGRAM_ID)[0];
   console.log(`evm recipient: ${finalEvmTo}`);
   console.log(`sol dest token: ${finalSolDest.toBase58()}`);
 
@@ -422,10 +384,10 @@ async function main() {
   } else {
     console.log("SOL pay: skipped (no Solana connection — localnet setup missing?)");
   }
-  if (anvilProc) anvilProc.kill();
+
 }
 
-main().catch((err) => {
+main().finally(() => anvilProc?.kill()).catch((err) => {
   console.error(`FAIL  ${err instanceof Error ? err.message : String(err)}`);
   process.exit(1);
 });

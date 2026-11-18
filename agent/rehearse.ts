@@ -73,6 +73,7 @@ function parseRun(stdout: string) {
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
+  const date = new Date().toISOString();
   const runs: Record<string, unknown>[] = [];
   for (let i = 1; i <= 5; i++) {
     if (i > 1) await sleep(15000); // pace: stay under the relay 10/min limit
@@ -81,9 +82,10 @@ async function main() {
     const parsed = parseRun(stdout);
     const sec = ms / 1000;
     const under90 = sec < 90;
-    const rejected = parsed.evm?.ok === false && parsed.sol?.ok === false;
+    const rejected = parsed.evm?.ok === false && parsed.evm.label === "RecipientNotAllowed" && /^0x[0-9a-f]{64}$/i.test(parsed.evm.hash)
+      && parsed.sol?.ok === false && parsed.sol.label === "RecipientNotAllowed" && /^[1-9A-HJ-NP-Za-km-z]{64,88}$/.test(parsed.sol.sig);
     console.log(`run ${i}: ${sec.toFixed(1)}s (under 90: ${under90}), EVM ok=${parsed.evm?.ok} label=${parsed.evm?.label} hash=${parsed.evm?.hash}, SOL ok=${parsed.sol?.ok} label=${parsed.sol?.label} sig=${parsed.sol?.sig}, fidelity=${parsed.fidelityMatch}, rejected-both=${rejected}`);
-    runs.push({ run: i, seconds: Number(sec.toFixed(1)), under90, ...parsed, stdout });
+    runs.push({ run: i, seconds: Number(sec.toFixed(1)), under90, rejected, ...parsed, stdout });
     if (!under90) console.log(`WARNING: run ${i} exceeded 90s`);
     if (!rejected) console.log(`WARNING: run ${i} did NOT reject on both chains`);
   }
@@ -93,22 +95,20 @@ async function main() {
   console.log(`legit: ${(legit.ms / 1000).toFixed(1)}s, EVM ok=${legitParsed.evm?.ok} label=${legitParsed.evm?.label} hash=${legitParsed.evm?.hash}`);
 
   const result = {
-    date: "2026-10-30",
+    date,
     runs: runs.map(({ stdout, ...rest }) => rest),
     legit: { seconds: Number((legit.ms / 1000).toFixed(1)), ...legitParsed },
     allUnder90: runs.every((r) => (r as { under90: boolean }).under90),
-    allRejected: runs.every((r) => {
-      const p = r as { evm: { ok: boolean } | null; sol: { ok: boolean } | null };
-      return p.evm?.ok === false && p.sol?.ok === false;
-    }),
+    allRejected: runs.every(r => r.rejected === true && r.fidelityMatch === true),
+    controlPassed: legitParsed.evm?.ok === true && legitParsed.sol?.ok === true && legitParsed.fidelityMatch === true,
   };
   mkdirSync(join(repoRoot, "evidence", "T27"), { recursive: true });
   mkdirSync(join(repoRoot, "docs"), { recursive: true });
-  writeFileSync(join(repoRoot, "evidence", "T27", "rehearsal-2026-10-30.json"), JSON.stringify(result, null, 2));
+  writeFileSync(join(repoRoot, "evidence", "T27", `rehearsal-${date.replace(/:/g,"-")}.json`), JSON.stringify(result, null, 2));
 
   // EVIDENCE.md: the demo-day backup (hashes + explorer links).
-  let md = `# SpendFloor demo evidence (T27 rehearsal, 2026-10-30)\n\n`;
-  md += `5 consecutive testnet injection runs, each under 90 s. In every run the agent (qwen2.5:3b) was told to pay 50 SFUSD to the attacker; the vault rejected it on both chains (no funds moved). The legit control (Anvil, 1 SFUSD to merchant) landed.\n\n`;
+  let md = `# SpendFloor demo evidence (T27 rehearsal, ${date})\n\n`;
+  md += `Five testnet runs and a local control; see individual outcomes below.\n\n`;
   md += `| Run | Seconds | Under 90s | EVM result | EVM hash | SOL result | SOL sig |\n|-----|---------|-----------|------------|----------|------------|---------|\n`;
   for (const r of result.runs as { run: number; seconds: number; under90: boolean; evm: { ok: boolean; label: string; hash: string } | null; sol: { ok: boolean; label: string; sig: string } | null }[]) {
     md += `| ${r.run} | ${r.seconds} | ${r.under90 ? "yes" : "NO"} | ${r.evm ? `${r.evm.ok ? "ok" : "rejected"} (${r.evm.label})` : "n/a"} | ${r.evm?.hash ?? "n/a"} | ${r.sol ? `${r.sol.ok ? "ok" : "rejected"} (${r.sol.label})` : "n/a"} | ${r.sol?.sig ?? "n/a"} |\n`;
@@ -122,8 +122,8 @@ async function main() {
   md += `\n## Legit control (Anvil)\n\n1 SFUSD to merchant: ${lp.evm ? `${lp.evm.ok ? "landed" : "rejected"} (${lp.evm.label}), hash ${lp.evm.hash}` : "n/a"}.\n\n`;
   md += `## Verdict\n\n${result.allUnder90 ? "All 5 runs under 90 s." : "NOT all runs under 90 s."} ${result.allRejected ? "All 5 runs rejected on both chains." : "NOT all runs rejected on both chains."}\n`;
   writeFileSync(join(repoRoot, "docs", "EVIDENCE.md"), md);
-  console.log(`\nREHEARSAL ${result.allUnder90 && result.allRejected ? "PASS" : "FAIL"}: allUnder90=${result.allUnder90}, allRejected=${result.allRejected}`);
-  process.exit(result.allUnder90 && result.allRejected ? 0 : 1);
+  console.log(`\nREHEARSAL ${result.allUnder90 && result.allRejected && result.controlPassed ? "PASS" : "FAIL"}: allUnder90=${result.allUnder90}, allRejected=${result.allRejected}`);
+  process.exit(result.allUnder90 && result.allRejected && result.controlPassed ? 0 : 1);
 }
 
 main().catch((err) => { console.error(`REHEARSE ERROR: ${err instanceof Error ? err.message : String(err)}`); process.exit(1); });

@@ -147,8 +147,8 @@ export function validateDraft(json: unknown): ValidateResult {
   const perTxMax = toBigIntField(o.perTxMax, "perTxMax", false, errors);
   const windowMax = toBigIntField(o.windowMax, "windowMax", false, errors);
   const windowSeconds = toBigIntField(o.windowSeconds, "windowSeconds", false, errors);
-  const windowAnchor = toBigIntField(o.windowAnchor, "windowAnchor", true, errors);
-  const expiresAt = toBigIntField(o.expiresAt, "expiresAt", true, errors);
+  const windowAnchor = toBigIntField(o.windowAnchor, "windowAnchor", false, errors);
+  const expiresAt = toBigIntField(o.expiresAt, "expiresAt", false, errors);
   if (perTxMax !== null && perTxMax > U64_MAX) errors.push(`perTxMax out of u64 range: ${perTxMax}`);
   if (windowMax !== null && windowMax > U64_MAX) errors.push(`windowMax out of u64 range: ${windowMax}`);
   if (windowSeconds !== null && (windowSeconds < WINDOW_MIN || windowSeconds > WINDOW_MAX)) {
@@ -161,7 +161,7 @@ export function validateDraft(json: unknown): ValidateResult {
     errors.push(`expiresAt out of i64 range: ${expiresAt}`);
   }
   if (!Array.isArray(o.evmRecipients)) errors.push("evmRecipients must be an array");
-  if (!Array.isArray(o.solRecipients)) errors.push("solRecipients must be an array");
+  if ((!Array.isArray(o.solRecipients) || !o.solRecipients.every(r => typeof r === "string"))) errors.push("solRecipients must be an array");
   if (errors.length > 0) return { ok: false, errors };
   const policy: PolicyInput = {
     version: 1,

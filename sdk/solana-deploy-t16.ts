@@ -1,3 +1,6 @@
+import {readFileSync} from "node:fs";
+import {readProgramRelease} from "./program-release.js";
+import { readSolPolicy } from "./sol.js";
 // solana-deploy-t16 (T16 Solana leg).
 //
 //   Run on the OWNER machine only, AFTER deploying the program:
@@ -6,7 +9,7 @@
 //   Program deploy (new program ID, since the T07 program keypair is lost;
 //   the T07 program BWVM3J3... cannot be upgraded without it):
 //     solana program deploy --url https://api.devnet.solana.com \
-//       --keypair ~/.spendfloor-keys/sol-owner.json \
+//       --keypair <temporary-private-bare-owner-keypair> \
 //       --program-id solana/target/deploy/spendfloor-keypair.json \
 //       solana/target/deploy/spendfloor.so
 //
@@ -135,6 +138,10 @@ async function sendAndConfirm(ixs: TransactionInstruction[], signers: Keypair[])
   throw new Error("unreachable");
 }
 
+const release = await readProgramRelease(connection, PROGRAM_ID, readFileSync(new URL("../solana/target/deploy/spendfloor.so", import.meta.url)));
+if (!release.matches || !release.authority.equals(owner.publicKey)) throw new Error("program binary or upgrade authority mismatch: setup refused");
+if (await connection.getAccountInfo(policy)) throw new Error("policy already exists; reconcile existing deployment before funding");
+
 // --- 1. Create the SPL mint (authority = OWNER) ---
 const mintKp = Keypair.generate();
 const mintRent = await connection.getMinimumBalanceForRentExemption(MINT_LEN);
@@ -254,6 +261,9 @@ function i64(n: number): Buffer {
   );
   console.log(`policy initialized (tx ${sig})`);
 }
+
+const initialized = await readSolPolicy(connection, PROGRAM_ID);
+if (!initialized.owner.equals(owner.publicKey) || !initialized.agent.equals(agentPubkey) || !initialized.mint.equals(mintKp.publicKey)) throw new Error("unexpected policy identity: funding refused");
 
 // --- 4. Mint 100 SFUSD to the vault token account ---
 {

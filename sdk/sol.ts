@@ -12,6 +12,7 @@
 // code) or the logs into a normalized label, so it returns
 // { label, signature }, not a raw RPC error.
 
+import { base58 } from "@scure/base";
 import { createHash } from "node:crypto";
 import {
   Connection,
@@ -97,11 +98,7 @@ async function waitForSignature(
     const st = await connection.getSignatureStatus(signature).catch(() => null);
     const value = st?.value;
     if (value?.confirmationStatus === "confirmed" || value?.confirmationStatus === "finalized") {
-      const tx = await connection.getTransaction(signature, { commitment: "confirmed" }).catch(() => null);
-      return { err: value.err, logs: tx?.meta?.logMessages ?? [] };
-    }
-    if (value?.err) {
-      const tx = await connection.getTransaction(signature, { commitment: "confirmed" }).catch(() => null);
+      const tx = value.err ? await connection.getTransaction(signature, { commitment: "confirmed" }).catch(() => null) : null;
       return { err: value.err, logs: tx?.meta?.logMessages ?? [] };
     }
     await sleep(1000);
@@ -120,11 +117,10 @@ function labelFromSolErr(err: unknown, logs: string[]): SpendLabel {
     // Fall through to the log scan.
   }
   for (const line of logs) {
-    const m = line.match(/Custom program error: 0x([0-9a-fA-F]+)/) ?? line.match(/"Custom":\s*(\d+)/);
-    if (m) {
-      const code = parseInt(m[1], m[1].startsWith("0x") || /^[0-9a-fA-F]+$/.test(m[1]) && m[1].length > 4 ? 16 : 10);
-      if (SOL_ERROR_CODES[code]) return SOL_ERROR_CODES[code];
-    }
+    const hex = line.match(/custom program error: 0x([0-9a-f]+)/i);
+    const decimal = line.match(/"Custom":\s*(\d+)/);
+    const code = hex ? parseInt(hex[1], 16) : decimal ? Number(decimal[1]) : NaN;
+    if (SOL_ERROR_CODES[code]) return SOL_ERROR_CODES[code];
     const anchor = line.match(/Error Code: (\w+)/);
     if (anchor) {
       const names: Record<string, SpendLabel> = {
@@ -150,7 +146,7 @@ function labelFromSolErr(err: unknown, logs: string[]): SpendLabel {
 /**
  * Agent signs the spend, submitter pays. Returns { ok, hash } on a
  * landed success, or { ok: false, label, hash } on a landed failure.
- * A send that never broadcasts returns SubmitFailed with no hash; a
+ * A send with an uncertain outcome returns RpcError with its local signature; a
  * broadcast that never confirms in time returns Timeout with the
  * signature, so the caller can check it later.
  */
@@ -165,19 +161,27 @@ export async function submitSolSpend(
   amount: bigint,
   opts: { timeoutMs?: number } = {},
 ): Promise<SpendResult> {
+  if (agent.publicKey.equals(submitter.publicKey)) throw new Error("agent cannot pay its own fees");
   const ix = buildSpendInstruction(programId, policy, vaultToken, destToken, agent.publicKey, amount);
   const tx = new Transaction().add(ix);
   tx.feePayer = submitter.publicKey;
   const { blockhash } = await connection.getLatestBlockhash();
   tx.recentBlockhash = blockhash;
   tx.sign(agent, submitter);
-  let signature: string;
+  return broadcastSignedSol(connection, tx, opts.timeoutMs);
+}
+
+export async function broadcastSignedSol(connection: Connection, tx: Transaction, timeoutMs?: number): Promise<SpendResult> {
+  const bytes = tx.serialize();
+  const signature = base58.encode(tx.signature!);
   try {
-    signature = await connection.sendRawTransaction(tx.serialize(), { skipPreflight: true });
-  } catch (err) {
-    return { ok: false, label: "SubmitFailed", raw: err instanceof Error ? err.message : String(err) };
+    const returned = await connection.sendRawTransaction(bytes, {skipPreflight:true});
+    if (returned !== signature) throw new Error("RPC returned an unexpected signature");
+  } catch {
+    // A lost response does not prove rejection. Keep the locally known id.
+    return {ok:false, label:"RpcError", hash:signature, raw:"broadcast outcome unknown; reconcile signature"};
   }
-  const landed = await waitForSignature(connection, signature, opts.timeoutMs);
+  const landed = await waitForSignature(connection, signature, timeoutMs);
   if (!landed) return { ok: false, label: "Timeout", hash: signature };
   if (!landed.err) return { ok: true, hash: signature };
   return { ok: false, label: labelFromSolErr(landed.err, landed.logs), hash: signature };
@@ -185,6 +189,8 @@ export async function submitSolSpend(
 
 /** Parse a policy account (Borsh layout; offsets match the program). */
 export function parsePolicyAccount(data: Buffer): SolPolicyState {
+  const tag = createHash("sha256").update("account:Policy").digest().subarray(0, 8);
+  if (!data.subarray(0, 8).equals(tag)) throw new Error("invalid Policy discriminator");
   let off = 8;
   const readPubkey = () => {
     const k = new PublicKey(data.subarray(off, off + 32));
@@ -214,12 +220,14 @@ export function parsePolicyAccount(data: Buffer): SolPolicyState {
   const expiresAt = readI64();
   const nRecipients = data.readUInt32LE(off);
   off += 4;
+  if (nRecipients < 1 || nRecipients > 8 || data.length < off + 32 * nRecipients + 114) throw new Error("invalid Policy account length");
   const recipients: PublicKey[] = [];
   for (let i = 0; i < nRecipients; i++) recipients.push(readPubkey());
   const evmSetHash = new Uint8Array(data.subarray(off, off + 32));
   off += 32;
   const policyHash = new Uint8Array(data.subarray(off, off + 32));
   off += 32;
+  if (data[off] > 1) throw new Error("invalid Policy frozen flag");
   const frozen = data[off] !== 0;
   off += 1;
   const window = readU64();
@@ -242,7 +250,8 @@ export async function readSolPolicy(
   const [policy] = policyPda(programId);
   const info = await connection.getAccountInfo(policy);
   if (!info) throw new Error("policy account not found");
-  return parsePolicyAccount(info.data as Buffer);
+  if (!info.owner.equals(programId) || info.executable) throw new Error("invalid Policy account owner/type");
+  return parsePolicyAccount(info.data);
 }
 
 export { SystemProgram };

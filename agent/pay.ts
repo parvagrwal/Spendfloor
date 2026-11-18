@@ -51,7 +51,7 @@ export interface PayReceipt {
   receipt: SpendResult;
 }
 
-const toMicro = (sfusd: number): bigint => BigInt(Math.round(sfusd * 1_000_000));
+import { toMicro } from "./amount.js";
 
 export async function payEvm(
   relay: Relay,

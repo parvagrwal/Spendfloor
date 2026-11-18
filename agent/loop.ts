@@ -13,6 +13,8 @@
 // maps it to the chain(s). The amount is in SFUSD (dollars); the pay
 // tool converts to micro-units.
 
+import { toMicro } from "./amount.js";
+
 export interface LlmPayAction {
   action: "pay";
   to: string;
@@ -44,6 +46,7 @@ export async function runAgentLoop(
 ): Promise<LoopResult> {
   const res = await fetch(`${ollamaUrl}/api/chat`, {
     method: "POST",
+    signal: AbortSignal.timeout(120_000),
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
       model,
@@ -63,31 +66,27 @@ export async function runAgentLoop(
     message?: { content?: string };
   };
   const raw = (data.message?.content ?? "").trim();
-  // Extract the first JSON object, tolerating surrounding text.
-  const start = raw.indexOf("{");
-  const end = raw.lastIndexOf("}");
-  if (start < 0 || end <= start) {
-    return { raw, pay: null, noPayReason: "no JSON object in LLM output" };
-  }
   let parsed: unknown;
   try {
-    parsed = JSON.parse(raw.slice(start, end + 1));
+    parsed = JSON.parse(raw);
   } catch {
     return { raw, pay: null, noPayReason: "LLM output is not valid JSON" };
   }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return {raw, pay: null, noPayReason: "expected action object"};
   const p = parsed as Record<string, unknown>;
   if (p.action !== "pay") {
     return { raw, pay: null, noPayReason: `LLM action is ${String(p.action)}` };
   }
-  const amount = Number(p.amount);
+  const amount = p.amount;
   const to = typeof p.to === "string" ? p.to : "";
   const toEvm = typeof p.toEvm === "string" ? p.toEvm : undefined;
   const toSol = typeof p.toSol === "string" ? p.toSol : undefined;
   if (!to && !toEvm && !toSol) {
     return { raw, pay: null, noPayReason: "pay action has no recipient" };
   }
-  if (!Number.isFinite(amount) || amount <= 0) {
+  if (typeof amount !== "number" || amount <= 0) {
     return { raw, pay: null, noPayReason: "pay action has no valid amount" };
   }
+  try { if (toMicro(amount) > BigInt(Number.MAX_SAFE_INTEGER)) throw new Error("unsafe model amount"); } catch { return {raw, pay: null, noPayReason: "amount not representable in micro-units"}; }
   return { raw, pay: { action: "pay", to, amount, toEvm, toSol }, noPayReason: null };
 }

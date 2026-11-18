@@ -59,7 +59,7 @@ console.log(`owner: ${owner.address}`);
 console.log(`agent: ${agent}`);
 console.log(`allowlist: ${expectedOwner}, ${submitter}`);
 console.log(`dailyCap: ${formatEther(DAILY_CAP)} ETH, perTxCap: ${formatEther(PER_TX_CAP)} ETH, fund: ${formatEther(FUND)} ETH`);
-console.log(`rpc: ${RPC}`);
+console.log(`rpc origin: ${new URL(RPC).origin}`);
 console.log("");
 
 // --- Artifact (forge build must have run in evm/ first) ---

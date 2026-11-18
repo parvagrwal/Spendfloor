@@ -100,7 +100,7 @@ async function main() {
   // Base Sepolia does not return revert data, so the label may be
   // generic "Reverted"; BadNonce is proven deductively (see header).
   const v17Label = v17Res.ok ? "ACCEPT" : (v17Res.label ?? "Reverted");
-  const v17Actual = v17Label === "BadNonce" ? "BadNonce" : (v17Res.ok ? "ACCEPT" : "BadNonce (deductive)");
+  const v17Actual = v17Label === "BadNonce" ? "BadNonce" : (v17Res.ok ? "ACCEPT" : v17Label);
   rec("EVM", "V17", "BadNonce", v17Actual, v17Res.hash ?? null, "replay of V1 payload; label deductive (nonce N vs current N+1, all other checks pass)");
 
   // --- SOL V1 + V17 (manual tx, so we keep the fully-signed bytes) ---
@@ -113,13 +113,10 @@ async function main() {
   const tx = new Transaction({ feePayer: submitterKp.publicKey, blockhash, lastValidBlockHeight }).add(ix);
   tx.partialSign(agentKp, submitterKp);
   const bytes = tx.serialize();
-  const sig1 = await conn.sendRawTransaction(bytes, { skipPreflight: true });
-  for (let i = 0; i < 60; i++) {
-    const st = await conn.getSignatureStatus(sig1);
-    if (st.value && st.value.err) throw new Error(`SOL V1 tx ${sig1} failed: ${JSON.stringify(st.value.err)}`);
-    if (st.value && st.value.confirmationStatus && st.value.confirmationStatus !== "processed") break;
-    await new Promise((r) => setTimeout(r, 1000));
-  }
+  const {broadcastSignedSol} = await import("../sdk/sol.js");
+  const landed = await broadcastSignedSol(conn, tx);
+  if (!landed.ok || !landed.hash) throw new Error(`V1 not confirmed: ${landed.label} ${landed.hash}`);
+  const sig1 = landed.hash;
   rec("SOL", "V1", "ACCEPT", "ACCEPT", sig1, "post-reset V1 (proves SOL reset freed the window)");
   const solPolAfterV1 = await readSolPolicy(conn, SOL_PROGRAM);
   // V17: resubmit V1's exact bytes immediately (same blockhash, still valid).
@@ -138,8 +135,8 @@ async function main() {
   }
   const solPolAfterDup = await readSolPolicy(conn, SOL_PROGRAM);
   const spentUnchanged = solPolAfterDup.spent === solPolAfterV1.spent;
-  const dupOk = (dupSig === sig1 || dupErr !== null) && spentUnchanged;
-  rec("SOL", "V17", "duplicate (does not land)", dupOk ? "duplicate (does not land)" : "landed (spent changed)", dupSig, `resubmit sig=${dupSig} (V1 sig=${sig1}), spent before=${solPolAfterV1.spent} after=${solPolAfterDup.spent}, err=${dupErr ? JSON.stringify(dupErr) : "none"}`);
+  const dupOk = (dupSig === sig1 || /already processed/i.test(String(dupErr))) && spentUnchanged;
+  rec("SOL", "V17", "duplicate (does not land)", dupOk ? "duplicate (does not land)" : "outcome not proven", dupSig, `resubmit sig=${dupSig} (V1 sig=${sig1}), spent before=${solPolAfterV1.spent} after=${solPolAfterDup.spent}, err=${dupErr ? JSON.stringify(dupErr) : "none"}`);
   void solPolBefore;
 
   // --- SOL V12 (agent attempts owner ix -> NotOwner 6008) ---
@@ -159,8 +156,8 @@ async function main() {
   let notOwnerCount = 0;
   const v12Sigs: string[] = [];
   for (const a of attempts) {
-    const t = new Transaction({ feePayer: agentKp.publicKey }).add(a.ix);
-    const { sig, err } = await sendSolAndConfirm(conn, t, [agentKp]);
+    const t = new Transaction({ feePayer: submitterKp.publicKey }).add(a.ix);
+    const { sig, err } = await sendSolAndConfirm(conn, t, [submitterKp, agentKp]);
     v12Sigs.push(sig);
     const errStr = JSON.stringify(err);
     if (errStr.includes("6008")) notOwnerCount++;
@@ -170,6 +167,7 @@ async function main() {
 
   relay.stop();
   writeFileSync(join(here, "..", "evidence", "T17", "post-reset.json"), JSON.stringify({ results }, null, 2));
+  if (results.some(r => !r.pass)) process.exitCode = 1;
   console.log(`\nPost-reset: ${results.filter((r) => r.pass).length}/${results.length} pass`);
 }
 

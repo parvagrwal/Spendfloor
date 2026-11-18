@@ -72,7 +72,7 @@ console.log(`machine: ${kind}`);
 console.log(`vault: ${VAULT}`);
 console.log(`agent: ${agent.address} (must stay 0 wei)`);
 console.log(`submitter: ${submitter.address}`);
-console.log(`rpc: ${RPC}`);
+console.log(`rpc origin: ${new URL(RPC).origin}`);
 console.log("");
 
 const artifactUrl = new URL("../evm/out/Vault.sol/Vault.json", import.meta.url);

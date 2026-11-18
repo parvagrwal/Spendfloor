@@ -24,7 +24,7 @@ check() { # name, pin, actual
 ver() { command -v "$1" >/dev/null 2>&1 && "$@" 2>/dev/null; }
 
 check "rustc"  "$RUST_PIN"   "$(ver rustc --version  | awk '{print $2}')"
-check "forge"  "$FORGE_PIN"  "$(ver forge --version  | head -1 | awk '{print $3}')"
+check "forge"  "$FORGE_PIN"  "$(ver forge --version  | head -1 | awk '{sub(/-stable$/, "", $3); print $3}')"
 check "solana" "$SOLANA_PIN" "$(ver solana --version | awk '{print $2}')"
 check "anchor" "$ANCHOR_PIN" "$(ver anchor --version | awk '{print $2}')"
 check "ollama" "$OLLAMA_PIN" "$(ver ollama --version | awk '{print $4}')"

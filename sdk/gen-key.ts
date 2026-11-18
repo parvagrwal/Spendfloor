@@ -11,7 +11,7 @@
 //     submitter keys. Custody is enforced here, not by convention.
 //   - Prints ONLY the public address. Never prints key material.
 
-import { chmodSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Keypair } from "@solana/web3.js";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
@@ -20,7 +20,7 @@ import {
   KEYS_DIR,
   ROLES,
   allowedRoles,
-  keyFilePath,
+  keyFilePath, checkKeyDirectory, requireExternalPath,
   type Chain,
   type MachineKind,
   type Role,
@@ -44,12 +44,9 @@ if (!role || !ROLES.includes(role)) {
   process.exit(2);
 }
 
+requireExternalPath(KEYS_DIR);
 mkdirSync(KEYS_DIR, { recursive: true, mode: 0o700 });
-try {
-  chmodSync(KEYS_DIR, 0o700);
-} catch {
-  /* best effort on filesystems without POSIX modes */
-}
+checkKeyDirectory();
 
 const markerPath = join(KEYS_DIR, "MACHINE");
 let kind: MachineKind;
@@ -70,7 +67,7 @@ if (existsSync(markerPath)) {
     process.exit(2);
   }
   kind = machineArg;
-  writeFileSync(markerPath, kind + "\n", { mode: 0o600 });
+  writeFileSync(markerPath, kind + "\n", { mode: 0o600, flag: "wx" });
   console.log(`Machine marked as: ${kind} (${markerPath})`);
 }
 
@@ -92,7 +89,7 @@ if (chain === "evm") {
   const privateKey = generatePrivateKey();
   address = privateKeyToAccount(privateKey).address;
   const file = { type: "spendfloor/evm-key/v1", privateKey };
-  writeFileSync(path, JSON.stringify(file, null, 2) + "\n", { mode: 0o600 });
+  writeFileSync(path, JSON.stringify(file, null, 2) + "\n", { mode: 0o600, flag: "wx" });
 } else {
   const keypair = Keypair.generate();
   address = keypair.publicKey.toBase58();
@@ -100,7 +97,7 @@ if (chain === "evm") {
     type: "spendfloor/sol-key/v1",
     secretKey: Array.from(keypair.secretKey),
   };
-  writeFileSync(path, JSON.stringify(file, null, 2) + "\n", { mode: 0o600 });
+  writeFileSync(path, JSON.stringify(file, null, 2) + "\n", { mode: 0o600, flag: "wx" });
 }
 
 console.log(`chain:   ${chain}`);

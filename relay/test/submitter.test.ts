@@ -193,7 +193,7 @@ async function nonce(vault: Address): Promise<bigint> {
 
 test("relay on: V1 lands through the relay", async () => {
   const relay = createRelay(DEFAULT_RELAY_CONFIG, evmSubmitter, Keypair.generate(), {
-    localnet: true,
+    localnet: true, targets: {evmVaults: [vaultA, vaultB]},
   });
   relay.start();
   const signed = await signEvmIntent(agentAcc, 31337, vaultA, {
@@ -212,7 +212,7 @@ test("relay on: V1 lands through the relay", async () => {
 
 test("relay off: agent cannot spend (fails closed)", async () => {
   const relay = createRelay(DEFAULT_RELAY_CONFIG, evmSubmitter, Keypair.generate(), {
-    localnet: true,
+    localnet: true, targets: {evmVaults: [vaultA, vaultB]},
   });
   // Never started: submit must throw before any broadcast.
   await assert.rejects(
@@ -254,7 +254,7 @@ test("relay off: agent cannot spend (fails closed)", async () => {
 
 test("relay forwards over-cap spend; vault rejects it (no policy in relay)", async () => {
   const relay = createRelay(DEFAULT_RELAY_CONFIG, evmSubmitter, Keypair.generate(), {
-    localnet: true,
+    localnet: true, targets: {evmVaults: [vaultA, vaultB]},
   });
   relay.start();
   const signed = await signEvmIntent(agentAcc, 31337, vaultA, {
@@ -275,7 +275,7 @@ test("relay forwards over-cap spend; vault rejects it (no policy in relay)", asy
 test("rate limit: third submit in a minute is rejected", async () => {
   const cfg = { ...DEFAULT_RELAY_CONFIG, maxPerMinutePerAgent: 2 };
   const relay = createRelay(cfg, evmSubmitter, Keypair.generate(), {
-    localnet: true,
+    localnet: true, targets: {evmVaults: [vaultA, vaultB]},
   });
   relay.start();
   for (let i = 0; i < 2; i++) {
@@ -334,4 +334,28 @@ test("relay off unit test (no chain, never started)", async () => {
       }),
     /relay is off/,
   );
+});
+
+test('an intent is isolated to its vault and concurrent submissions consume it once', async () => {
+  const n = await nonce(vaultA);
+  const before = await spent(vaultA), otherBefore = await spent(vaultB);
+  const signed = await signEvmIntent(agentAcc, 31337, vaultA, {to: merchant, amount: 1n, nonce:n, deadline:deadline()});
+  const cross = await submitEvmSpend(evmPublic, evmSubmitter, vaultB, signed);
+  assert.equal(cross.label,'Unauthorized'); assert.equal(await spent(vaultB),otherBefore);
+  // Different fee wallets avoid a payer nonce conflict masking vault replay protection.
+  const results = await Promise.all([evmSubmitter,evmOwner].map(wallet=>submitEvmSpend(evmPublic,wallet,vaultA,signed)));
+  assert.equal(results.filter(r=>r.ok).length,1); assert.equal(results.filter(r=>r.label==='BadNonce').length,1);
+  assert.equal(await spent(vaultA),before+1n);assert.equal(await nonce(vaultA),n+1n);
+});
+
+test('operator runtime check matches local deployment, including all immutable sites', async () => {
+  const {hashDomain} = await import('viem');
+  const {matchesRuntime} = await import('../../cli/runtime-code.js');
+  const artifact = JSON.parse(readFileSync(join(evmDir, 'out/SpendFloorVault.sol/SpendFloorVault.json'),'utf8'));
+  const code = await evmPublic.getCode({address:vaultA});
+  assert.ok(code);
+  const domain = hashDomain({domain:{name:'SpendFloorVault',version:'1',chainId:31337n,verifyingContract:vaultA},types:{EIP712Domain:[{name:'name',type:'string'},{name:'version',type:'string'},{name:'chainId',type:'uint256'},{name:'verifyingContract',type:'address'}]}});
+  const check = (owner:Address) => matchesRuntime(artifact.deployedBytecode.object, code, artifact.deployedBytecode.immutableReferences,[domain,owner,evmToken]);
+  assert.equal(check(evmOwner.account!.address),true);
+  assert.equal(check(agentAcc.address),false);
 });

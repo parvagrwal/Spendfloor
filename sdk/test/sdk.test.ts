@@ -12,11 +12,12 @@
 
 import assert from "node:assert/strict";
 import { spawn, execSync, type ChildProcess } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test, { after, before } from "node:test";
 import {
+  sendAndConfirmTransaction,
   Connection,
   Keypair,
   LAMPORTS_PER_SOL,
@@ -139,20 +140,31 @@ before(async () => {
     "solana-test-validator",
     `${process.env.HOME}/.local/share/solana/install/active_release/bin/solana-test-validator`,
   );
-  try {
-    if (!(await rpcUp(SOL_RPC, { method: "getHealth", params: [] }))) {
-      validatorLedger = mkdtempSync(join(tmpdir(), "spendfloor-validator-"));
-      validatorProc = spawn(
-        validatorBin,
-        ["--rpc-port", "8899", "--ledger", join(validatorLedger, "ledger"), "--reset", "--quiet"],
-        { stdio: "ignore" },
-      );
-      await waitForRpc(SOL_RPC, { method: "getHealth", params: [] }, 30_000);
+  const soPath = new URL("../../solana/target/deploy/spendfloor.so", import.meta.url).pathname;
+  solProgramId = new PublicKey("CQfuniyvMY9sPDAFMPRZzbpHEwRiyy3Y4BsfuQd3iAbE");
+  if (existsSync(soPath)) {
+    try {
+      if (!(await rpcUp(SOL_RPC, { method: "getHealth", params: [] }))) {
+        validatorLedger = mkdtempSync(join(tmpdir(), "spendfloor-validator-"));
+        validatorProc = spawn(
+          validatorBin,
+          ["--rpc-port", "8899", "--ledger", join(validatorLedger, "ledger"), "--quiet", "--bpf-program", solProgramId.toBase58(), soPath],
+          { stdio: "ignore" },
+        );
+        await Promise.race([waitForRpc(SOL_RPC, { method: "getHealth", params: [] }, 30_000),
+          new Promise<never>((_, reject) => validatorProc!.once("error", reject))]);
+      }
+      solReady = true;
+    } catch (err) {
+      // A validator that cannot start (e.g. solana-test-validator panics on
+      // io_uring on this VM) must not fail the EVM tests: the Solana tests
+      // skip on !solReady, as the comment above promises. Only a required
+      // run fails hard here.
+      if (process.env.REQUIRE_SOLANA_TESTS === "1") throw err;
+      console.log(`Solana validator unavailable, Solana tests will skip: ${err instanceof Error ? err.message : String(err)}`);
     }
-    solReady = true;
-  } catch (err) {
-    console.log(`Solana validator unavailable, Solana tests will skip: ${err instanceof Error ? err.message : String(err)}`);
-    solReady = false;
+  } else if (process.env.REQUIRE_SOLANA_TESTS === "1") {
+    throw new Error("Solana integration required but spendfloor.so is missing");
   }
   if (!evmReady) return;
 
@@ -218,13 +230,7 @@ before(async () => {
 
   // --- Solana setup (skip when the chain or the .so is missing) ---
   if (!solReady) {
-    console.log("Solana tests skipped: local validator unavailable.");
-    return;
-  }
-  const soPath = new URL("../../solana/target/deploy/spendfloor.so", import.meta.url).pathname;
-  if (!existsSync(soPath)) {
-    console.log("Solana tests skipped: program .so missing, run cargo build-sbf first.");
-    solReady = false;
+    console.log("Solana tests skipped: SBF artifact missing.");
     return;
   }
   solConnection = new Connection(SOL_RPC, "confirmed");
@@ -233,17 +239,6 @@ before(async () => {
   solSubmitter = Keypair.generate();
   solMerchant = Keypair.generate();
   solAttacker = Keypair.generate();
-  const solanaBin = homeBin(
-    "solana",
-    `${process.env.HOME}/.local/share/solana/install/active_release/bin/solana`,
-  );
-  const tmp = mkdtempSync(join(tmpdir(), "spendfloor-sol-"));
-  const payerFile = join(tmp, "payer.json");
-  const progFile = join(tmp, "prog.json");
-  writeFileSync(payerFile, JSON.stringify(Array.from(solOwner.secretKey)));
-  const progKp = Keypair.generate();
-  writeFileSync(progFile, JSON.stringify(Array.from(progKp.secretKey)));
-  solProgramId = progKp.publicKey;
   // Fund the payer via the local faucet, then deploy with the CLI.
   await solConnection.requestAirdrop(solOwner.publicKey, 10 * LAMPORTS_PER_SOL);
   for (let i = 0; i < 30; i++) {
@@ -251,10 +246,6 @@ before(async () => {
     if (bal >= 10 * LAMPORTS_PER_SOL) break;
     await sleep(1000);
   }
-  execSync(
-    `${solanaBin} program deploy --url ${SOL_RPC} --keypair ${payerFile} --program-id ${progFile} ${soPath}`,
-    { stdio: "ignore" },
-  );
   const progInfo = await solConnection.getAccountInfo(solProgramId);
   assert.ok(progInfo, "program deploy failed");
   [solPolicy] = policyPda(solProgramId);
@@ -280,7 +271,7 @@ before(async () => {
       data: Buffer.concat([Buffer.from([0, 6]), solOwner.publicKey.toBuffer(), Buffer.from([0])]),
     }),
   );
-  await solConnection.sendTransaction(mintTx, [solOwner, mintKp]);
+  await sendAndConfirmTransaction(solConnection, mintTx, [solOwner, mintKp]);
 
   // Init policy now that the mint exists.
   const u32le = (v: number) => {
@@ -321,7 +312,7 @@ before(async () => {
       solMint.toBuffer(),
     ]),
   });
-  await solConnection.sendTransaction(new Transaction().add(initIx), [solOwner]);
+  await sendAndConfirmTransaction(solConnection, new Transaction().add(initIx), [solOwner]);
 
   // Token accounts: vault (owner = policy PDA), merchant, attacker.
   async function createTokenAccount(owner: PublicKey): Promise<PublicKey> {
@@ -346,7 +337,7 @@ before(async () => {
         data: Buffer.from([1]),
       }),
     );
-    await solConnection.sendTransaction(tx, [solOwner, kp]);
+    await sendAndConfirmTransaction(solConnection, tx, [solOwner, kp]);
     return kp.publicKey;
   }
   solVaultToken = await createTokenAccount(solPolicy);
@@ -366,7 +357,7 @@ before(async () => {
       data: Buffer.concat([Buffer.from([7]), mintAmount]),
     }),
   );
-  await solConnection.sendTransaction(mintToTx, [solOwner]);
+  await sendAndConfirmTransaction(solConnection, mintToTx, [solOwner]);
   // Fund the submitter for fees.
   await solConnection.requestAirdrop(solSubmitter.publicKey, 2 * LAMPORTS_PER_SOL);
   for (let i = 0; i < 30; i++) {
@@ -376,9 +367,14 @@ before(async () => {
   }
 });
 
-after(() => {
+after(async () => {
   anvilProc?.kill();
-  validatorProc?.kill();
+  if (validatorProc && validatorProc.exitCode === null && validatorProc.signalCode === null && validatorProc.pid) {
+    const exited = new Promise(resolve => validatorProc!.once("exit", resolve));
+    validatorProc.kill();
+    await exited;
+  }
+  if (validatorLedger) rmSync(validatorLedger, {recursive:true, force:true});
 });
 
 test("evm: valid spend lands and updates state", async () => {
@@ -516,7 +512,7 @@ test("sol: policy account parses from the Borsh layout", () => {
   const r1 = Keypair.generate().publicKey;
   const r2 = Keypair.generate().publicKey;
   const mint = Keypair.generate().publicKey;
-  const parts: Buffer[] = [Buffer.alloc(8)];
+  const parts: Buffer[] = [Buffer.from("de8707a3ebb12144", "hex")];
   const u32le = (v: number) => {
     const b = Buffer.alloc(4);
     b.writeUInt32LE(v, 0);

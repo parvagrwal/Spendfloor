@@ -724,7 +724,7 @@ contract SpendFloorVaultTest {
         require(!ok, "ETH transfer must fail");
     }
 
-    function test_PolicyHashStable() public {
+    function test_PolicyHashStable() public view {
         bytes32 h1 = vault.policyHash();
         bytes32 h2 = vault.policyHash();
         require(h1 == h2, "hash stable across reads");

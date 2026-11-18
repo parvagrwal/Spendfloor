@@ -268,8 +268,9 @@ async function main() {
 
   const passed = results.filter((r) => r.pass).length;
   console.log(`\nEVM local: ${passed}/${results.length} pass`);
-  mkdirSync(join(here, "..", "evidence", "T17"), { recursive: true });
-  writeFileSync(join(here, "..", "evidence", "T17", "evm-local.json"), JSON.stringify({ chain: "evm", net: "local", passed, total: results.length, results }, null, 2));
+  const outputDir = process.env.SPENDFLOOR_EVIDENCE_DIR ?? join(here, "..", "evidence", "T17");
+  mkdirSync(outputDir, { recursive: true });
+  writeFileSync(join(outputDir, "evm-local.json"), JSON.stringify({ chain: "evm", net: "local", passed, total: results.length, results }, null, 2));
   if (anvilProc) anvilProc.kill();
   if (passed !== results.length) process.exit(1);
 }

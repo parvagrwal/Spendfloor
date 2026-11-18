@@ -74,7 +74,7 @@ async function main() {
     const chainId = await evmPub.getChainId();
     const merchant = "0x61f1c99d674bcd333578AC4f538F46AbC7bB4106" as Address;
     const attacker = "0x960b6582945D1447b55B032C9630a3Bc8E82C6D0" as Address;
-    const relay = createRelay(DEFAULT_RELAY_CONFIG, submitter, loadSolKeypair("submitter"), {});
+    const relay = createRelay(DEFAULT_RELAY_CONFIG, submitter, loadSolKeypair("submitter"), {targets: {evmVaults: [vault, ...(p1 ? [p1] : []), ...(p2 ? [p2] : [])]}});
     relay.start();
     const spend = async (v: Address, to: Address, amount: bigint) => {
       const nonce = (await evmPub.readContract({ address: v, abi: VAULT_ABI, functionName: "nonce" })) as bigint;
@@ -164,8 +164,9 @@ async function main() {
         const data = encodeFunctionData({ abi: fullAbi, functionName: a.fn as never, args: a.args as never });
         try {
           await evmPub.call({ to: vault, account: agent.address, data });
-        } catch {
-          reverted++;
+        } catch (err) {
+          // A transport outage is not evidence of authorization.
+          if (err instanceof Error && /NotOwner|0x30cd7471/i.test(err.message)) reverted++;
         }
       }
       rec("V12", "NotOwner", reverted === 4 ? "NotOwner" : "other", null, "testnet confirms all four revert; label proven by local 18/18");
@@ -210,7 +211,7 @@ async function main() {
     const conn = solConnection();
     const agentKp = loadSolKeypair("agent");
     const submitterKp = loadSolKeypair("submitter");
-    const relay = createRelay(DEFAULT_RELAY_CONFIG, createWalletClient({ account: loadEvmAccount("submitter"), chain: baseSepolia, transport: http("https://sepolia.base.org") }), submitterKp, {});
+    const relay = createRelay(DEFAULT_RELAY_CONFIG, createWalletClient({ account: loadEvmAccount("submitter"), chain: baseSepolia, transport: http("https://sepolia.base.org") }), submitterKp, {targets: {solVault: {program, vaultToken, agent: agentKp.publicKey}}});
     relay.start();
     const spendSol = async (dest: PublicKey, amount: number) => {
       return paySol(relay, conn, agentKp, program, policy, vaultToken, dest, amount);
@@ -296,8 +297,12 @@ async function main() {
     {
       const { Keypair: KP } = await import("@solana/web3.js");
       const attackerKp = KP.generate();
-      const r18 = await paySol(relay, conn, attackerKp, program, policy, vaultToken, merchantToken, 1);
-      rec("V18", "Unauthorized", r18.receipt.ok ? "ACCEPT" : (r18.receipt.label ?? "SubmitFailed"), r18.receipt.hash ?? null, "attacker-signed SOL spend");
+      // This is a program authorization vector, not relay admission. The
+      // configured relay correctly refuses an unregistered co-signer.
+      const {submitSolSpend} = await import("../sdk/sol.js");
+      const receipt = await submitSolSpend(conn, program, policy, vaultToken, merchantToken, attackerKp, submitterKp, 1_000_000n);
+      rec("V18", "Unauthorized", receipt.ok ? "ACCEPT" : (receipt.label ?? "SubmitFailed"), receipt.hash ?? null);
+
     }
     relay.stop();
   }
@@ -306,6 +311,7 @@ async function main() {
   console.log(`\nTestnet (agent vectors + staged owner vectors): ${passed}/${results.length} pass (pending-owner excluded from pass)`);
   mkdirSync(join(here, "..", "evidence", "T17"), { recursive: true });
   writeFileSync(join(here, "..", "evidence", "T17", "testnet-run.json"), JSON.stringify({ results }, null, 2));
+  if (!results.length || passed !== results.length) process.exitCode = 1;
 }
 
 main().catch((err) => { console.error(`FAIL ${err instanceof Error ? err.message : String(err)}`); process.exit(1); });

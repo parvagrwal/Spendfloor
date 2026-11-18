@@ -1,22 +1,13 @@
-// sol-key-to-bare (helper for Solana CLI deploys).
-//
-//   Usage: npx tsx sdk/sol-key-to-bare.ts <role> [out-path]
-//
-// Writes the secret key of a stored Solana keypair as a bare JSON array
-// (the format the Solana CLI needs) to /tmp/<role>-bare.json by default.
-// The stored file may be bare or wrapped; the loader handles both.
-// Delete the output file after the CLI step that needed it: it holds
-// private key material. This script NEVER prints key material.
+// Export only to a new owner-readable file. Remove it after the CLI operation.
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { loadSolKeypair, ROLES, requireExternalPath } from "./keys.js";
 
-import { writeFileSync } from "node:fs";
-import { loadSolKeypair } from "./keys.js";
-
-const role = process.argv[2];
-if (!role) {
-  console.log("FAIL  usage: npx tsx sdk/sol-key-to-bare.ts <role> [out-path]");
-  process.exit(1);
-}
-const out = process.argv[3] ?? `/tmp/sol-${role}-bare.json`;
-const kp = loadSolKeypair(role as "owner" | "agent" | "submitter");
-writeFileSync(out, JSON.stringify(Array.from(kp.secretKey)));
-console.log(`wrote ${out} (delete it after the CLI step)`);
+const role = ROLES.find(r => r === process.argv[2]);
+if (!role) throw new Error("usage: sol-key-to-bare.ts owner|agent|submitter [new-file]");
+const kp = loadSolKeypair(role);
+const out = process.argv[3] ?? join(mkdtempSync(join(tmpdir(), "spendfloor-export-")), `${role}.json`);
+requireExternalPath(out);
+writeFileSync(out, JSON.stringify(Array.from(kp.secretKey)), {flag: "wx", mode: 0o600});
+console.log(`wrote ${out} (private key; remove after use)`);

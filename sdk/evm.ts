@@ -204,7 +204,7 @@ export async function submitEvmSpend(
   submitter: WalletClient,
   vault: Address,
   signed: SignedEvmIntent,
-  opts: { gas?: bigint; timeoutMs?: number } = {},
+  opts: { gasPrice?: bigint; gas?: bigint; timeoutMs?: number } = {},
 ): Promise<SpendResult> {
   const data = encodeFunctionData({
     abi: VAULT_ABI,
@@ -218,6 +218,7 @@ export async function submitEvmSpend(
     hash = await submitter.sendTransaction({
       to: vault,
       data,
+      ...(opts.gasPrice !== undefined ? { gasPrice: opts.gasPrice } : {}),
       gas: opts.gas ?? DEFAULT_GAS,
       account: submitterAccount,
       chain: submitter.chain,
@@ -237,17 +238,18 @@ export async function readEvmPolicy(
   publicClient: PublicClient,
   vault: Address,
 ): Promise<EvmPolicyState> {
+  const blockNumber = await publicClient.getBlockNumber({cacheTime: 0});
   const [policy, policyHash, agent, frozen, nonce, spentInWindow, currentWindow, token, owner] =
     await Promise.all([
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "policy" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "policyHash" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "agent" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "frozen" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "nonce" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "spentInWindow" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "currentWindow" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "token" }),
-      publicClient.readContract({ address: vault, abi: VAULT_ABI, functionName: "owner" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "policy" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "policyHash" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "agent" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "frozen" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "nonce" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "spentInWindow" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "currentWindow" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "token" }),
+      publicClient.readContract({ blockNumber, address: vault, abi: VAULT_ABI, functionName: "owner" }),
     ]);
   return {
     version: policy[0],

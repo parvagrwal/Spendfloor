@@ -1,0 +1,4 @@
+{
+  "extends": "./sdk/tsconfig.json",
+  "include": ["agent/**/*.ts", "cli/**/*.ts", "conformance/**/*.ts", "policy/**/*.ts", "relay/**/*.ts", "sdk/**/*.ts", "test/**/*.ts"]
+}

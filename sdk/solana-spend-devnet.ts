@@ -58,7 +58,7 @@ console.log(`machine: ${kind}`);
 console.log(`program: ${PROGRAM_ID.toBase58()}`);
 console.log(`agent: ${agent.publicKey.toBase58()} (must stay 0 lamports)`);
 console.log(`submitter: ${submitter.publicKey.toBase58()}`);
-console.log(`rpc: ${RPC.replace(/api-key=[^&]*/g, "api-key=***")}`);
+console.log(`rpc origin: ${new URL(RPC).origin}`);
 console.log("");
 
 const connection = new Connection(RPC, "confirmed");

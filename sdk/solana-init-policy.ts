@@ -60,7 +60,7 @@ console.log(`owner: ${owner.publicKey.toBase58()}`);
 console.log(`agent: ${agent}`);
 console.log(`allowlist: ${expectedOwner}, ${submitter}`);
 console.log(`dailyCap: ${DAILY_CAP} lamports, perTxCap: ${PER_TX_CAP} lamports, fund: ${FUND} lamports`);
-console.log(`rpc: ${RPC.replace(/api-key=[^&]*/g, "api-key=***")}`);
+console.log(`rpc origin: ${new URL(RPC).origin}`);
 console.log("");
 
 const connection = new Connection(RPC, "confirmed");

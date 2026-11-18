@@ -1,11 +1,11 @@
 // Shared error labels and result types for the SpendFloor SDK (T15).
 //
-// A failed spend never throws a raw RPC error at the caller. It returns a
+// Broadcast helpers report receipt outcomes as a
 // SpendResult with a normalized label (one of the vault/program error
 // names, or a transport label) plus the transaction hash/signature when
 // the transaction landed, so the caller can look it up. Role separation
 // is structural: the agent signs, the submitter pays, the owner
-// administers. No SDK function lets one key do two roles, and there is
+// administers. Callers must keep role keys separate. There is
 // no direct-transfer shortcut around the vault.
 
 export type SpendLabel =
@@ -33,7 +33,7 @@ export type SpendLabel =
 
 export interface SpendResult {
   ok: boolean;
-  /** Transaction hash (EVM) or signature (Solana), when broadcast/landed. */
+  /** Transaction hash (EVM) or signature (Solana), if known locally or returned by the network (not proof of landing). */
   hash?: string;
   /** Normalized label for a failure. Absent on success. */
   label?: SpendLabel;
