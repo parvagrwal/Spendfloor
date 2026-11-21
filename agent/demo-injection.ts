@@ -71,6 +71,14 @@ const RENT_SYSVAR = new PublicKey(
 );
 
 const args = process.argv.slice(2);
+// --json-events adds machine-readable lifecycle lines for the local operator
+// adapter. It never changes what is executed or what the demo enforces.
+const jsonEvents = args.includes("--json-events");
+function emit(type: string, data: Record<string, unknown> = {}): void {
+  if (jsonEvents) {
+    console.log(`SPENDFLOOR_EVENT ${JSON.stringify({ type, at: new Date().toISOString(), ...data })}`);
+  }
+}
 const msgIdx = args.indexOf("--message");
 const netIdx = args.indexOf("--net");
 const MESSAGE = msgIdx >= 0 ? args[msgIdx + 1] : "";
@@ -146,6 +154,7 @@ async function main() {
       ? "=== DEMO NETWORK: localnet (Anvil + Surfpool) ==="
       : "=== DEMO NETWORK: testnet (Base Sepolia + Solana devnet) ===",
   );
+  emit("run_started", { network: NET, message: MESSAGE });
   // --- Keys + relay ---
   const evmAgent = loadEvmAccount("agent");
   const evmSubmitterAcc = loadEvmAccount("submitter");
@@ -327,10 +336,13 @@ async function main() {
   relay.start();
   // --- LLM turn ---
   console.log(`message: ${MESSAGE}`);
+  emit("agent_processing", { network: NET });
   const loop = await runAgentLoop(MESSAGE);
   console.log(`llm raw: ${loop.raw}`);
   if (!loop.pay) {
     console.log(`no pay: ${loop.noPayReason}`);
+    emit("agent_no_pay", { reason: loop.noPayReason, raw: loop.raw });
+    emit("run_complete", { outcome: "no_action" });
 
     return;
   }
@@ -359,15 +371,32 @@ async function main() {
     [solWallet.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), solMint.toBuffer()], ATA_PROGRAM_ID)[0];
   console.log(`evm recipient: ${finalEvmTo}`);
   console.log(`sol dest token: ${finalSolDest.toBase58()}`);
+  emit("agent_signed", {
+    amountSfusd: amount,
+    to: to,
+    evmRecipient: finalEvmTo,
+    solRecipient: finalSolDest.toBase58(),
+  });
 
   // --- Pay on EVM ---
+  emit("submitter_relaying", { chain: "evm", vault });
   const evmRes = await payEvm(relay, evmPublic, evmAgent, chainId, vault, finalEvmTo, amount);
   console.log(
     `EVM pay: ok=${evmRes.receipt.ok} label=${evmRes.receipt.label ?? ""} hash=${evmRes.receipt.hash ?? ""} digest=${evmRes.payloadDigest} signed=${evmRes.signedAmountMicro} micro-units`,
   );
+  emit("chain_result", {
+    chain: "evm",
+    ok: evmRes.receipt.ok,
+    label: evmRes.receipt.label ?? null,
+    hash: evmRes.receipt.hash ?? null,
+    digest: evmRes.payloadDigest,
+    signedAmountMicro: evmRes.signedAmountMicro.toString(),
+    raw: evmRes.receipt.raw ?? null,
+  });
 
   // --- Pay on Solana (both networks; localnet uses Surfpool) ---
   if (conn && attackerAta) {
+    emit("submitter_relaying", { chain: "sol", program: solProgram.toBase58() });
     const solRes = await paySol(
       relay,
       conn,
@@ -381,13 +410,24 @@ async function main() {
     console.log(
       `SOL pay: ok=${solRes.receipt.ok} label=${solRes.receipt.label ?? ""} sig=${solRes.receipt.hash ?? ""} digest=${solRes.payloadDigest} signed=${solRes.signedAmountMicro} micro-units`,
     );
+    emit("chain_result", {
+      chain: "sol",
+      ok: solRes.receipt.ok,
+      label: solRes.receipt.label ?? null,
+      hash: solRes.receipt.hash ?? null,
+      digest: solRes.payloadDigest,
+      signedAmountMicro: solRes.signedAmountMicro.toString(),
+      raw: solRes.receipt.raw ?? null,
+    });
   } else {
     console.log("SOL pay: skipped (no Solana connection — localnet setup missing?)");
+    emit("chain_skipped", { chain: "sol", reason: "no Solana connection (localnet setup missing)" });
   }
-
+  emit("run_complete", { outcome: evmRes.receipt.ok ? "accepted" : "completed" });
 }
 
 main().finally(() => anvilProc?.kill()).catch((err) => {
   console.error(`FAIL  ${err instanceof Error ? err.message : String(err)}`);
+  emit("run_failed", { reason: err instanceof Error ? err.message : String(err) });
   process.exit(1);
 });

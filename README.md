@@ -4,7 +4,7 @@
 
 One spend policy for AI agents, enforced on-chain on Base and Solana. The agent's key holds nothing, so a prompt-injected drain gets rejected by the vault.
 
-**Release status:** testnet software; not approved for real funds. Start with [production readiness](PRODUCTION_READINESS.md), [tests and measurements](TESTING_REPORT.md), and the [deployment and recovery guide](DEPLOYMENT.md). No web frontend or hosted API is included.
+**Release status:** testnet software; not approved for real funds. Start with [production readiness](PRODUCTION_READINESS.md), [tests and measurements](TESTING_REPORT.md), and the [deployment and recovery guide](DEPLOYMENT.md). A local five-screen demo UI with a loopback operator adapter is included; there is no hosted API. See [frontend operations](docs/FRONTEND_OPERATIONS.md).
 
 ## The problem
 
@@ -148,12 +148,23 @@ AIGI is a grants sponsor, not a technology integration. There is no AIGI code an
 - `docs/` — evidence, honest matrix, threat model, demo runbook
 - `evidence/` — per-task evidence (hashes, logs, runs)
 - `deployments/` — testnet and localnet deployment records
-- `ui/` — demo page (demo mode plus playground simulator, single file, no build)
+- `frontend/` — five-screen React demo control plane (Command Center, Attack Playground, Architecture Explorer, Transaction Proof, Policy Control)
+- `operator/` — narrow loopback adapter for read-only state, recorded evidence and allowlisted demo execution
 - `scripts/` — toolchain check, clean-room runner, raw server-off scripts
 - `rebalance-bot/` — stub, no code yet
 
+## Run the demo UI
+
+```bash
+npm run dev          # UI on http://localhost:5173, loopback operator on 8787
+npm run build && npm start   # single-origin built app on http://localhost:8787
+```
+
+Live submissions are disabled by default. On the demo machine with agent + submitter keys, Ollama and RPC access, set `SPENDFLOOR_DEMO_ENABLE=1` before starting the operator. The UI never holds keys or signs; see [docs/FRONTEND_OPERATIONS.md](docs/FRONTEND_OPERATIONS.md) for the full walkthrough, environment variables and recovery procedure.
+
 ## Docs
 
+- [docs/FRONTEND_OPERATIONS.md](docs/FRONTEND_OPERATIONS.md) — demo UI architecture, setup, walkthrough, recovery and limitations
 - [docs/EVIDENCE.md](docs/EVIDENCE.md) — rehearsal runs, hashes, explorer links
 - [docs/HONEST_MATRIX.md](docs/HONEST_MATRIX.md) — live state and honest gaps
 - [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) — threats, Socket scan triage, residual risks

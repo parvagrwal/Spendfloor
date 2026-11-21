@@ -6,6 +6,7 @@ node_modules/
 **/*secret*.json
 target/
 out/
+dist/
 cache/
 graphify-out/
 .avm/
